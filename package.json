@@ -1,0 +1,137 @@
+{
+  "name": "lindsey-harrod-frontend",
+  "version": "1.0.0",
+  "description": "Live with Lindsey Harrod",
+  "main": "index.js",
+  "scripts": {
+    "dev": "next -p 7777",
+    "build": "next build",
+    "start": "next start -p 7777",
+    "test": "NODE_ENV=test jest --watch"
+  },
+  "author": "nick plechas",
+  "license": "ISC",
+  "dependencies": {
+    "@apollo/client": "^3.2.5",
+    "@apollo/link-error": "^2.0.0-beta.3",
+    "@apollo/react-ssr": "^4.0.0-beta.1",
+    "@react-spring/web": "*",
+    "@stripe/react-stripe-js": "^1.1.2",
+    "@stripe/stripe-js": "^1.10.0",
+    "@zeit/next-css": "^1.0.1",
+    "apollo-upload-client": "^13.0.0",
+    "babel-core": "^7.0.0-bridge.0",
+    "babel-plugin-styled-components": "^1.10.7",
+    "chart.js": "^2.9.4",
+    "chroma-js": "^2.0.3",
+    "classnames": "^2.2.6",
+    "date-fns": "^2.12.0",
+    "dompurify": "^2.0.15",
+    "downshift": "^5.2.0",
+    "eslint-plugin-react-hooks": "^4.2.1-alpha-19092ac8c-20210803",
+    "framer-motion": "^3.6.1",
+    "graphql": "^15.4.0",
+    "graphql-tag": "^2.10.3",
+    "immutability-helper": "^3.0.1",
+    "isomorphic-unfetch": "^3.0.0",
+    "loaders.css": "^0.1.2",
+    "lodash.debounce": "^4.0.8",
+    "lodash.difference": "^4.0.8",
+    "lodash.intersection": "^4.0.8",
+    "lorem-ipsum": "^2.0.3",
+    "match-sorter": "^4.0.0",
+    "next": "^10.0.0",
+    "next-with-apollo": "^5.0.1",
+    "nprogress": "^0.2.0",
+    "prop-types": "^15.7.2",
+    "pure-react-carousel": "^1.27.3",
+    "react": "^17.0.1",
+    "react-background-video-player": "^1.1.7",
+    "react-dom": "^17.0.1",
+    "react-horizontal-scrolling-menu": "^0.7.7",
+    "react-measure": "^2.5.2",
+    "react-otp-input": "^2.4.0",
+    "react-script-hook": "^1.2.1",
+    "react-select": "^4.3.1",
+    "react-speech-recognition": "^3.8.2",
+    "react-switch": "^6.0.0",
+    "react-toastify": "^7.0.4",
+    "react-transition-group": "^4.3.0",
+    "react-video-js-player": "^1.1.1",
+    "react-webcam": "^5.2.4",
+    "reactjs-popup": "^2.0.3",
+    "regenerator-runtime": "^0.13.7",
+    "socket.io-client": "^4.0.0",
+    "styled-components": "^5.2.0",
+    "uuid": "^8.3.1",
+    "vanilla-tilt": "^1.7.0",
+    "video.js": "^7.8.2",
+    "videojs-brand": "^0.0.4",
+    "videojs-event-tracking": "^1.0.1",
+    "vimeo": "^2.1.1",
+    "waait": "^1.0.5"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.12.3",
+    "@babel/preset-env": "^7.12.1",
+    "babel-plugin-module-resolver": "^3.1.1",
+    "casual": "^1.6.2",
+    "css-loader": "^1.0.1",
+    "eslint": "^7.32.0",
+    "eslint-plugin-react": "^7.24.0",
+    "graphql-tools": "^4.0.0"
+  },
+  "babel": {
+    "env": {
+      "development": {
+        "presets": [
+          "next/babel"
+        ],
+        "plugins": [
+          [
+            "styled-components",
+            {
+              "ssr": true,
+              "displayName": true
+            }
+          ]
+        ]
+      },
+      "production": {
+        "presets": [
+          "next/babel"
+        ],
+        "plugins": [
+          [
+            "styled-components",
+            {
+              "ssr": true,
+              "displayName": true
+            }
+          ]
+        ]
+      },
+      "test": {
+        "presets": [
+          [
+            "next/babel",
+            {
+              "preset-env": {
+                "modules": "commonjs"
+              }
+            }
+          ]
+        ],
+        "plugins": [
+          [
+            "styled-components",
+            {
+              "ssr": true,
+              "displayName": true
+            }
+          ]
+        ]
+      }
+    }
+  }
+}

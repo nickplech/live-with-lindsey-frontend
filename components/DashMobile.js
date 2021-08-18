@@ -222,18 +222,18 @@ const ClassList = styled.div`
     grid-template-columns: 1fr 1fr 1fr;
     grid-template-rows: 1fr 1fr;
     border-radius: 10px;
-    border: 1px solid rgba(20, 20, 20, 0.05);
+    /* border: 1px solid rgba(20, 20, 20, 0.05); */
     box-shadow: 0 10px 10px -5px rgba(0, 0, 0, 0.2);
     display: grid;
     width: 100%;
 
-    /* background: rgb(248, 176, 176);
     background: linear-gradient(
-      90deg,
-      rgba(248, 176, 176, 0.8057598039215687) 8%,
-      rgba(252, 199, 198, 0.5396533613445378) 79%,
-      rgba(255, 255, 255, 0.2903536414565826) 100%
-    ); */
+      330deg,
+      rgba(248, 176, 176, 1 ) 0%,
+      rgba(255, 215, 212, 1) 43%,
+      rgba(255, 255, 255, 1) 69%,
+      rgba(255, 255, 255, 1) 100%
+    );
     height: 180px;
     overflow: hidden;
   }
@@ -299,7 +299,7 @@ const ClassList = styled.div`
   .course-info {
 justify-content: center;
 text-align: center;
-align-items: center;
+align-items: center;min-width: 220px;
     padding: 15px;
     position: relative;
     width: 100%;

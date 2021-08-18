@@ -352,16 +352,14 @@ function  VodListSlider({id, user}) {
     <>
       <Link
         href={{
-          pathname: '/viewall',
+          pathname: '/viewallondemands',
           query: { category: 'all live streams' },
         }}
       >
         <Tite style={{ marginTop: '70px', marginLeft: '30px' }}>
         (Re)live Streams
-     
         </Tite>
       </Link>
-
       <Wrap>
         <div className="mobile-layout">
           <CarouselProvider

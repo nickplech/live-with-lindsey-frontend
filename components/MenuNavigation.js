@@ -3,7 +3,6 @@ import React from 'react'
 import styled from 'styled-components'
 import Link from 'next/link'
 import Signout from './Signout'
-import ModalPicture from './PictureUpdateModal'
 const NavMenuContainer = styled.div`
   width: 100%;
   display: flex;
@@ -46,7 +45,7 @@ const NavLink = styled(motion.li)`
   .login {
     background: transparent;
      border: none;
-    font-size: 26px;
+    font-size: 24px;
     font-family: 'Bison';
     padding-right: 10px;
     border-right: 2px solid #f8b0b0;
@@ -58,20 +57,13 @@ const NavLink = styled(motion.li)`
   .signup {
     background: transparent;
      border: none;
-    font-size: 26px;
+    font-size: 24px;
     font-family: 'Bison';    outline: none;
     padding-right: 10px;
        cursor: pointer;
   }
 `
-const Line = styled.div`
-width: 100%;
-height: 2px;
-position: relative;
-display: block;
-background: slategrey;
-margin: 10px auto;
-`
+ 
 const variants = {
   show: {
     transform: 'translateX(0em)',
@@ -184,7 +176,7 @@ onClick={toggle}
             },
           }}
         > 
-<Line  /></NavLink>
+ </NavLink>
         <BottomButtons>
           <NavLink
             onClick={toggle}
@@ -239,8 +231,8 @@ onClick={toggle}
                 </button>
               </Link>
             ) : (
-             <><ModalPicture onClick={toggle} image={userPic}  toggle={toggle} initial={false} /> <Signout onClick={toggle} style={{ marginTop: '50px' }} />
-         </>   )}
+            <Signout onClick={toggle} style={{ marginTop: '50px' }} />
+   )}
           </NavLink>
         </BottomButtons>
       </NavList>

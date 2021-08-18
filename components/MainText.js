@@ -86,8 +86,8 @@ const Container = styled.div`
   }
 
   a {
-    min-width: 150px;
-    padding: 5px 10px;
+   
+    padding: 3px 5px;
     border-radius: 5px;
     border: none;
     margin: 10px;

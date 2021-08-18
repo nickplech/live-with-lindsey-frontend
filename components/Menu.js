@@ -1,7 +1,7 @@
 import { motion } from 'framer-motion'
 import React from 'react'
-import { useState } from 'react'
 import styled from 'styled-components'
+import ModalPicture from './PictureUpdateModal'
 
 import { NavMenu } from './MenuNavigation'
 
@@ -115,6 +115,7 @@ const commonVariants = {
 const commonTransition = { type: 'spring', duration: 0.05 }
 
 export default function Menu({ isOpen, toggle, me, addy }) {
+  const userPic = me?.image?  me.image.publicUrlTransformed : '../static/img/profpic.svg'
   return (
     <HamburgerMenuContainer>
       <MenuContainer
@@ -123,7 +124,9 @@ export default function Menu({ isOpen, toggle, me, addy }) {
         variants={menuVariants}
         transition={menuTransition}
       >
-        <TopContainer></TopContainer>
+        <TopContainer>
+          {/* <ModalPicture onClick={toggle} image={userPic}  toggle={toggle} initial={false} /> */}
+           </TopContainer>
         <ContentContainer>
           <NavMenu me={me} addy={addy} isOpen={isOpen} toggle={toggle} />
         </ContentContainer>

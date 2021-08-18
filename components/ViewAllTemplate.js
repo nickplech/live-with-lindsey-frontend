@@ -54,8 +54,9 @@ const Recommended = styled.div`
 `
 const Videos = styled.div`
   height: 300px;
-  width: 30%;
-  max-width: 400px;
+  min-width: 350px;
+  width: 100%;
+  max-width: 380px;
   margin: 30px 20px 40px 20px;
   border-radius: 10px;
   display: flex;

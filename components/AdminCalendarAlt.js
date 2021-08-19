@@ -200,9 +200,7 @@ function AdminCalendarAlt() {
    
     return date > today
   })
-  console.log(todayArray)
-   console.log(futureArray)  
-   console.log(passedArray)
+
   theDataLength === 0 && <p>No Classes Scheduled This Week!</p>
   return (
     <Calendar>

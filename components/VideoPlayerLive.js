@@ -19,11 +19,11 @@ export const VideoPlayerLive = ( props ) => {
         gridRow: '1/3',
         gridColumn: 1,
       margin: '0 auto',
-      position: 'relative',
+      position: 'absolute',
       zIndex: 10000}} 
         poster="../static/img/classbackgrounds/backsplashfinal/standby.jpg"
         ref={videoRef} className="video-js vjs-big-play-button vjs-live vjs-liveui  vjs-big-play-centered" 
-    ></video-js>   
+   / >  
     
   )
 

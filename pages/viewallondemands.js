@@ -4,12 +4,12 @@ import Footer from '../components/Footer'
 import styled from 'styled-components'
 import ViewAllTemplate from '../components/ViewAllTemplate'
 
-const ViewAllOnDemands = (props) => {
+const ViewAllOnDemands = ({query}) => {
   return (
     <>
       <PhotoArray />
    
-      <ViewAllTemplate category={'name'} />
+      <ViewAllTemplate  title={query.category}/>
 
       <Footer />
     </>

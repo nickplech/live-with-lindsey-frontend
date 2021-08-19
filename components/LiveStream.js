@@ -20,14 +20,14 @@ const LIVE_AUTH_QUERY = gql`
 `
 const Griddy = styled.div`
   display: grid;
-  height: 100%;
+  height: calc(100vh - 60px);
   width: 100%;
-grid-template-columns: 1fr 30vw;
-grid-template-rows: 5vh 95vh;
+grid-template-columns: 1fr  ;
+grid-template-rows: 1fr;
   /* flex-flow: column; */
 position: relative;
   .chatframe {
-    position: absolute;
+    position: fixed;
     width: 100%;
     height: 100%;
     grid-row: 2;
@@ -119,10 +119,10 @@ function LiveStream({ id }) {
   }
  
   return (
-    <>
+ 
       <Griddy>
         <VideoPlayerLive style={{ zIndex: 500 }} {...options} id={id}  />
-        <Name name={name}>
+        {/* <Name name={name}>
           {name + ' '} |{' '}
           <ChatTrigger open={open}  />
         </Name>
@@ -135,11 +135,10 @@ function LiveStream({ id }) {
             itemId={id}
             open={open}
           />
-        </div>
+        </div> */}
 
     </Griddy>      
-      {/* <Background /> */}
-      </>
+    
   )
 }
 export default LiveStream

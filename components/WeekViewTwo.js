@@ -8,7 +8,7 @@ import {
 } from 'framer-motion'
 import styled from 'styled-components'
 import { format } from 'date-fns'
-import { useToast } from './contexts/LocalState'
+
 const Container = styled.div`
   width: 100%;
   margin: 0px auto;
@@ -78,7 +78,25 @@ const Course = styled.li`
 
   height: 65px;
   transition: 0.3s;
-  overflow: hidden;
+ 
+  &:before {
+    display: ${props => props.showTodayMarker ? 'flex' : 'none'};
+    content: 'Today';
+    /* transform: rotate(90deg); */
+ letter-spacing: 2px;
+    color: white;
+  
+    justify-content: center;
+    align-items: center;
+ padding: 2px 5px;
+ line-height: 15px;
+border-radius: 25px;
+text-align: center;
+transform: translate(-40px, 22px) rotate(-90deg);
+position: absolute;
+background: ${props => props.theme.third};
+
+  }
   @media (min-width: 992px) {
     margin: 5px 20px;
   }
@@ -118,6 +136,7 @@ const Course = styled.li`
     display: flex;
     flex-flow: column;
     align-items: flex-start;
+    border-radius: 10px 0 0 10px;
     background: linear-gradient(
       90deg,
       rgba(248, 176, 176, 0.8057598039215687) 8%,
@@ -134,8 +153,7 @@ const Course = styled.li`
     /* align-items: center;
 justify-content: center; */
   }
-  h1 {
-  }
+ 
 
   .course-info {
     padding: 0px;
@@ -250,6 +268,7 @@ background: white;
 display: flex;
   }
 `
+
 const dotNames = [
   { name: 'GOING LIVE', img: 'timer' },
   { name: 'LIVE', img: 'station' },
@@ -279,7 +298,10 @@ function WeekView({ id, today, items }) {
           {' '}
           <ClassList>
             {items.map((item, i) => {
+              const today = format(new Date(), 'M/dd')
+              const date = format(new Date(item.date), 'M/dd')
               return (
+               
                 <motion.div
                   key={i}
                   transition={{
@@ -294,7 +316,7 @@ function WeekView({ id, today, items }) {
                   initial="varientA"
                   animate={flipped === i ? 'varientB' : 'varientA'}
                 >
-                  <Course>
+                  <Course showTodayMarker={date === today ? true : false}>
                     <div className="course-preview">
                       <h1>{format(new Date(item.date), 'EEEE')}</h1>
                       <h2>
@@ -364,6 +386,7 @@ function WeekView({ id, today, items }) {
                     </div>
                   </Course>
                 </motion.div>
+               
               )
             })}
           </ClassList>

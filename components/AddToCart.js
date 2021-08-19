@@ -180,10 +180,13 @@ const proceedToCheckout = async () => {
 
 const itemInCart = inCart.includes(id)
 const itemIsOwned = ownsItem.map(user => {
-  if(user && user.id === me.id) {
+  if(me) {
+    if (user.id === me.id) {
     return true
   }
   return false
+}
+  return null
 })
 
   if(itemIsOwned[theIndex] === true) return (

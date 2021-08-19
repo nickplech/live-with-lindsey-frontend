@@ -353,7 +353,7 @@ function  VodListSlider({id, user}) {
       <Link
         href={{
           pathname: '/viewallondemands',
-          query: { category: 'all live streams' },
+          query: { category: 'All Recorded Live Streams' },
         }}
       >
         <Tite style={{ marginTop: '70px', marginLeft: '30px' }}>

@@ -97,7 +97,12 @@ grid-template-columns: 1fr 1fr;
 height: 100%;
 
 .back {
-  
+  grid-column: 1/3; 
+ 
+ 
+ 
+  width: 100%;
+  border: 2px solid ${props => props.theme.primary};
 }
 .left {
    grid-column: 1; 
@@ -105,8 +110,9 @@ height: 100%;
    position: relative;
   margin: 0 auto;
   width: 100%;
-  background: rgba(240,240,240,.5);
+  background: rgba(240,240,240,.7);
   padding: 20px;
+ 
   padding-right: 50px;
 }
 .right {
@@ -114,7 +120,7 @@ height: 100%;
  grid-row: 1;
    position: relative;
    margin: 0 auto;
-  width: 100%;  background: rgba(240,240,240,.5);  padding: 20px;
+  width: 100%;  background: rgba(240,240,240,.7);  padding: 20px;
 }
 
 
@@ -279,6 +285,7 @@ const nameLong = inputs.businessName.length > 14
     <Grid>  
       <h2>Update Account Information</h2>
       <Form
+   
         onSubmit={async (e) => {
           e.preventDefault()
           await updateUser()
@@ -292,9 +299,9 @@ const nameLong = inputs.businessName.length > 14
           <div className="left">
             
           <label htmlFor="cellPhone">
-            Phone Number
+            Cell Phone Number
             <input
-              type="phone"
+              type="tel"
               id="cellPhone"
               name="cellPhone"
               className="short"
@@ -304,6 +311,8 @@ const nameLong = inputs.businessName.length > 14
               onChange={handleChange}
             />
           </label>
+          <p style={{letterSpacing: '1px', padding: 0, margin: 0, transform: 'translateY(-20px)'}}>Used to authorize that it is actually you using your account; also used to send Live Workout SMS reminders</p>
+
           <label htmlFor="businessName">
              Display Name
             <input
@@ -317,6 +326,7 @@ const nameLong = inputs.businessName.length > 14
             />
             {nameLong ? <p style={{color: 'red', margin: 0, transform: 'translateY(-20px)', fontSize: '14px'}}>Please Shorten Your Display Name</p> : null}
           </label>
+          <p style={{letterSpacing: '1px', padding: 0, margin: 0, transform: 'translateY(-20px)'}}>Your public display name used in features of the Live with Lindsey Fitness Community such as Live Chat</p>
           <label htmlFor="email">
             Login/Contact Email Address
             <input
@@ -331,7 +341,7 @@ const nameLong = inputs.businessName.length > 14
           </label>
           </div>
           <div className="right">
-          <label htmlFor="receiveTexts">
+          <label htmlFor="receiveSms">
             Text Message Alerts
             
           </label><input
@@ -346,7 +356,7 @@ const nameLong = inputs.businessName.length > 14
               onChange={() => clickSms()}
             />
           <p style={{letterSpacing: '1px', padding: 0, margin: 0}}>By Leaving this Option Selected, You are Stating that You Would Like to Receive SMS&mdash;Text Message&mdash;Reminders Approximately 30 minutes Before Each Live Workout of Which You are Subscribed</p><p style={{letterSpacing: '1px'}}>Deselect the Checkbox to Elect NOT TO RECEIVE SMS MESSAGES</p>
-            <SickButton disabled={tooShort || nameLong} style={{justifySelf: 'flexEnd'}}
+            <SickButton disabled={tooShort || nameLong} style={{justifySelf: 'flexEnd', bottom: '40px', right: '40px', position: 'absolute'}}
             type="submit">
             Sav{loading ? 'ing' : 'e'} Changes
           </SickButton>
@@ -360,7 +370,7 @@ const nameLong = inputs.businessName.length > 14
  
         <div
           style={{
-            background: 'rgba(240,240,240,.5)',
+            background: 'rgba(240,240,240,.8)',
             padding: '20px',
             borderRadius: '5px',
             marginBottom: '45px',

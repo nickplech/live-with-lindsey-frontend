@@ -127,7 +127,7 @@ const SingleItemStyles = styled.div`
     position: relative;
     overflow: hidden;
     padding-top: 56.25%;
-    transform: translate(25px, 15px)
+    transform: translate(20px, 15px)
   }
   iframe {
     position: relative;
@@ -216,13 +216,16 @@ const GoBacks = styled.div`
 
 
 const Tags = styled.div`
-  width: 90%;
+  width: 98%;
+  grid-column: 1;
+  
   position: relative;
   z-index: 2280;
-  margin: 0 auto;
+  margin: 0px 20px;
+  transform: translateY(-60px);
   text-transform: uppercase;
   display: flex;
-  transform: translateY(-25px);
+ 
   flex-flow: row wrap;
 
   span {
@@ -423,8 +426,7 @@ function SingleItem({ id }) {
       </Head>{' '}
       <Wrap>
         <Background />
-        <GoBacks>
-          <Link href="/ondemand">
+        <GoBacks> <Link href="/ondemand">
             <a>
               
               <P><Image
@@ -433,8 +435,21 @@ function SingleItem({ id }) {
                 alt="back arrow"
               />Go Back to <span>On-Demand</span> Home</P>
             </a>
-          </Link>
-        </GoBacks>
+          </Link> </GoBacks>
+         
+                  <div
+          style={{
+           
+            width: '100%',
+            // bottom: 0,
+            gridColumn: 1,
+            gridRow: 2,
+            position: 'relative',
+            padding: '0 0px 0',
+   
+          }}
+        >
+       
         <SingleItemStyles>
       
           <iframe
@@ -449,26 +464,16 @@ function SingleItem({ id }) {
             allow="fullscreen"
             allowFullScreen
           ></iframe>
- 
+  
         </SingleItemStyles>
-           
-        <div
-          style={{
-            display: 'flex',
-            width: '100%',
-            gridColumn: 1,
-            gridRow: 3,
-            position: 'relative',
-            padding: '0 0px 0',
-            flexFlow: 'row wrap',
-          }}
-        >
-          <Tags>
+            <Tags>
             {VideoOnDemand.tags &&
               VideoOnDemand.tags.map((tag) => {
                 return <span key={tag.name}>{tag.name}</span>
               })}
           </Tags>
+
+        
         </div>
         <Recommended id={VideoOnDemand.id} tags={VideoOnDemand.tags} />
         <Details removeFromFavoritesButChill={removeFromFavoritesButChill} addToFav={addToFav} isAFav={isAFav} fav={fav} me={me} videoOnDemand={VideoOnDemand}>

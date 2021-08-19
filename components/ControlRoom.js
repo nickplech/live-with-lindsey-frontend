@@ -170,12 +170,13 @@ function ControlRoom({ adminId }) {
   return (
     <Wrapper>
       <TheData style={{ marginLeft: ' 0px' }}>
+         <ClickToCopyId id={adminId} />
         <ControlDots
         updateStatus={updateStatus}
           id={adminId}  
           status={item.status}
         />
-        <ClickToCopyId id={adminId} />
+       
         
         <RegChart>
           <div className="thediv"><p className="one">{userCount.length}</p><p>Total Registered</p></div>

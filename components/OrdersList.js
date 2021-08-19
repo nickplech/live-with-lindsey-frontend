@@ -9,7 +9,7 @@ import { perPage } from '../config'
 import styled from 'styled-components'
 import Error from './ErrorMessage'
 import formatMoney from '../lib/formatMoney'
-import OrderItemStyles from './styles/OrderItemStyles'
+import {OrderItemStyles, OrderMeta} from './styles/OrderItemStyles'
 import Pagination from './Pagination'
 const USER_ORDERS_QUERY = gql`
   query USER_ORDERS_QUERY($id: ID, $skip: Int = 0, $first: Int = ${perPage} ) {
@@ -134,7 +134,7 @@ function OrdersList({ userId, page, pages, count }) {
                   }}
                 >
                   <a>
-                    <div className="order-meta">
+                    <OrderMeta>
                       <p>
                         {formatDistance(new Date(order.createdAt), new Date(), {
                           addSuffix: true,
@@ -145,7 +145,7 @@ function OrdersList({ userId, page, pages, count }) {
                         {order._recordsMeta.count === 1 ? '' : 's'}{' '}
                       </p>
                       <p>{formatMoney(order.total)}</p>
-                    </div>
+                    </OrderMeta>
                     {/* <div className="images">
                         {order.items.map((item) => (
                           <img

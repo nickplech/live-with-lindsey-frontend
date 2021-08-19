@@ -96,7 +96,7 @@ const Mode = styled.div`
   display: flex;
 
   height: 500px;
-  padding: 20px;
+  padding: 10px;
   font-family: 'Bison';
   letter-spacing: 2px;
   font-size: 17px;
@@ -245,7 +245,7 @@ function ModalFrame() {
     date: new Date(),
     reason: '',
   })
-
+console.log(inputs.date)
   const [createNewClass, { loading, error }] = useMutation(
     CREATE_CLASS_MUTATION,
     {

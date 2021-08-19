@@ -27,12 +27,12 @@ export default function ClickToCopyId({ id }) {
   }, [copyText])
 
   return (
-     
+     <div style={{display: 'flex', width: '100%', justifyContent: 'center', margin: ' 0px auto 0px auto', transform: 'translateY(-25px)'}}>
       <div
         style={{
           display: 'inline-flex',
      
-           marginTop: '20px',
+           marginTop: '0px',
           fontFamily: 'Bison',
           color: 'slategrey',
           fontSize: '20px',
@@ -46,17 +46,17 @@ export default function ClickToCopyId({ id }) {
      
       <span
         style={{
-        transform: 'translateY(2px)',
+        transform: 'translateY(-3px)',
           cursor: 'pointer',
           color: 'grey',
-          fontSize: '18px',
+          fontSize: '22px',
         }}
         onClick={() => setCopyText(id)}
       >
         {id}
       </span>
 
-      <CopyToClipElement text={copyText} /> </div>
+      <CopyToClipElement text={copyText} /> </div></div>
     
   )
 }

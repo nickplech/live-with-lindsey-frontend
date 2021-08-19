@@ -152,8 +152,8 @@ class TabsContainer extends Component {
     return (
       <Wrap>
         <ReactTabs>
-          <TabzContainer adminStyle={this.state.tabs.length > 2}>
-            <ListTabs adminStyle={this.state.tabs.length > 2}>
+          <TabzContainer adminStyle={this.state.tabs.length >= 3}>
+            <ListTabs adminStyle={this.state.tabs.length >= 3}>
               {this.state.tabs.map((tab, index) => (
                 <TabTitleItem>
                   {tab.title === 'profile' || tab.title === 'order history' ? (

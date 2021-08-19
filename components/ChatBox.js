@@ -78,7 +78,7 @@ const StyledChat = styled.div`
 
   flex-flow: column;
   align-items: flex-start;
-  &::after {
+  &:after {
     z-index: 400;
     position: absolute;
     height: 100%;
@@ -161,8 +161,13 @@ const TextInput = styled.form`
   flex-direction: row;
   position: fixed;
   z-index: 300;
-  bottom: 0;
-  input {
+  bottom: 0;   
+  background:  
+    rgba(30, 30, 30, 0.88);
+ 
+    
+`
+const Input = styled.input`
     outline: 0;
     border: none;
     padding: 0 10px;
@@ -171,11 +176,11 @@ const TextInput = styled.form`
     color: darkslategrey;
     box-sizing: border-box;
     font-size: 18px;
-    background: ${(props) => props.theme.white};
+  
     display: flex;
-  }
-  button {
-    background: transparent;
+`
+const Button = styled.button`
+background: transparent;
     text-transform: uppercase;
     font-size: 14px;
     box-sizing: border-box;
@@ -185,24 +190,24 @@ const TextInput = styled.form`
     align-items: center;
     right: 0;
     height: 40px;
+    border: none;
     width: 80px;
     color: white;
-    background: ${(props) => props.theme.secondary};
+ 
     display: flex;
     flex-direction: row;
     position: fixed;
-    &:disabled {
-      opacity: 0.3;
-    }
+ 
     &:focus {
-      outline: none;
+      background: ${props => props.theme.primary};
+      color: #fff;
     }
     &:hover {
-      background: #ed4264;
+      background: ${props => props.theme.primary};
       color: #fff;
-      opacity: 0.5;
+    
     }
-  }
+  
 `
 const BackArrow = styled.img`
   transform: rotate(90deg);
@@ -211,10 +216,16 @@ const BackArrow = styled.img`
   color: white;
   z-index: 10000;
   cursor: pointer;
-  &:hover {
-    transform: rotate(90deg) translateX(-3px);
-    border-color: ${(props) => props.theme.second};
-  }
+  ${Button}:hover & {
+     
+        transform: rotate(90deg) translateX(-3px);
+    
+}
+${Button}:focus & {
+     
+     transform: rotate(90deg) translateX(-3px);
+ 
+}
   &:nth-of-type(2) {
     margin-left: 60px;
     border-radius: 5%;
@@ -364,7 +375,7 @@ function ChatBox({ itemId, messages }) {
           await setContent('')
         }}
       >
-        <input
+        <Input
           type="text"
           name="content"
           autoComplete="off"
@@ -375,9 +386,9 @@ function ChatBox({ itemId, messages }) {
           onChange={handleContent}
           value={content}
         />
-        <button disabled={isEmpty || tooLong || loading} type="submit">
+        <Button disabled={isEmpty || tooLong || loading} type="submit">
           <BackArrow src="../static/img/arrow-back.svg" />
-        </button>
+        </Button>
       </TextInput>
     </>
   )

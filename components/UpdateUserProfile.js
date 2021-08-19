@@ -114,6 +114,10 @@ height: 100%;
   padding: 20px;
  
   padding-right: 50px;
+  @media(max-width: 768px) {
+  grid-column: 1/3;
+  padding-bottom: 0;
+}
 }
 .right {
    grid-column: 2;
@@ -121,6 +125,13 @@ height: 100%;
    position: relative;
    margin: 0 auto;
   width: 100%;  background: rgba(240,240,240,.7);  padding: 20px;
+
+@media(max-width: 768px) {
+  grid-column: 1/3;
+  grid-row: 2;
+  padding-top: 0;
+  padding-bottom: 100px;
+}
 }
 
 

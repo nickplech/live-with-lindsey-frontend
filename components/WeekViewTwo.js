@@ -88,13 +88,13 @@ const Course = styled.li`
   
     justify-content: center;
     align-items: center;
- padding: 2px 5px;
+ padding: 2px 8px;
  line-height: 15px;
-border-radius: 25px;
+border-radius: 3px;
 text-align: center;
-transform: translate(-40px, 22px) rotate(-90deg);
+transform: translate(-40px, 23px) rotate(-90deg);
 position: absolute;
-background: ${props => props.theme.third};
+background: ${props => props.isLive ? 'red' : props.theme.third};
 
   }
   @media (min-width: 992px) {
@@ -316,7 +316,7 @@ function WeekView({ id, today, items }) {
                   initial="varientA"
                   animate={flipped === i ? 'varientB' : 'varientA'}
                 >
-                  <Course showTodayMarker={date === today ? true : false}>
+                  <Course isLive={item.status === 'LIVE'} showTodayMarker={date === today ? true : false}>
                     <div className="course-preview">
                       <h1>{format(new Date(item.date), 'EEEE')}</h1>
                       <h2>
@@ -392,6 +392,8 @@ function WeekView({ id, today, items }) {
           </ClassList>
           <ClassList>
             {items.map((item, i) => {
+                            const today = format(new Date(), 'M/dd')
+                            const date = format(new Date(item.date), 'M/dd')
               return (
                 <motion.div
                   variants={flipVarients}
@@ -411,7 +413,7 @@ function WeekView({ id, today, items }) {
                     position: 'relative',
                   }}
                 >
-                  <Course status={item.status}>
+                  <Course isLive={item.status === 'LIVE'}  showTodayMarker={date === today ? true : false} status={item.status}>
                     <div className="course-preview"></div>
                     <div className="course-info"></div>
                     <div

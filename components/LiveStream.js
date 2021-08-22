@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import VideoPlayerLive from './VideoPlayerLive'
+import VideoLiveJs from './VideoLiveJs'
 import styled from 'styled-components'
 import GetChats from './ChatBox'
 import gql from 'graphql-tag'
@@ -18,82 +18,78 @@ const LIVE_AUTH_QUERY = gql`
     }
   }
 `
+const Background = styled.div`
+background: #ed4264;
+height: 100%;
+width: 100%;
+position: fixed;
+z-index: 0;
+
+opacity: 0.4;
+background: -webkit-linear-gradient(to bottom, #ffedbc, #ed4264);
+background: linear-gradient(to bottom, #ffedbc, #ed4264);
+`
 const Griddy = styled.div`
   display: grid;
   height: calc(100vh - 60px);
   width: 100%;
-grid-template-columns: 1fr  ;
+grid-template-columns: ${props => props.open ? '1fr minmax(375px, 30%)' : '1fr'};
 grid-template-rows: 1fr;
   /* flex-flow: column; */
 position: relative;
-  .chatframe {
-    position: fixed;
-    width: 100%;
-    height: 100%;
-    grid-row: 2;
-  grid-column: 2;
  
-    display: flex;
+`
+const ChatFrame = styled.div`
+  ${props => props.open && 'grid-column: 2'};
+   display: ${props => props.open ? 'flex' : 'none'};
+  height: 100%;
+ 
+ 
+ position: relative;
+ width: 100%;
+   
+ z-index: 1000;
+ 
+  transition: all 0.3s;
+  box-shadow: 0 0 10px 3px rgba(0, 0, 0, 0.2);
+  
     overflow-y: scroll;
     &::-webkit-scrollbar {
       display: none; // Safari and Chrome
     }
-  }
+ .name {
+ z-index:2000;
+   width: 100%;
+   position: relative;
+   justify-content: flex-end;
+   height: 40px;
+   display: flex;
+   align-items: center;
+   background: transparent;
+   font-family: 'Bison';
+   color:white; 
+   padding: 0;
+   font-size: 17px;
+   margin: 0;
+   line-height: 13px;
+   cursor: pointer;
+ }
+ .arrow {
+   height: 20px;
+   width: 20px;
+   transform: rotate(90deg);
+   margin-left: 10px;
+   margin-right: 10px;
+ }
 `
-const Background = styled.div`
-  background: #ed4264;
-  height: 100%;
-  width: 100%;
-  position: fixed;
-  z-index: 0;
 
-  opacity: 0.4;
-  background: -webkit-linear-gradient(to bottom, #ffedbc, #ed4264);
-  background: linear-gradient(to bottom, #ffedbc, #ed4264);
-`
-const Name = styled.div`
-  width: 100%;
-  z-index: 80000;
-  grid-row: 1;
-  grid-column: 2;
-  display: flex;
-  background: rgb(30, 30, 30);
-  color: rgba(240, 240, 240, 0.8);
-
-  justify-content: flex-start;
-  align-items: center;
-  font-family: 'Bison';
-  font-size: 24px;
-  line-height: 30px;
-  position: relative;
-  z-index: 100;
-  padding: 0px 0 0px 10px;
-`
 function LiveStream({ id }) {
   const [itemId, setId] = useState(null)
-  const [open, setOpen] = useState(true)
-       
-  const { data, loading, error } = useQuery(LIVE_AUTH_QUERY, {
-    variables: { id: id },
-  })
-  // if (!data) return null
-  useEffect(() => {
-
-    if (id !== undefined) {
-      setId(id)
-    }
-  }, [itemId])
-
-  if (loading) return <Loader />
-  if (error) return <Error error={error} />
-
-  const name = data.liveAuth.name
-  const handleToggleChat = (e) => {
-    setOpen(!open)
-  }
-  const options = {
-    fill: true,
+  const [open, setOpen] = useState(false)
+  const videoJsOptions = {
     fluid: true,
+    fill: true,
+ 
     autoplay: true,
     responsive: true,
     controls: true,
@@ -112,22 +108,39 @@ function LiveStream({ id }) {
     html5: {
       vhs: {
         enableLowInitialPlaylist: true,
-        smoothQualityChange: true,
         overrideNative: true,
       },
     },
   }
+  const { data, loading, error } = useQuery(LIVE_AUTH_QUERY, {
+    variables: { id: id },
+  })
+  // if (!data) return null
+  useEffect(() => {
+
+    if (id !== undefined) {
+      setId(id)
+    }
+  }, [itemId])
+
+  if (loading) return <Loader />
+  if (error) return <Error error={error} />
+
+  const name = data.liveAuth.name
+  const handleToggleChat = (e) => {
+    setOpen(prev => !prev)
+  }
+ 
  
   return (
- 
-      <Griddy>
-        <VideoPlayerLive style={{ zIndex: 500 }} {...options} id={id}  />
-        {/* <Name name={name}>
-          {name + ' '} |{' '}
-          <ChatTrigger open={open}  />
-        </Name>
+    <>
+ <Background />
 
-        <div className="chatframe">
+      <Griddy open={open}>
+ 
+        <VideoLiveJs id={id} options={videoJsOptions}/>
+            <ChatFrame     open={open}>
+              <div className="name">close chat <img className="arrow" src="../static/img/uparrow.svg" onClick={() => handleToggleChat()} /> </div>
           <GetChats
        
             name={name}
@@ -135,10 +148,10 @@ function LiveStream({ id }) {
             itemId={id}
             open={open}
           />
-        </div> */}
+    </ChatFrame>
 
     </Griddy>      
-    
+         <ChatTrigger handleToggleChat={handleToggleChat} open={open}  /></>
   )
 }
 export default LiveStream

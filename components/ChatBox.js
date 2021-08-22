@@ -191,7 +191,7 @@ background: transparent;
     right: 0;
     height: 40px;
     border: none;
-    width: 80px;
+    width: 50px;
     color: white;
  
     display: flex;
@@ -199,11 +199,11 @@ background: transparent;
     position: fixed;
  
     &:focus {
-      background: ${props => props.theme.primary};
+      background: ${props => props.theme.second };
       color: #fff;
     }
     &:hover {
-      background: ${props => props.theme.primary};
+      background: ${props => props.theme.second };
       color: #fff;
     
     }
@@ -213,17 +213,18 @@ const BackArrow = styled.img`
   transform: rotate(90deg);
   position: absolute;
   transition: 0.2s;
-  color: white;
+ 
   z-index: 10000;
   cursor: pointer;
+  height: 20px;
   ${Button}:hover & {
      
-        transform: rotate(90deg) translateX(-3px);
+        transform: rotate(90deg)translateX(-4px);
     
 }
 ${Button}:focus & {
      
-     transform: rotate(90deg) translateX(-3px);
+     transform: rotate(90deg)translateX(-4px);
  
 }
   &:nth-of-type(2) {

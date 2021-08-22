@@ -1,31 +1,38 @@
  
 
-import React, {useEffect, useState} from "react"
+import React, {useEffect,useRef, useState} from "react"
 import Loader from './Loader' 
 import videojs from "video.js"
 import "video.js/dist/video-js.css"
 
-export const VideoPlayerLive = ( props ) => {
+export const VideoPlayerLive = ({id}) => {
+  const options = {
+    fluid: true,
+    fill: true,
+ 
+    autoplay: true,
+    responsive: true,
+    controls: true,
+    textTrackSettings: false,
+    liveui: true,
+    errorDisplay: false,
+    preload: 'auto',
+    notSupportedMessage: 'Sorry, not supported!',
+    suppressNotSupportedError: true,
+    sources: [
+      {
+        src: `http://143.110.146.49:8080/hls/${id}.m3u8`,
+        type: 'application/x-mpegURL',
+      },
+    ],
+    html5: {
+      vhs: {
+        enableLowInitialPlaylist: true,
+        overrideNative: true,
+      },
+    },
+  }
 
-  const videoRef = React.useRef(null)
-  const { options } = props
-
-  const VideoHtml = ( props ) => (
-     
-      <video-js style={{ 
-      display: 'flex',
-      width: '100%',
-        height: '100%',
-        gridRow: '1/3',
-        gridColumn: 1,
-      margin: '0 auto',
-      position: 'absolute',
-      zIndex: 10000}} 
-        poster="../static/img/classbackgrounds/backsplashfinal/standby.jpg"
-        ref={videoRef} className="video-js vjs-big-play-button vjs-live vjs-liveui  vjs-big-play-centered" 
-   / >  
-    
-  )
 
 
 useEffect( () => {
@@ -43,10 +50,22 @@ useEffect( () => {
       }
     }
   }, [options])
-
-
- 
-return  <VideoHtml />
-
+return ( 
+<VideoHtml />
+  )
 }
+
 export default VideoPlayerLive;
+
+  const VideoHtml = ( props ) => {
+
+    const videoRef = React.useRef(null)
+ return(
+
+    <div data-vjs-player>
+      <video ref={videoRef} poster="../static/img/classbackgrounds/backsplashfinal/standby.jpg"
+        ref={videoRef} className="video-js vjs-big-play-button vjs-live vjs-liveui  vjs-big-play-centered" 
+  />
+    </div>
+  )
+ } 

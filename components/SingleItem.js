@@ -222,10 +222,10 @@ const Tags = styled.div`
   position: relative;
   z-index: 2280;
   margin: 0px 20px;
-  transform: translateY(-60px);
+  transform: translateY(-65px);
   text-transform: uppercase;
   display: flex;
- 
+ align-items: center;
   flex-flow: row wrap;
 
   span {
@@ -236,9 +236,18 @@ const Tags = styled.div`
     border-radius: 2px;
     padding: 0px 5px;
     letter-spacing: 3px;
+    cursor: pointer;
 
     font-family: 'Bison';
     opacity: 0.8;
+    &:hover {
+      opacity: .5;
+    }
+  }
+  div {
+    font-size: 20px;
+    padding: 0;
+    margin: 0 10px 0 0;
   }
 `
  
@@ -261,6 +270,7 @@ transform: translateY(250px);
     font-family: 'Bison';
     line-height: 20px;
     margin-bottom: 0;
+    margin-left: 15px;
     transform: translateY(8px);
     letter-spacing: 2px;
     color: rgba(30, 30, 30, 0.8);
@@ -268,7 +278,7 @@ transform: translateY(250px);
   }
   ul {
     padding: 0;
-    width: 250px;
+    width: 200px;  margin-left: 15px;
   }
   
   p {
@@ -466,7 +476,7 @@ function SingleItem({ id }) {
           ></iframe>
   
         </SingleItemStyles>
-            <Tags>
+        <Tags>   <div>TAGS:</div> 
             {VideoOnDemand.tags &&
               VideoOnDemand.tags.map((tag) => {
                 return <span key={tag.name}>{tag.name}</span>

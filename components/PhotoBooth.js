@@ -78,6 +78,8 @@ const Wrap = styled.div`
       letter-spacing: 2px;
       font-size: 26px;
       margin: 0px;
+   
+    padding: 0 5px;
       line-height: 26px;
       color: white;
       text-align: center;
@@ -120,7 +122,10 @@ const DateBlock = styled.div`
     text-align: center;
     justify-content: center;
     background: ${(props) => props.theme.second};
-    margin: 0 auto;
+    margin: 0 auto;  
+    font-size: 22px;
+    line-height: 22px;
+    padding:  5px;
   }
 `
 const Mode = styled.div`

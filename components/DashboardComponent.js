@@ -370,8 +370,8 @@ const ClassList = styled.div`
     justify-content: center;
     user-select: none;
     color: #fff;
-    font-size: 14px;
-    padding: 6px 5px;
+    font-size: 18px;
+    padding: 0px 5px;
     min-width: 170px;
     margin-top: 30px;
     font-family: 'Bison';
@@ -680,11 +680,11 @@ function TodaysClasses({ items, id }) {
                           Join Live{' '}
                           <img
                             style={{
-                              transform: 'rotate(90deg)',
+                              transform: 'rotate(180deg)',
                               marginLeft: '3px',
                             }}
                             width="20px"
-                            src="../static/img/uparrow.svg"
+                            src="../static/img/arrow-back.svg"
                             alt="arrow"
                           />
                         </a>
@@ -696,23 +696,7 @@ function TodaysClasses({ items, id }) {
                       )} `}</button>
                     )}
                   </div>
-                  {/* <div className="status">
-                    {isPast(todayOnly) && intInterval === false && !active ? (
-                      <div className="live">
-                        <h5 className="complete">COMPLETED </h5>
-                      </div>
-                    ) : active ? (
-                      <div className="live">
-                        <div className="div">LIVE</div>
-                        <div className="circle"></div>
-                      </div>
-                    ) : (
-                      <div className="live">
-                        <h5 className="goingLive">{item.status}</h5>
-                      </div>
-                    )}
-
-                  </div> */}
+   
                   <Status status={item.status}>
                     <div className="live-status">
                       {item.status}{' '}

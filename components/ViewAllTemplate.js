@@ -82,16 +82,14 @@ const Videos = styled.div`
   }
 `
 
-const Title = styled.h1`
-  color: rgba(30, 30, 30, 1);
-
-  font-family: 'Bison';
+const Tite = styled.h1`
   letter-spacing: 2px;
-  margin: 30px 20px 10px;
-  font-size: 28px;
-  /* transform: translateY(-70px); */
-  position: relative;
+  font-size: 30px;
+  color: ${(props) => props.theme.second};
+  font-family: 'Bison';
+  line-height: 30px;
 `
+
 function ViewAllTemplate({title}) {
   
   const { data, error, loading } = useQuery(ALL_ITEMS_QUERY
@@ -105,7 +103,9 @@ function ViewAllTemplate({title}) {
 
   return (
     <>
-      <Title>{title}</Title>
+        <Tite style={{ marginTop: '70px', marginLeft: '30px' }}>
+        {title}
+        </Tite>
     <TheSection>
     
         {allVideoOnDemands.map((video, i) => {

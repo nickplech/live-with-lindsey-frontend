@@ -1,6 +1,5 @@
 import 'regenerator-runtime/runtime'
 import { ApolloProvider } from '@apollo/client'
- 
 import Page from '../components/Page'
 import withData from '../lib/withData'
 import { ToastStateProvider } from '../components/contexts/LocalState'
@@ -13,11 +12,9 @@ function MyApp({ Component, apollo, pageProps }) {
     <ApolloProvider client={apollo}>
       <ToastStateProvider >
         <UserSocketProvider>
-    
         <Page>
           <Component {...pageProps} />
         </Page>
-    
         </UserSocketProvider>
       </ToastStateProvider>
     </ApolloProvider>

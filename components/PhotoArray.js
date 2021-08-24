@@ -84,28 +84,28 @@ function PhotoArray() {
         <span>ABS</span>
   
   <span>ARMS</span>
-  <span>BACK</span>
-  <span>BANDS</span>
-  <span>BENCH WORKOUTS</span>
-  <span>BICEPS</span>
-  <span>BOOTY</span>
-
-  <span>CHALLENGES</span>
-  <span>CHEST</span>
-  <span>CORE</span>
-  <span>ENDURANCE</span>
-
   <span>HAMSTRINGS</span>
   <span>HIIT CARDIO</span>
   <span>LATS</span>
   <span>LEGS</span>
+  <span>BACK</span>
+  <span>TRICEPS</span>
+  <span>UPPER BODY</span>
+  <span>CHALLENGES</span>
+  <span>BICEPS</span>
+  <span>BOOTY</span>
+  <span>STRENGTH TRAINING</span>
+  <span>STRETCHING</span>
+
+  <span>CHEST</span>
+  <span>CORE</span>
+  <span>ENDURANCE</span>
+  <span>BANDS</span>
+  <span>BENCH WORKOUTS</span>
   <span>POSTERIOR CHAIN</span>
   <span>SHOULDERS</span>
   <span>SQUATS</span>
-  <span>STRENGTH TRAINING</span>
-  <span>STRETCHING</span>
-  <span>TRICEPS</span>
-  <span>UPPER BODY</span>
+
 
   <span>WEIGHT TRAINING</span>
   <span>YOGA</span>
@@ -113,33 +113,33 @@ function PhotoArray() {
      
        <div className="ani" >
         <span>ABS</span>
-  
-  <span>ARMS</span>
-  <span>BACK</span>
-  
-  <span>CHALLENGES</span>
-  <span>CHEST</span>
-  <span>CORE</span>
-  <span>ENDURANCE</span>
+    <span>ENDURANCE</span>
   <span>STRETCHING</span>
   <span>TRICEPS</span>
   <span>UPPER BODY</span>
+  
+  <span>CORE</span>
 
-  <span>WEIGHT TRAINING</span>
-  <span>YOGA</span>
-  <span>HAMSTRINGS</span>
-  <span>HIIT CARDIO</span>
+<span>ARMS</span>
+  <span>BACK</span>
+    <span>HIIT CARDIO</span>
   <span>LATS</span>
   <span>LEGS</span>
   <span>POSTERIOR CHAIN</span>
+  <span>CHALLENGES</span>
+
+  <span>BENCH WORKOUTS</span>
+  <span>BICEPS</span>
+  <span>BOOTY</span>
+  <span>CHEST</span>
   <span>SHOULDERS</span>
   <span>SQUATS</span>
   <span>STRENGTH TRAINING</span>
 <span>BANDS</span>
-  <span>BENCH WORKOUTS</span>
-  <span>BICEPS</span>
-  <span>BOOTY</span>
 
+  <span>WEIGHT TRAINING</span>
+  <span>YOGA</span>
+  <span>HAMSTRINGS</span>
   </div>
      </Row>
     <Row initial={{ opacity: 0 }}
@@ -179,30 +179,30 @@ function PhotoArray() {
        <div className="ani" >
         <span>ABS</span>
   
-  
-  <span>BOOTY</span>
-
-  <span>CHALLENGES</span>
-  <span>CHEST</span>
-  <span>CORE</span>
+    <span>CORE</span>
   <span>ENDURANCE</span>
 
   <span>HAMSTRINGS</span>
   <span>HIIT CARDIO</span>
+  <span>BOOTY</span>
+  <span>SQUATS</span><span>ARMS</span>
+  <span>BACK</span>
+  <span>BANDS</span>
+
+  <span>STRETCHING</span>
+  <span>TRICEPS</span>
+  <span>CHALLENGES</span>
+  <span>CHEST</span>
+
   <span>LATS</span>
   <span>LEGS</span>
   <span>POSTERIOR CHAIN</span>
   <span>SHOULDERS</span>
-  <span>SQUATS</span><span>ARMS</span>
-  <span>BACK</span>
-  <span>BANDS</span>
+
+  <span>UPPER BODY</span>
   <span>BENCH WORKOUTS</span>
   <span>BICEPS</span>
   <span>STRENGTH TRAINING</span>
-  <span>STRETCHING</span>
-  <span>TRICEPS</span>
-  <span>UPPER BODY</span>
-
   <span>WEIGHT TRAINING</span>
   <span>YOGA</span>
   </div>
@@ -606,20 +606,17 @@ function PhotoArray() {
   <span>ARMS</span>
   <span>BACK</span>
   <span>BANDS</span>
-  <span>BENCH WORKOUTS</span>
-  <span>BICEPS</span>
-  <span>BOOTY</span>
 
-  <span>CHALLENGES</span>
-  <span>CHEST</span>
-  <span>CORE</span>
-  <span>ENDURANCE</span>
-
-  <span>HAMSTRINGS</span>
   <span>HIIT CARDIO</span>
   <span>LATS</span>
   <span>LEGS</span>
   <span>POSTERIOR CHAIN</span>
+  <span>CHALLENGES</span>
+  <span>CHEST</span>
+  <span>CORE</span>
+  <span>ENDURANCE</span>
+  <span>BENCH WORKOUTS</span>
+  <span>BICEPS</span>
   <span>SHOULDERS</span>
   <span>SQUATS</span>
   <span>STRENGTH TRAINING</span>
@@ -627,6 +624,9 @@ function PhotoArray() {
   <span>TRICEPS</span>
   <span>UPPER BODY</span>
 
+  <span>BOOTY</span>
+
+  <span>HAMSTRINGS</span>
   <span>WEIGHT TRAINING</span>
   <span>YOGA</span>
   </div>
@@ -637,26 +637,26 @@ function PhotoArray() {
   <span>ARMS</span>
   <span>BACK</span>
   <span>BANDS</span>
-  <span>BENCH WORKOUTS</span>
-  <span>BICEPS</span>
-  <span>BOOTY</span>
-
+  
+  <span>LEGS</span>
+  <span>POSTERIOR CHAIN</span>
   <span>CHALLENGES</span>
   <span>CHEST</span>
   <span>CORE</span>
   <span>ENDURANCE</span>
 
   <span>HAMSTRINGS</span>
+<span>BENCH WORKOUTS</span>
+  <span>BICEPS</span>
+  <span>BOOTY</span>
   <span>HIIT CARDIO</span>
-  <span>LATS</span>
-  <span>LEGS</span>
-  <span>POSTERIOR CHAIN</span>
+  <span> <span>STRETCHING</span>
+  <span>TRICEPS</span>
+  <span>UPPER BODY</span>LATS</span>
   <span>SHOULDERS</span>
   <span>SQUATS</span>
   <span>STRENGTH TRAINING</span>
-  <span>STRETCHING</span>
-  <span>TRICEPS</span>
-  <span>UPPER BODY</span>
+ 
 
   <span>WEIGHT TRAINING</span>
   <span>YOGA</span>

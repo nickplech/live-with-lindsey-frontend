@@ -14,11 +14,12 @@ const VOD = (props) => {
   return (
     <>
       <PhotoArray />
-<div style={{minHeight: '600px'}}>
-      <MostRecentVideo />
-      <VodFavoritesSlider  user={me} />
-      <VodListSlider  user={me} />
-      <CommunityFavoritesSlider user={me} /></div>
+        <div style={{minHeight: '600px'}}>
+          <MostRecentVideo />
+          <VodFavoritesSlider  user={me} />
+          <VodListSlider  user={me} />
+          <CommunityFavoritesSlider user={me} />
+        </div>
       <Footer />
     </>
   )

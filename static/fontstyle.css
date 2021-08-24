@@ -3,7 +3,6 @@
     font-family: 'Felix';
     src: url('../static/Felix.ttf') format('truetype');
     font-display: swap;
-  
   }
   @font-face {
     font-family: 'Bison';
@@ -20,9 +19,7 @@
   }
   
   @font-face {
-          font-family: 'Comfortaa';
-          src: url('/static/Comfortaa.woff2') format('woff2');
-  font-style: normal;
-          font-weight: normal;
-      font-display: swap;
-      }
+    font-family: 'Comfortaa';
+    src: url('../static/Comfortaa.ttf') format('truetype');
+    font-display: swap;
+  }

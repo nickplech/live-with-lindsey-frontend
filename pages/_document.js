@@ -4,7 +4,7 @@ import { ServerStyleSheet } from 'styled-components'
 export default class MyDocument extends Document {
   static async getInitialProps({ renderPage }) {
     const sheet = new ServerStyleSheet()
-    const originalRenderPage = renderPage
+    
     const page = renderPage(
       (App) => (props) => sheet.collectStyles(<App {...props} />),
     )
@@ -20,7 +20,6 @@ export default class MyDocument extends Document {
           <link
             rel="stylesheet"
             href="/static/fontstyle.css"
-      
           />
           </Head>
         <body>

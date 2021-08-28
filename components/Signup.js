@@ -56,9 +56,9 @@ const Background = styled.div`
 `
 const SignUpTitle = styled.h3`
   font-family: 'Felix';
-  font-size: 42px;
+  font-size: 36px;
   /* line-height: 26px; */
-  margin: 46px auto;
+  margin: 26px auto;
   z-index: 1000;
   position: relative;
   color: ${(props) => props.theme.second};
@@ -93,7 +93,7 @@ function Signup() {
   })
   const isCompleted = inputs.firstName && inputs.firstName.length
   const isCompletedLastName = inputs.lastName && inputs.lastName.length
-  const isCompletedCellPhone = phoneValue
+  const isCompletedCellPhone = phoneValue.length > 13
   const isCompletedDisplayName =
     inputs.businessName && inputs.businessName.length
   console.log(
@@ -102,6 +102,12 @@ function Signup() {
     isCompletedCellPhone,
     isCompletedDisplayName,
   )
+  function isComplete(isCompleted, isCompletedLastName, isCompletedCellPhone, isCompletedDisplayName) {
+    if(isCompleted === true && isCompletedLastName === true && isCompletedCellPhone === true && isCompletedDisplayName === true) {
+      return true
+    }
+    return false
+  }
   return (
     <>
       <StyledSignUpStepper>
@@ -133,7 +139,7 @@ function Signup() {
               businessName={inputs.businessName}
               error={error}
             >
-              <Step isCompleted={isCompleted}>
+              <Step isComplete={isComplete}>
                 <label htmlFor="firstName" style={{ marginTop: '25px' }}>
                   First Name
                   <input
@@ -180,7 +186,7 @@ function Signup() {
                     id="cellPhone"
                     name="cellPhone"
                     className="short"
-                    placeholder="Phone Number"
+                    placeholder="(###)###-####"
                     required
                     value={formatPhoneNumber(inputs.cellPhone)}
                     onChange={handleChange}

@@ -60,16 +60,7 @@ const Wrap = styled.div`
     }
   }
   .all_access_includes {
-    grid-row: 2;
-    grid-column: 1/4;
-    display: flex;
-    flex-flow: row wrap;
-    justify-content: space-around;
-    width: 90%;
-    max-width: 1600px;
-    margin: 0 auto;
-    position: relative;
-    margin-top: 300px;
+    justify-content: center;
   }
   h2 {
     font-family: 'Bison';
@@ -118,6 +109,68 @@ const Wrap = styled.div`
     font-size: 18px;
     border: 2px solid ${(props) => props.theme.second};
   }
+
+
+.first-bulletpoint{
+  margin-left: 10px;
+    font-family: 'Bison';
+    color: #f8b0b0;
+    display: flex;
+    max-width: 600px;
+    line-height: 18px;
+    font-size: 16px;
+}
+  .bulletpoints {
+    margin-left: 10px;
+    font-family: 'Bison';
+    color: slategrey;
+    display: flex;
+    max-width: 600px;
+    line-height: 18px;
+    font-size: 16px;
+       &:before {
+      content: '+';
+      margin-right: 6px;
+      font-size: 26px;
+      font-family: 'Comfortaa';
+      line-height: 22px;
+      position: relative;
+      transform: translateY(3px);
+      color: ${(props) => props.theme.second};
+    }
+  }
+  .all_access {
+    color: ${(props) => props.theme.second};
+  }
+  h1 {
+    color: ${(props) => props.theme.second};
+    font-family: 'Felix';
+    line-height: 3.2rem;
+    font-size: 38px;
+    width: 600px;
+    position: absolute;
+    transform: translateY(200px);
+  }
+  ul {
+    list-style: none;
+    padding: none;
+    position: absolute;
+    display: flex;
+    flex-flow: column;
+  }
+  li {
+    margin: 0;
+    margin-bottom: 10px;
+    letter-spacing: 2px;
+    align-items: center;
+    transform: translateX(-13px);
+ 
+  }
+  h3 {
+    font-family: 'Bison';
+    font-size: 26px;
+    margin-bottom: 0px;
+  }
 `
 function SelectSubscription({ handleSetPlan }) {
   return (
@@ -141,43 +194,37 @@ function SelectSubscription({ handleSetPlan }) {
           </div>
         </div>
         <div className="all_access_includes">
-          <div className="item_included">
-            <p> Full Access to Daily Live Stream Workouts</p>
-          </div>
-          <div className="item_included">
-            <img src="../static/img/woddark.svg" alt="Workouts On Demand" />
-            <p>
-              Full Access to Lindsey's Video on Demand Library of 50+ Workouts
-              and Growing
-            </p>
-          </div>
-          <div className="item_included">
-            <p> 5 New Workouts Every Week</p>
-          </div>
-          <div className="item_included">
-            <p> Exclusive Mobility and Active Recovery Classes</p>
-          </div>
-          <div className="item_included">
-            <p> Exclusive Challenges &amp; Programs</p>
-          </div>{' '}
-          <div className="item_included">
-            <p>
+        <ul className=" list-unstyled">
+            <h3>
+              {' '}
+              <img height="120" src="../static/img/aap.svg" />
+            </h3>
+            <li className="first-bulletpoint">The Perks of a Live with Lindsey All Access Pass</li>
+            <li className="bulletpoints">
+              Full Access to Daily Live Stream Workouts + Lindsey's Video
+              on-Demand Library of 50+ Workouts and Growing
+            </li>
+            <li className="bulletpoints">5 New Workouts Every Week</li>
+            <li className="bulletpoints">
+              Exclusive Mobility and Active Recovery Classes
+            </li>
+            <li className="bulletpoints">
+              Exclusive Challenges &amp; Programs
+            </li>{' '}
+            <li className="bulletpoints">
               No More Expiration Dates! Retake Classes as Many Times as You Want
-            </p>
-          </div>
-          <div className="item_included">
-            <p>
+            </li>
+            <li className="bulletpoints">
               {' '}
               Access to an Amazing Online Community of Women from Around the
               World, United by Self Love + Movement
-            </p>
-          </div>
-          <div className="item_included">
-            <p>
+            </li>
+            <li className="bulletpoints">
               A variety of workouts ranging from strength, low impact, body
               weight and cardio, catering to all fitness levels
-            </p>
-          </div>
+            </li>
+          </ul>
+
         </div>
       </Wrap>
       <Footer />

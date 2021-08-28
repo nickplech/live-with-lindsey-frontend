@@ -388,7 +388,7 @@ const Div = styled.div`
 
 const MenuItem = ({ id, name, date, classLength }) => {
   const cleanName = name.toLowerCase().replace(/\s/g, '')
-  console.log(id)
+ 
   return (
     <MenItem
       image={`../static/img/classbackgrounds/smallfinal/${cleanName}.png`}
@@ -417,7 +417,7 @@ export function ProductSlider() {
   const [isSelected, setIsSelected] = useState(
     format(weekStart, 'yyyy-MM-dd'),
   )
-  console.log(isSelected)
+ 
 
   const { error, loading, data } = useQuery(STREAMS_QUERY, {
     variables: { date: isSelected ? isSelected : weekStart },

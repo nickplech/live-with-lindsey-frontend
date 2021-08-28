@@ -38,7 +38,7 @@ function DaySelector({isSelected, addTheDays}) {
 const date = new Date()
 const weekStart = startOfWeek(date, {weekStartsOn: 0})
 const theSelected = format(new Date(isSelected), 'eee')
-console.log(theSelected, isSelected)
+
 const dayButtons = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
   return (
     <SelectorRow >

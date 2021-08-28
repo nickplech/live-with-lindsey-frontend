@@ -72,7 +72,7 @@ const Form2 = styled.form`
     font-size: 1.5rem;
     margin-bottom: 20px;
     background: transparent;
-    border-radius: 5px;
+ 
     &:focus {
       outline: 0;
       border: 2px solid #f8b0b0;

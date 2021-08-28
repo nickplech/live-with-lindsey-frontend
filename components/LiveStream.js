@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import Head from 'next/head'
 import VideoLiveJs from './VideoLiveJs'
 import styled from 'styled-components'
 import GetChats from './ChatBox'
@@ -134,6 +135,11 @@ function LiveStream({ id }) {
  
   return (
     <>
+     
+  <Head>
+    <link href="https://vjs.zencdn.net/7.14.3/video-js.css" rel="stylesheet" />
+    <title>Live with Lindsey Studio</title>
+  </Head>
  <Background />
 
       <Griddy open={open}>
@@ -151,7 +157,8 @@ function LiveStream({ id }) {
     </ChatFrame>
 
     </Griddy>      
-         <ChatTrigger handleToggleChat={handleToggleChat} open={open}  /></>
+         <ChatTrigger handleToggleChat={handleToggleChat} open={open}  />
+         </>
   )
 }
 export default LiveStream

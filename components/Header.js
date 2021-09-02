@@ -59,6 +59,7 @@ const Logo = styled.div`
 //   top: -40px;
 // `
 const StyledHeader = styled.header`
+ 
   .bar {
     /* position: fixed; */
     display: grid;

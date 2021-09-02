@@ -60,7 +60,10 @@ const Wrap = styled.div`
     }
   }
   .all_access_includes {
+  
+    display: flex;
     justify-content: center;
+    align-items: center;
   }
   h2 {
     font-family: 'Bison';
@@ -151,13 +154,13 @@ const Wrap = styled.div`
     position: absolute;
     transform: translateY(200px);
   }
-  ul {
+  /* ul {
     list-style: none;
     padding: none;
-    position: absolute;
+    position: relative;
     display: flex;
     flex-flow: column;
-  }
+  } */
   li {
     margin: 0;
     margin-bottom: 10px;
@@ -186,6 +189,7 @@ function SelectSubscription({ handleSetPlan }) {
             </button>
           </div>
           <div className="free">
+          <img width="220" src="../static/img/aap.svg" />
             <h2>UNLIMITED LIVES &amp; On-Demand</h2>
             <h3>$99/mo</h3>
             <button onClick={(e) => handleSetPlan(e, 'allAccess')}>
@@ -197,9 +201,9 @@ function SelectSubscription({ handleSetPlan }) {
         <ul className=" list-unstyled">
             <h3>
               {' '}
-              <img height="120" src="../static/img/aap.svg" />
+              
             </h3>
-            <li className="first-bulletpoint">The Perks of a Live with Lindsey All Access Pass</li>
+            {/* <li className="first-bulletpoint">The Perks of a Live with Lindsey All Access Pass</li> */}
             <li className="bulletpoints">
               Full Access to Daily Live Stream Workouts + Lindsey's Video
               on-Demand Library of 50+ Workouts and Growing

@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect, useRef, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import gql from 'graphql-tag'
 import { useMutation, useQuery } from '@apollo/client'
 import styled from 'styled-components'
@@ -278,7 +278,7 @@ transform: translateY(250px);
   }
   ul {
     padding: 0;
-    width: 200px;  margin-left: 15px;
+   margin-left: 15px;
   }
   
   p {
@@ -289,7 +289,8 @@ const PopUp = styled.li`
   cursor: alias ;
     margin: 0px;
     line-height: 26px;
-
+    min-width: 100px;
+    max-width: 200px;
     font-size: 21px;
     font-family: 'Bison';
     list-style: none;

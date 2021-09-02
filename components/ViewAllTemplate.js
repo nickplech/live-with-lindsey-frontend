@@ -41,7 +41,7 @@ const Videos = styled.div`
   background-color: deepPink;
   padding: 0px;
   color: #fff;
-  border: 1px solid deepPink;
+  /* border: 1px solid deepPink; */
   border-radius: 10px;
   display: flex;
   align-items: flex-end;

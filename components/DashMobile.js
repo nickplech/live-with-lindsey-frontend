@@ -226,13 +226,14 @@ const ClassList = styled.div`
     box-shadow: 0 10px 10px -5px rgba(0, 0, 0, 0.2);
     display: grid;
     width: 95%;
-margin: 0 auto;
+    max-width: 600px;
+margin: 0 auto 30px;
     background: linear-gradient(
-      330deg,
-      rgba(248, 176, 176, 1 ) 0%,
-      rgba(255, 215, 212, 1) 43%,
-      rgba(255, 255, 255, 1) 69%,
-      rgba(255, 255, 255, 1) 100%
+      90deg,
+       rgba(248, 196, 196, 1 )0%,
+      rgba(255, 245, 245, 1) 30%,
+     rgba(255, 245, 245, 1) 70%,
+    rgba(248, 196, 196, 1 ) 100%
     );
     height: 180px;
     overflow: hidden;
@@ -331,6 +332,7 @@ min-width: 220px;
     padding-right: 10px;
     width: 100%;
     grid-row: 1;
+    position: absolute;
     font-family: 'Bison';
   }
   .btn-dis {
@@ -744,7 +746,7 @@ function TodaysClasses({ items, active, isSelected, setIsSelected }) {
                     {openUp ? (
                       <Link
                         href={{
-                          pathname: '/stream/[id]',
+                          pathname: '/stream/[...id]',
                           query: { id: item.id },
                         }}
                         as={'/stream/' + item.id}

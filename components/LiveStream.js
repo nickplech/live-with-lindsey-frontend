@@ -34,14 +34,19 @@ const Griddy = styled.div`
   display: grid;
   height: calc(100vh - 60px);
   width: 100%;
-grid-template-columns: ${props => props.open ? '1fr minmax(375px, 30%)' : '1fr'};
-grid-template-rows: 1fr;
+  grid-template-columns: 1fr;
+
+grid-template-rows: 1fr 1fr;
   /* flex-flow: column; */
 position: relative;
- 
+ @media(min-width: 768px) {
+  grid-template-rows: 1fr ;
+
+  grid-template-columns: ${props => props.open ? '1fr minmax(375px, 30%)' : '1fr'};
+ }
 `
 const ChatFrame = styled.div`
-  ${props => props.open && 'grid-column: 2'};
+  ${props => props.open && 'grid-column: 1'};
    display: ${props => props.open ? 'flex' : 'none'};
   height: 100%;
  
@@ -57,6 +62,10 @@ const ChatFrame = styled.div`
     overflow-y: scroll;
     &::-webkit-scrollbar {
       display: none; // Safari and Chrome
+    }
+    @media(min-width: 768px) {
+      ${props => props.open && 'grid-column: 2'};
+   display: ${props => props.open ? 'flex' : 'none'};
     }
  .name {
  z-index:2000;
@@ -102,7 +111,7 @@ function LiveStream({ id }) {
     suppressNotSupportedError: true,
     sources: [
       {
-        src: `http://143.110.146.49:8080/hls/${id}.m3u8`,
+        src: `https://live.lindseyharrod.com/hls/${id}.m3u8`,
         type: 'application/x-mpegURL',
       },
     ],

@@ -414,7 +414,7 @@ const MenuItem = ({
           id={id}
         />
 
-        <Link href={{ pathname: '/class/[id]', query: { id: id } }}>
+        <Link href={{ pathname: '/class/[...id]', query: { id: id } }}>
           <a>
             <div className="theDiv">
               <h1>{name}</h1>

@@ -96,6 +96,12 @@ align-items: center;
   
     @media (max-width: 992px) {
       grid-column: 1;
+
+    }
+  }
+  img {
+    @media(max-width: 768px) {
+      max-width: 300px;
     }
   }
   span {

@@ -75,7 +75,7 @@ const Course = styled.li`
   z-index: 20000;
   margin: 5px auto;
   width: 90%;
-
+  max-width: 600px;
   height: 65px;
   transition: 0.3s;
  

@@ -2,7 +2,8 @@ import Router from 'next/router'
 import React, { useState } from 'react'
 import useForm from '../lib/useForm'
 import gql from 'graphql-tag'
-import formatMoney from '../lib/formatMoney'
+import Slider, {createSliderWithTooltip, SliderTooltip} from 'rc-slider';
+import 'rc-slider/assets/index.css';
 import { format } from 'date-fns'
 import { useMutation, useQuery } from '@apollo/client'
 import SickButton from './styles/SickButton'
@@ -110,7 +111,7 @@ const Mode = styled.div`
     position: absolute;
     transform: translateY(5px);
     height: 90%;
-    width: 95%;
+    width: 98%;
     overflow-x: hidden;
     overflow-y: scroll;
     margin: 0 auto;
@@ -129,7 +130,11 @@ const Mode = styled.div`
 
     position: relative;
   }
-
+.foo {
+  z-index: 99000;
+ color: white;
+font-size: 28px;
+}
   .actions {
     width: 100%;
     padding: 10px 5px;
@@ -198,26 +203,57 @@ text-align: center;
     opacity: .8;
   }
 `
+const SliderWithTooltip = createSliderWithTooltip(Slider);
+const { Handle } = SliderWithTooltip;
+
+const handle = props => {
+  const { value, dragging, index, ...restProps } = props;
+  return (
+    <SliderTooltip
+      prefixCls="rc-slider-tooltip"
+      overlay={`${value} %`}
+      visible={dragging}
+      placement="top"
+      key={index}
+    >
+      <Handle value={value} {...restProps} />
+    </SliderTooltip>
+  );
+};
+ 
+function percentFormatter(v) {
+  return `$${v}`;
+}
+ 
+const wrapperStyle = { width:'90%', margin: '50px auto'};
 function ModalFrame() {
+  
   const [equipmentId, setEquipmentSearch] = useState('')
   const [isSelected, setIsSelected] = useState('')
   const [tagsId, setTagsSearch] = useState('')
   const [selectedEquipment, setSelectedEquipment] = useState([])
   const [selectedTags, setSelectedTags] = useState([])
-  const [priceState, setPriceState] = useState(1000)
+  const [priceState, setPriceState] = useState('1000')
   const [selectedOption, setSelectedOption] = useState('')
+  const [sliderValue, setSliderValue] = useState(10)
 
+
+  const onSliderChange = v => {
+  console.log(v)
+    setSliderValue(v)
+  };
+  const onSliderAfterChange = v => {
+    console.log(v)
+    const thePrice = v + '00'
+    setPriceState(thePrice)
+    setIsSelected('$' + v)
+  }
   const submitEquipment = selectedEquipment.map((str, i) => ({ id: str }))
 
   function handleSelectedOption(e) {
     setSelectedOption(e)
   }
-  function changeToPrice(e, toInt) {
-    e.preventDefault()
-    const {value } = e.target
-    setPriceState(toInt)
-    setIsSelected(toInt)
-  }
+  
   const handleEquipmentSearch = (item) => {
     let selectedCopy = [...selectedEquipment]
     selectedCopy.push(item.id)
@@ -278,10 +314,10 @@ console.log(inputs.date)
     return { value, label }
   })
   const pricingArr = [...Array(20).keys()]
-  console.log(selectedEquipment)
+
   const needsClass = selectedOption && selectedOption.length
   const needsDateTime = inputs.date && inputs.date !== null
-  const tooManyTags = selectedTags.length > 5
+  const tooManyTags = selectedTags.length > 10
   return (
     <Wrap>
       <Popup
@@ -310,7 +346,7 @@ console.log(inputs.date)
 
                 <div className="content">
                   <form
-                    data-testid="form"
+               
                     onSubmit={async (e) => {
                       e.preventDefault()
                       await createNewClass()
@@ -395,17 +431,28 @@ console.log(inputs.date)
                       </span>{' '}
                       search tags
                     </p>
-                    <Pricing >
-                    {pricingArr.map((price, i) => {
-                      const actualPrice = price + 1
-                      const toMs = actualPrice + '00'
-                      const toInt = parseInt(toMs)
-                
-                      return <ShowPrice  value={toInt} isSelected={isSelected} onClick={(e) => changeToPrice(e, toInt)}>
-                      ${actualPrice}
-                    </ShowPrice>
-                    })}
-                    </Pricing>
+                    <div style={wrapperStyle}>
+                    <SliderWithTooltip
+                      tipFormatter={percentFormatter}
+                      min={0} max={20}
+                      onChange={onSliderChange}
+                      onAfterChange={onSliderAfterChange}
+                      tipProps={{ overlayClassName: 'foo'  }}
+                      marks={{ 0:0, 1:1, 2:2, 3:3, 4:4, 5:5, 6:6, 7:7, 8:8, 9:9, 10:10, 11:11, 12:12, 13:13, 14:14, 15:15, 16:16, 17:17, 18:18, 19:19, 20:20 }}
+        defaultValue={sliderValue}
+        trackStyle={{borderRadius: 0,  backgroundColor: 'green', height: 10 }}
+        handleStyle={{
+          borderColor: 'green',
+          height: 20,borderRadius: 0,
+          width: 10,
+          marginLeft:0,
+          marginTop: -5,
+          backgroundColor: 'green',
+        }}
+        railStyle={{ borderRadius: 0,backgroundColor: '#f8b0b0', height: 10 }}
+      />
+                    </div>
+ 
                     
                     <SickButton
                       disable={

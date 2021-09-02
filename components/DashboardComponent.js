@@ -570,7 +570,7 @@ function DashboardComponent() {
           <Schedule items={items}>
             <Title items={items}>Scheduled Live Workouts </Title>
             <p className="subTight">
-              Getting Started? Explore this week's Live Workouts below!
+              Explore this week's Live Workouts below!
             </p>
             <ScheduledClasses  id={me && me.id} inCart={inCart} />
           </Schedule>
@@ -671,10 +671,10 @@ function TodaysClasses({ items, id }) {
                     {openUp ? (
                       <Link
                         href={{
-                          pathname: '/stream/[id]',
+                          pathname: '/stream/[...id]',
                           query: { id: item.id },
                         }}
-                        as={'/stream/' + item.id}
+                      
                       >
                         <a className="btn">
                           Join Live{' '}

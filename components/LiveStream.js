@@ -36,7 +36,7 @@ const Griddy = styled.div`
   width: 100%;
   grid-template-columns: 1fr;
 
-grid-template-rows: 1fr 1fr;
+grid-template-rows: 1fr 2fr;
   /* flex-flow: column; */
 position: relative;
  @media(min-width: 768px) {
@@ -143,31 +143,25 @@ function LiveStream({ id }) {
  
  
   return (
-    <>
-     
-  <Head>
-    <link href="https://vjs.zencdn.net/7.14.3/video-js.css" rel="stylesheet" />
-    <title>Live with Lindsey Studio</title>
-  </Head>
- <Background />
-
+      <>
+        <Head>
+          <link href="https://vjs.zencdn.net/7.14.3/video-js.css" rel="stylesheet" />
+          <title>Live with Lindsey Studio</title>
+        </Head>
+      <Background />
       <Griddy open={open}>
- 
         <VideoLiveJs id={id} options={videoJsOptions}/>
-            <ChatFrame     open={open}>
+            <ChatFrame open={open}>
               <div className="name">close chat <img className="arrow" src="../static/img/uparrow.svg" onClick={() => handleToggleChat()} /> </div>
-          <GetChats
-       
-            name={name}
- 
-            itemId={id}
-            open={open}
-          />
-    </ChatFrame>
-
-    </Griddy>      
-         <ChatTrigger handleToggleChat={handleToggleChat} open={open}  />
-         </>
+              <GetChats
+                name={name}
+                itemId={id}
+                open={open}
+              />
+            </ChatFrame>
+        </Griddy>      
+        <ChatTrigger handleToggleChat={handleToggleChat} open={open}  />
+      </>
   )
 }
 export default LiveStream

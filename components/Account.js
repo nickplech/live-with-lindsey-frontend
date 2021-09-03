@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useState} from 'react'
 import gql from 'graphql-tag'
 import useForm from '../lib/useForm'
 import { useMutation } from '@apollo/client'
@@ -6,7 +6,7 @@ import { CURRENT_USER_QUERY } from './User'
 import { useUser } from './User'
 import SickButton from './styles/SickButton'
 import Form from './styles/Form'
-
+import { toast } from 'react-toastify'
 import styled from 'styled-components'
 const UPDATE_USER_MUTATION = gql`
   mutation UPDATE_USER_MUTATION($image: Upload, $id: ID!) {
@@ -45,6 +45,28 @@ const Width = styled.div`
     display: flex;
     justify-self: flex-end;
   }
+  input[type="file"] {
+    display: none;
+}
+.custom-file-upload {
+    border: 3px solid #f8b0b0;
+    display: inline-block;
+    padding: 0px;
+    font-size: 22px;
+    line-height: 28px;
+    cursor: pointer;
+   
+    height: 36px;
+    border-radius: 5px;
+    background-color: #f8b0b0;
+    cursor: pointer;
+    color: white;
+    transition: .3s;
+&:hover {
+  transform: scale(1.06);
+  box-shadow: 0 8px 7px -3px rgba(0,0,0,.2);
+}
+}
 `
 const Img = styled.div`
   background: url(${(props) => props.pic}) center center;
@@ -67,16 +89,61 @@ const Img = styled.div`
 
 function Account() {
   const me = useUser()
+  const [newImage, setNewImage] = useState(false)
   if (!me) return null
   const validImageTypes = 'image/gif, image/jpeg, image/jpg, image/png'
 
   const { inputs, handleChange, resetForm } = useForm({
     image: '',
   })
+  const handleImageChange = files => {
+    setNewImage(false)
+    const file = files ? files[0] : false;
+    if (!file) return;
+
+    // Validate file type
+    if (!file.type || validImageTypes.indexOf(file.type) === -1) {
+      addToast('Please provide a valid image type: GIF, JPG, or PNG.', {
+        appearance: 'error',
+        autoDismiss: true,
+      });
+      return null;
+    }
+
+    // Validate file size
+    if (file.size > 5 * 1024 * 1024) {
+      toast('Maximum image size is 5MB.', {
+        appearance: 'error',
+        autoDismiss: true,
+      });
+      return null;
+    }
+
+   if(loading) return <p>loading...</p>
+   setNewImage(true)
+    updateUser({
+      variables: {
+        id: me.id,
+        image: file,
+      },
+    })
+      .then(() => {
+        if(loading) return <p>loading...</p>
+       toast('New avatar image saved successfully.', {
+          appearance: 'success',
+          autoDismiss: true,
+        });
+      })
+      .catch(error => {
+        // eslint-disable-next-line no-console
+        console.error(error);
+      });
+  };
+
   const [updateUser, { error, loading, data }] = useMutation(
     UPDATE_USER_MUTATION,
     {
-      variables: { ...inputs, id: me.id },
+      // variables: { ...inputs, id: me.id },
       refetchQueries: [{ query: CURRENT_USER_QUERY }],
     },
   )
@@ -106,24 +173,23 @@ function Account() {
           <Img pic={defaultPic} />
         )}
 
-        <label style={{ margin: '15px auto' }} htmlFor="file">
+        <label className="custom-file-upload" style={{ margin: '15px auto' }} htmlFor="file">
           {inputs.image && 'Click Update to Display New Image'}
+          Upload{loading ? 'ing' : null} Profile Pic
           <input
+            disabled={loading}
             type="file"
+            accept={validImageTypes}
+            type="file"
+            onChange={e => handleImageChange(e.target.files)}
             id="file"
             name="image"
             placeholder="Upload an image"
             required
-            onChange={handleChange}
+        
           />
         </label>
-        <SickButton
-          style={{ marginTop: '50px' }}
-          disabled={inputs.image.length === 0 || loading}
-          type="submit"
-        >
-          Updat{loading ? 'ing' : 'e'}
-        </SickButton>
+      
       </form>
     </Width>
   )

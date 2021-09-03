@@ -1,18 +1,23 @@
-import React, { createContext, useState, useEffect, useRef } from "react";
-import { io } from "socket.io-client";
+import React, { useContext, createContext, useState, useEffect, useRef } from "react";
+import io  from "socket.io-client";
 import Peer from "simple-peer";
  import Error from '../ErrorMessage'
-const VideoContext = createContext();
- const URL = "http://localhost:3001/privateclass";
 
-export const socket = io(URL);
+const PeerContext = createContext();
 
-const VideoState = ({ children }) => {
+export  function usePeerSocket() {
+  return useContext(PeerContext)
+  
+}
+
+
+ export function PeerSocketProvider({name, classId, userId, children }) {
+  const [peerSocket, setPeerSocket] = useState()
   const [callAccepted, setCallAccepted] = useState(false);
   const [callEnded, setCallEnded] = useState(false);
   const [stream, setStream] = useState();
   const [chat, setChat] = useState([]);
-  const [name, setName] = useState("");
+  const [yourName, setYourName] = useState(name);
   const [call, setCall] = useState({});
   const [me, setMe] = useState("");
   const [userName, setUserName] = useState("");
@@ -28,8 +33,18 @@ const VideoState = ({ children }) => {
   const userVideo = useRef();
   const connectionRef = useRef();
   const screenTrackRef = useRef();
-
+    useEffect(() => {
+      const newPeerSocket = io(`http://localhost:3001/privateclass`, {
+        withCredentials: true,
+     
+      })
+      setPeerSocket(newPeerSocket)
+      console.log('peer sockeeeeeeee')
+      return () => newPeerSocket.close()
+    }, [classId, userId ])
+console.log(classId, userId,yourName)
   useEffect(() => {
+    if(!peerSocket) return
     navigator.mediaDevices
       .getUserMedia({ video: true, audio: true })
       .then((currentStream) => {
@@ -37,14 +52,15 @@ const VideoState = ({ children }) => {
         myVideo.current.srcObject = currentStream;
       });
     if (localStorage.getItem("name")) {
-      setName(localStorage.getItem("name"));
+      setYourName(localStorage.getItem("name"));
     }
-    socket.on("me", (id) => setMe(id));
-    socket.on("endCall", () => {
+    peerSocket.on("me", (id) => setMe(id));
+    peerSocket.on("endCall", () => {
       window.location.reload();
     });
 
-    socket.on("updateUserMedia", ({ type, currentMediaStatus }) => {
+
+    peerSocket.on("updateUserMedia", ({ type, currentMediaStatus }) => {
       if (currentMediaStatus !== null || currentMediaStatus !== []) {
         switch (type) {
           case "video":
@@ -61,21 +77,21 @@ const VideoState = ({ children }) => {
       }
     });
 
-    socket.on("callUser", ({ from, name: callerName, signal }) => {
-      setCall({ isReceivingCall: true, from, name: callerName, signal });
+    peerSocket.on("callUser", ({ from,yourName: callerName, signal }) => {
+      setCall({ isReceivingCall: true, from,yourName: callerName, signal });
     });
 
-    socket.on("msgRcv", ({ name, msg: value, sender }) => {
+    peerSocket.on("msgRcv", ({yourName, msg: value, sender }) => {
       setMsgRcv({ value, sender });
       setTimeout(() => {
         setMsgRcv({});
       }, 2000);
     });
-  }, []);
+  }, [peerSocket]);
 
-  // useEffect(() => {
-  //   console.log(chat);
-  // }, [chat]);
+  useEffect(() => {
+    console.log(chat);
+  }, [chat]);
 
   const answerCall = () => {
     setCallAccepted(true);
@@ -83,10 +99,10 @@ const VideoState = ({ children }) => {
     const peer = new Peer({ initiator: false, trickle: false, stream });
 
     peer.on("signal", (data) => {
-      socket.emit("answerCall", {
+      peerSocket.emit("answerCall", {
         signal: data,
         to: call.from,
-        userName: name,
+        userName:yourName,
         type: "both",
         myMediaStatus: [myMicStatus, myVdoStatus],
       });
@@ -106,11 +122,11 @@ const VideoState = ({ children }) => {
     const peer = new Peer({ initiator: true, trickle: false, stream });
     setOtherUser(id);
     peer.on("signal", (data) => {
-      socket.emit("callUser", {
+      peerSocket.emit("callUser", {
         userToCall: id,
         signalData: data,
         from: me,
-        name,
+       yourName,
       });
     });
 
@@ -118,11 +134,11 @@ const VideoState = ({ children }) => {
       userVideo.current.srcObject = currentStream;
     });
 
-    socket.on("callAccepted", ({ signal, userName }) => {
+    peerSocket.on("callAccepted", ({ signal, userName }) => {
       setCallAccepted(true);
       setUserName(userName);
       peer.signal(signal);
-      socket.emit("updateMyMedia", {
+      peerSocket.emit("updateMyMedia", {
         type: "both",
         currentMediaStatus: [myMicStatus, myVdoStatus],
       });
@@ -134,7 +150,7 @@ const VideoState = ({ children }) => {
 
   const updateVideo = () => {
     setMyVdoStatus((currentStatus) => {
-      socket.emit("updateMyMedia", {
+      peerSocket.emit("updateMyMedia", {
         type: "video",
         currentMediaStatus: !currentStatus,
       });
@@ -145,7 +161,7 @@ const VideoState = ({ children }) => {
 
   const updateMic = () => {
     setMyMicStatus((currentStatus) => {
-      socket.emit("updateMyMedia", {
+      peerSocket.emit("updateMyMedia", {
         type: "mic",
         currentMediaStatus: !currentStatus,
       });
@@ -225,33 +241,34 @@ const VideoState = ({ children }) => {
     setCallEnded(true);
 
     connectionRef.current.destroy();
-    socket.emit("endCall", { id: otherUser });
+    peerSocket.emit("endCall", { id: otherUser });
     window.location.reload();
   };
 
   const leaveCall1 = () => {
-    socket.emit("endCall", { id: otherUser });
+    peerSocket.emit("endCall", { id: otherUser });
   };
   const sendMsg = (value) => {
-    socket.emit("msgUser", { name, to: otherUser, msg: value, sender: name });
+    peerSocket.emit("msgUser", {yourName, to: otherUser, msg: value, sender:yourName });
     let msg = {};
     msg.msg = value;
     msg.type = "sent";
     msg.timestamp = Date.now();
-    msg.sender = name;
+    msg.sender =yourName;
     setChat([...chat, msg]);
   };
 
   return (
-    <VideoContext.Provider
+    <PeerContext.Provider
       value={{
+        peerSocket,
         call,
         callAccepted,
         myVideo,
         userVideo,
         stream,
-        name,
-        setName,
+        yourName,
+        setYourName,
         callEnded,
         me,
         callUser,
@@ -279,8 +296,9 @@ const VideoState = ({ children }) => {
       }}
     >
       {children}
-    </VideoContext.Provider>
+    </PeerContext.Provider>
   );
 };
 
-export default VideoState;
+
+ 

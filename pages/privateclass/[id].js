@@ -1,10 +1,10 @@
 import { useRouter } from 'next/router'
 import PleaseSignIn from '../../components/PleaseSignIn'
-import VideoState  from '../../components/contexts/PrivatePeerSocket'
+import {PeerSocketProvider}  from '../../components/contexts/PrivatePeerSocket'
 import PrivateRoomComponent from '../../components/PrivateRoomComponent'
- 
 
-const Stream = () => {
+
+const aPrivateClass = () => {
   const router = useRouter()
 
   console.log(router.query.userId)
@@ -12,14 +12,16 @@ const Stream = () => {
   return (
     <PleaseSignIn>
       {(me) => (
-        <VideoState
-          id={router.query.id}
+        <PeerSocketProvider
+          classId={router.query.id}
           userId={me.id}
+name={me.firstName}
         >
-          <PrivateRoomComponent id={router.query.id} userId={me.id} />
-        </VideoState>
+          <PrivateRoomComponent    />
+
+        </PeerSocketProvider>
       )}
     </PleaseSignIn>
   )
 }
-export default Stream
+export default aPrivateClass

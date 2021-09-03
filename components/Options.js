@@ -1,40 +1,57 @@
 import React, { useState, useContext, useEffect, useRef } from "react";
-import { Input, Button, Tooltip, Modal, message } from "antd";
-import Phone from "../../assests/phone.gif";
-import Teams from "../../assests/teams.mp3";
-import * as classes from "./Options.module.css";
-import { CopyToClipboard } from "react-copy-to-clipboard";
-import VideoContext from "../../context/VideoContext";
-import Hang from "../../assests/hang.svg";
-import {
-  TwitterIcon,
-  TwitterShareButton,
-  WhatsappShareButton,
-  WhatsappIcon,
-  FacebookIcon,
-  FacebookShareButton,
-} from "react-share";
-import {
-  UserOutlined,
-  CopyOutlined,
-  InfoCircleOutlined,
-  PhoneOutlined,
-} from "@ant-design/icons";
-import { socket } from "../../context/VideoState";
-
-const Options = () => {
+// import { Input, Button, Tooltip, Modal, message } from "antd";
+// import Phone from "../../assests/phone.gif";
+// import Teams from "../../assests/teams.mp3";
+// import * as classes from "./Options.module.css";
+// import { CopyToClipboard } from "react-copy-to-clipboard";
+import {usePeerSocket} from "./contexts/PrivatePeerSocket";
+ import SickButton  from "./styles/SickButton";
+ import styled from 'styled-components'
+// import {
+//   TwitterIcon,
+//   TwitterShareButton,
+//   WhatsappShareButton,
+//   WhatsappIcon,
+//   FacebookIcon,
+//   FacebookShareButton,
+// } from "react-share";
+// import {
+//   UserOutlined,
+//   CopyOutlined,
+//   InfoCircleOutlined,
+//   PhoneOutlined,
+// } from "@ant-design/icons";
+ const Wrap = styled.div`
+ display: flex;
+flex-flow: column;
+text-align: center;
+ justify-content: center;
+ align-items: center;
+ border-radius:10px;
+ padding: 10px;
+ justify-self: center;
+ margin: 0 auto;
+ background: rgba(245,245,245,1);
+ box-shadow: 0 20px 8px -10px rgba(0,0,0,.2);
+  position: absolute;     
+ width: 95%;
+ max-width:300px;
+ height: 200px;
+ `
+const Options = ({name, userId}) => {
   const [idToCall, setIdToCall] = useState("");
 
   const [isModalVisible, setIsModalVisible] = useState(false);
   const Audio = useRef();
   const {
+      peerSocket,
     call,
     callAccepted,
     myVideo,
     userVideo,
     stream,
-    name,
-    setName,
+    yourName,
+    setYourName,
     callEnded,
     me,
     callUser,
@@ -43,8 +60,8 @@ const Options = () => {
     otherUser,
     setOtherUser,
     leaveCall1,
-  } = useContext(VideoContext);
-
+  } = usePeerSocket();
+console.log(name)
   useEffect(() => {
     if (isModalVisible) {
       Audio?.current?.play();
@@ -68,38 +85,15 @@ const Options = () => {
   }, [call.isReceivingCall]);
 
   return (
-    <div className={classes.options}>
-      <div style={{ marginBottom: "0.5rem" }}>
-        <h2>Account Info</h2>
-        <Input
-          size="large"
-          placeholder="Your name"
-          prefix={<UserOutlined />}
-          maxLength={15}
-          suffix={<small>{name.length}/15</small>}
-          value={name}
-          onChange={(e) => {
-            setName(e.target.value);
-            localStorage.setItem("name", e.target.value);
-          }}
-          className={classes.inputgroup}
-        />
+    <Wrap >
+      <div  >
+        <h2 style={{transform: 'translateY(-10px)'}}>Hi {yourName}!</h2>
+      
 
-        <div className={classes.share_options}>
-          <CopyToClipboard text={me}>
-            <Button
-              type="primary"
-              icon={<CopyOutlined />}
-              className={classes.btn}
-              tabIndex="0"
-              onClick={() => message.success("Code copied successfully!")}
-            >
-              Copy code
-            </Button>
-          </CopyToClipboard>
-
-          <div className={classes.share_social}>
-            <WhatsappShareButton
+        <div >
+ 
+          <div  >
+            {/* <WhatsappShareButton
               url={`https://video-chat-mihir.vercel.app/`}
               title={`Join this meeting with the given code "${me}"\n`}
               separator="Link: "
@@ -120,81 +114,81 @@ const Options = () => {
               className={classes.share_icon}
             >
               <TwitterIcon size={26} round className={classes.share_border} />
-            </TwitterShareButton>
+            </TwitterShareButton> */}
           </div>
         </div>
       </div>
       <div style={{ marginBottom: "0.5rem" }}>
         <h2>Make a call</h2>
 
-        <Input
+        <input
           placeholder="Enter code to call"
           size="large"
-          className={classes.inputgroup}
+   
           value={idToCall}
           onChange={(e) => setIdToCall(e.target.value)}
           style={{ marginRight: "0.5rem", marginBottom: "0.5rem" }}
-          prefix={<UserOutlined className="site-form-item-icon" />}
-          suffix={
-            <Tooltip title="Enter code of the other user">
-              <InfoCircleOutlined style={{ color: "rgba(0,0,0,.45)" }} />
-            </Tooltip>
-          }
+        //   prefix={<UserOutlined className="site-form-item-icon" />}
+        //   suffix={
+        //     <Tooltip title="Enter code of the other user">
+        //       <InfoCircleOutlined style={{ color: "rgba(0,0,0,.45)" }} />
+        //     </Tooltip>
+        //   }
         />
 
         {callAccepted && !callEnded ? (
-          <Button
+          <SickButton
             variant="contained"
             onClick={leaveCall}
-            className={classes.hang}
+       
             tabIndex="0"
           >
             <img src={Hang} alt="hang up" style={{ height: "15px" }} />
             &nbsp; Hang up
-          </Button>
+          </SickButton>
         ) : (
-          <Button
+          <SickButton
             type="primary"
-            icon={<PhoneOutlined />}
+ 
             onClick={() => {
               if (name.length) callUser(idToCall);
               else message.error("Please enter your name to call!");
             }}
-            className={classes.btn}
+       
             tabIndex="0"
           >
             Call
-          </Button>
+          </SickButton>
         )}
       </div>
 
       {call.isReceivingCall && !callAccepted && (
         <>
           <audio src={Teams} loop ref={Audio} />
-          <Modal
+          {/* <Modal
             title="Incoming Call"
             visible={isModalVisible}
             onOk={() => showModal(false)}
             onCancel={handleCancel}
             footer={null}
-          >
+          > */}
             <div style={{ display: "flex", justifyContent: "space-around" }}>
               <h1>
                 {call.name} is calling you:{" "}
                 <img
                   src={Phone}
                   alt="phone ringing"
-                  className={classes.phone}
+                  
                   style={{ display: "inline-block" }}
                 />
               </h1>
             </div>
-            <div className={classes.btnDiv}>
-              <Button
-                variant="contained"
-                className={classes.answer}
+            <div >
+              <SickButton
+          
+            
                 color="#29bb89"
-                icon={<PhoneOutlined />}
+            
                 onClick={() => {
                   answerCall();
                   Audio.current.pause();
@@ -202,11 +196,11 @@ const Options = () => {
                 tabIndex="0"
               >
                 Answer
-              </Button>
-              <Button
+              </SickButton>
+              <SickButton
                 variant="contained"
-                className={classes.decline}
-                icon={<PhoneOutlined />}
+                
+                 
                 onClick={() => {
                   setIsModalVisible(false);
                   Audio.current.pause();
@@ -214,12 +208,12 @@ const Options = () => {
                 tabIndex="0"
               >
                 Decline
-              </Button>
+              </SickButton>
             </div>
-          </Modal>
+          {/* </Modal> */}
         </>
       )}
-    </div>
+    </Wrap>
   );
 };
 

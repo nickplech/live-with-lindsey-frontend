@@ -238,6 +238,7 @@ class MultiSelectEquipment extends React.Component {
     const res = await client.query({
       query: EQUIPMENT_SEARCH_QUERY,
       variables: { searchTerm: e.target.value },
+      fetchPolicy: 'no-cache'
     })
     // if (!res.data.allRequireds && this.state.loading === true) return <Loader />
 

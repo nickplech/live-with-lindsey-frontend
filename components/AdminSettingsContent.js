@@ -2,7 +2,7 @@ import React from 'react'
 import AdminCalendarAlt from './AdminCalendarAlt'
 import Tabs from './Tabs'
 import UpdateEquipment from './UpdateEquipment'
-import styled from 'styled-components'
+import CreatePrivateClass from './CreatePrivateClass'
 import UpdateTagSettings from './UpdateTagSettings'
 import UpdateScheduleSettings from './UpdateScheduleSettings'
 
@@ -24,6 +24,9 @@ const AdminSettingsContent = () => {
       </Tabs.Tab>
       <Tabs.Tab id="tab4" title="weighty">
         <UpdateEquipment />
+      </Tabs.Tab>
+      <Tabs.Tab id="tab5" title="private">
+        <CreatePrivateClass />
       </Tabs.Tab>
     </Tabs>
   )

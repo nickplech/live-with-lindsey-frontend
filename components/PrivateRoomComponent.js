@@ -1,9 +1,11 @@
-import React, { useEffect, useRef} from 'react'
+import React, { useState, useRef} from 'react'
+import { motion } from "framer-motion";
 import Options from './Options'
+import SickButton  from './styles/SickButton'
 import styled from 'styled-components'
 import  {usePeerSocket}  from './contexts/PrivatePeerSocket'
 
-const Wrap = styled.section`
+const Wrap = styled(motion.div)`
 position: relative;
 display: flex;
  
@@ -37,9 +39,43 @@ height: calc(100vh - 60px);
       position: absolute;
     
     }
-
+.user_other {
+  display: flex;
+  position: absolute;
+  height: 150px;
+  width: auto;
+  background: lightgray;
+  z-index: 8888888;
+  border-radius: 5px;
+cursor: grab;
+}
 `
-const PrivateRoomComponent = (props) => {
+
+
+const CallingNow = styled.div`
+background: rgba(245,245,245,.8);
+position: fixed;
+min-height: 100px;
+display: flex;
+flex-flow: column;
+line-height: 10px;
+justify-content: center;
+justify-self: center;
+align-self: center;
+font-size: 22px;
+align-items: center;
+margin: 0 auto;
+text-align: center;
+width: 100%;
+
+button {
+    margin: 5px;
+}
+`
+const PrivateRoomComponent = ({isAdmin}) => {
+  const constraintsRef = useRef(null);
+
+  const [isModalVisible, setIsModalVisible] = useState(false);
   // const { me, callAccepted, myVideo, userVideo, callEnded, stream, call} = usePeerSocket
   const {
     call,
@@ -53,11 +89,12 @@ const PrivateRoomComponent = (props) => {
     me,
     callUser,
     leaveCall,
+    leaveCall1,
     answerCall,
-    sendMsg: sendMsgFunc,
-    msgRcv,
-    chat,
-    setChat,
+    // sendMsg: sendMsgFunc,
+    // msgRcv,
+    // chat,
+    // setChat,
     userName,
     myVdoStatus,
     screenShare,
@@ -69,10 +106,14 @@ const PrivateRoomComponent = (props) => {
     userMicStatus,
     updateMic,
   } = usePeerSocket()
-
+  const handleCancel = () => {
+    setIsModalVisible(false);
+    leaveCall1();
+    window.location.reload();
+  };
     return (
-        <Wrap>
-            <Grid>
+        <Wrap ref={constraintsRef}>
+            <Grid  >
      
       
        {stream &&
@@ -82,11 +123,48 @@ const PrivateRoomComponent = (props) => {
       
      
       {callAccepted && !callEnded && (
-      <video playsInline ref={userVideo} autoPlay className="user_other" />
+      <motion.video playsInline ref={userVideo} autoPlay className="user_other" drag
+      dragConstraints={constraintsRef} />
       
       )}
     </Grid>
-    <div className="opt-wrap">   <Options/></div>
+    {isAdmin && <div className="opt-wrap">   <Options/></div>}
+
+    {call.isReceivingCall && !callAccepted && (
+      
+         
+   
+      <CallingNow isModalVisible={isModalVisible} isReceivingCall={call.isReceivingCall} callAccepted={callAccepted} style={{ display: "flex", justifyContent: "space-around" }}>
+     <p>   You Have an Invite to Join, Please Accept to Continue!</p>
+   <div>
+        <SickButton
+    
+      
+     
+      
+          onClick={() => {
+            answerCall();
+            setIsModalVisible(false)
+          }}
+       
+        >
+          Accept
+        </SickButton>
+        <SickButton
+
+          onClick={() => {
+            setIsModalVisible(false)
+            handleCancel()
+          }}
+       
+        >
+          Decline
+        </SickButton>
+     </div>
+      </CallingNow>
+    
+ 
+)}
        
         </Wrap>
     )

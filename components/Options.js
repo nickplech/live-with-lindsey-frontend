@@ -1,11 +1,10 @@
 import React, { useState, useContext, useEffect, useRef } from "react";
-// import { Input, Button, Tooltip, Modal, message } from "antd";
-// import Phone from "../../assests/phone.gif";
-// import Teams from "../../assests/teams.mp3";
+
 // import * as classes from "./Options.module.css";
 // import { CopyToClipboard } from "react-copy-to-clipboard";
 import {usePeerSocket} from "./contexts/PrivatePeerSocket";
  import SickButton  from "./styles/SickButton";
+ import { toast } from 'react-toastify'
  import styled from 'styled-components'
 // import {
 //   TwitterIcon,
@@ -38,15 +37,36 @@ text-align: center;
  max-width:300px;
  height: 200px;
  `
-const Options = ({name, userId}) => {
+ const EndIt = styled.div`
+ position: fixed;
+ z-index: 99999;
+ bottom: 10px;
+ right: 10px;
+ button {
+     background: #f8b0b0;
+     opacity: .9;
+     color: white;
+     padding: 5px 2px;
+     border-radius: 5px;
+     padding-right: 8px;
+     border: none;
+    text-align: center;
+ 
+     font-family: 'Bison';
+     letter-spacing: 2px;
+     font-size: 18px;
+ }
+ `
+const Options = () => {
   const [idToCall, setIdToCall] = useState("");
 
   const [isModalVisible, setIsModalVisible] = useState(false);
-  const Audio = useRef();
+
   const {
       peerSocket,
     call,
     callAccepted,
+    otherClientId,
     myVideo,
     userVideo,
     stream,
@@ -61,16 +81,7 @@ const Options = ({name, userId}) => {
     setOtherUser,
     leaveCall1,
   } = usePeerSocket();
-console.log(name)
-  useEffect(() => {
-    if (isModalVisible) {
-      Audio?.current?.play();
-    } else Audio?.current?.pause();
-  }, [isModalVisible]);
 
-  const showModal = (showVal) => {
-    setIsModalVisible(showVal);
-  };
 
   const handleCancel = () => {
     setIsModalVisible(false);
@@ -78,21 +89,25 @@ console.log(name)
     window.location.reload();
   };
   useEffect(() => {
-    if (call.isReceivingCall && !callAccepted) {
+   
+    if (call.isReceivingCall) {
+           console.log('call it!')
       setIsModalVisible(true);
       setOtherUser(call.from);
+  
     } else setIsModalVisible(false);
   }, [call.isReceivingCall]);
 
-  return (
-    <Wrap >
-      <div  >
-        <h2 style={{transform: 'translateY(-10px)'}}>Hi {yourName}!</h2>
-      
 
-        <div >
+  return (
+      <>
+        {callAccepted && !callEnded ? (
+       null
+        ) : (
+    <Wrap >
  
-          <div  >
+ 
+           
             {/* <WhatsappShareButton
               url={`https://video-chat-mihir.vercel.app/`}
               title={`Join this meeting with the given code "${me}"\n`}
@@ -115,106 +130,39 @@ console.log(name)
             >
               <TwitterIcon size={26} round className={classes.share_border} />
             </TwitterShareButton> */}
-          </div>
-        </div>
-      </div>
-      <div style={{ marginBottom: "0.5rem" }}>
-        <h2>Make a call</h2>
-
-        <input
-          placeholder="Enter code to call"
-          size="large"
+      
    
-          value={idToCall}
-          onChange={(e) => setIdToCall(e.target.value)}
-          style={{ marginRight: "0.5rem", marginBottom: "0.5rem" }}
-        //   prefix={<UserOutlined className="site-form-item-icon" />}
-        //   suffix={
-        //     <Tooltip title="Enter code of the other user">
-        //       <InfoCircleOutlined style={{ color: "rgba(0,0,0,.45)" }} />
-        //     </Tooltip>
-        //   }
-        />
-
-        {callAccepted && !callEnded ? (
-          <SickButton
-            variant="contained"
-            onClick={leaveCall}
        
-            tabIndex="0"
-          >
-            <img src={Hang} alt="hang up" style={{ height: "15px" }} />
-            &nbsp; Hang up
-          </SickButton>
-        ) : (
+
+      
+            <>
+            <p style={{fontSize: '22px ', lineHeight: '22px '}}>{otherClientId ? 'Both Parties Have Arrived, You May Begin Your Video Chat!' : 'Please Wait for The Other Party to Enter the Studio'}</p>
           <SickButton
             type="primary"
- 
+            disabled={!otherClientId}
             onClick={() => {
-              if (name.length) callUser(idToCall);
-              else message.error("Please enter your name to call!");
+        callUser(otherClientId && otherClientId);
+           
             }}
        
             tabIndex="0"
           >
-            Call
+            Send Chat Invite
           </SickButton>
-        )}
-      </div>
+          </>
+        
+     </Wrap>)}
 
-      {call.isReceivingCall && !callAccepted && (
-        <>
-          <audio src={Teams} loop ref={Audio} />
-          {/* <Modal
-            title="Incoming Call"
-            visible={isModalVisible}
-            onOk={() => showModal(false)}
-            onCancel={handleCancel}
-            footer={null}
-          > */}
-            <div style={{ display: "flex", justifyContent: "space-around" }}>
-              <h1>
-                {call.name} is calling you:{" "}
-                <img
-                  src={Phone}
-                  alt="phone ringing"
-                  
-                  style={{ display: "inline-block" }}
-                />
-              </h1>
-            </div>
-            <div >
-              <SickButton
-          
-            
-                color="#29bb89"
-            
-                onClick={() => {
-                  answerCall();
-                  Audio.current.pause();
-                }}
-                tabIndex="0"
-              >
-                Answer
-              </SickButton>
-              <SickButton
-                variant="contained"
-                
-                 
-                onClick={() => {
-                  setIsModalVisible(false);
-                  Audio.current.pause();
-                }}
-                tabIndex="0"
-              >
-                Decline
-              </SickButton>
-            </div>
-          {/* </Modal> */}
-        </>
-      )}
-    </Wrap>
-  );
-};
+       {callAccepted && !callEnded && 
+       <EndIt>
+            <button
+              onClick={leaveCall}
+            >
+               
+              &nbsp; End Session
+            </button></EndIt>} 
+   </>
+  )
+}
 
 export default Options;

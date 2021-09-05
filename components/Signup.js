@@ -186,6 +186,9 @@ function Signup() {
                     id="cellPhone"
                     name="cellPhone"
                     className="short"
+                    minlength="14"
+                 
+                    maxlength="14"
                     placeholder="(###)###-####"
                     required
                     value={formatPhoneNumber(inputs.cellPhone)}

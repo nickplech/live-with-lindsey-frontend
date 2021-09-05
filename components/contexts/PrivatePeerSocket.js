@@ -11,12 +11,12 @@ export  function usePeerSocket() {
 }
 
 
- export function PeerSocketProvider({name, classId, userId, children }) {
+ export function PeerSocketProvider({name, isAdmin, classId, userId, children }) {
   const [peerSocket, setPeerSocket] = useState()
   const [callAccepted, setCallAccepted] = useState(false);
   const [callEnded, setCallEnded] = useState(false);
   const [stream, setStream] = useState();
-  const [chat, setChat] = useState([]);
+  const [otherClientId, setOtherClientId] = useState('')
   const [yourName, setYourName] = useState(name);
   const [call, setCall] = useState({});
   const [me, setMe] = useState("");
@@ -36,13 +36,13 @@ export  function usePeerSocket() {
     useEffect(() => {
       const newPeerSocket = io(`http://localhost:3001/privateclass`, {
         withCredentials: true,
-     
+        query: {userId: userId},
       })
       setPeerSocket(newPeerSocket)
       console.log('peer sockeeeeeeee')
       return () => newPeerSocket.close()
     }, [classId, userId ])
-console.log(classId, userId,yourName)
+
   useEffect(() => {
     if(!peerSocket) return
     navigator.mediaDevices
@@ -54,12 +54,15 @@ console.log(classId, userId,yourName)
     if (localStorage.getItem("name")) {
       setYourName(localStorage.getItem("name"));
     }
+   
     peerSocket.on("me", (id) => setMe(id));
+
     peerSocket.on("endCall", () => {
       window.location.reload();
     });
-
-
+  
+      peerSocket.emit("readyToGoIn", (me))
+ 
     peerSocket.on("updateUserMedia", ({ type, currentMediaStatus }) => {
       if (currentMediaStatus !== null || currentMediaStatus !== []) {
         switch (type) {
@@ -77,21 +80,17 @@ console.log(classId, userId,yourName)
       }
     });
 
-    peerSocket.on("callUser", ({ from,yourName: callerName, signal }) => {
-      setCall({ isReceivingCall: true, from,yourName: callerName, signal });
+    peerSocket.on("callUser", ({ from, yourName: callerName, signal }) => {
+      setCall({ isReceivingCall: true, from, yourName: callerName, signal });
     });
 
-    peerSocket.on("msgRcv", ({yourName, msg: value, sender }) => {
-      setMsgRcv({ value, sender });
-      setTimeout(() => {
-        setMsgRcv({});
-      }, 2000);
-    });
-  }, [peerSocket]);
 
-  useEffect(() => {
-    console.log(chat);
-  }, [chat]);
+  }, [peerSocket, me]);
+
+ useEffect(()=> {
+   if(!peerSocket) return
+   peerSocket.on('readyToGoOut', (clientVideoId) => setOtherClientId(clientVideoId))
+ },[peerSocket])
 
   const answerCall = () => {
     setCallAccepted(true);
@@ -248,15 +247,7 @@ console.log(classId, userId,yourName)
   const leaveCall1 = () => {
     peerSocket.emit("endCall", { id: otherUser });
   };
-  const sendMsg = (value) => {
-    peerSocket.emit("msgUser", {yourName, to: otherUser, msg: value, sender:yourName });
-    let msg = {};
-    msg.msg = value;
-    msg.type = "sent";
-    msg.timestamp = Date.now();
-    msg.sender =yourName;
-    setChat([...chat, msg]);
-  };
+
 
   return (
     <PeerContext.Provider
@@ -274,11 +265,12 @@ console.log(classId, userId,yourName)
         callUser,
         leaveCall,
         answerCall,
-        sendMsg,
-        msgRcv,
-        chat,
-        setChat,
-        setMsgRcv,
+        otherClientId,
+        // sendMsg,
+        // msgRcv,
+        // chat,
+        // setChat,
+        // setMsgRcv,
         setOtherUser,
         leaveCall1,
         userName,

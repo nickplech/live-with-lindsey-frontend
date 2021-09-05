@@ -14,10 +14,11 @@ const aPrivateClass = () => {
       {(me) => (
         <PeerSocketProvider
           classId={router.query.id}
+          isAdmin={me.isAdmin}
           userId={me.id}
 name={me.firstName}
         >
-          <PrivateRoomComponent    />
+          <PrivateRoomComponent     isAdmin={me.isAdmin}  />
 
         </PeerSocketProvider>
       )}

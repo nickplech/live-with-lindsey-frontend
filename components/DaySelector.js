@@ -37,7 +37,7 @@ flex-grow: 1;
 function DaySelector({isSelected, addTheDays}) {
 const date = new Date()
 const weekStart = startOfWeek(date, {weekStartsOn: 0})
-const theSelected = format(new Date(isSelected), 'eee')
+const theSelected = isSelected && format(new Date(isSelected), 'eee')
 
 const dayButtons = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
   return (

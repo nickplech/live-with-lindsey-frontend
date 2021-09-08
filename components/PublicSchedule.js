@@ -415,7 +415,7 @@ const MenuItem = ({ id, name, date, classLength }) => {
 export function ProductSlider() {
   const weekStart = startOfWeek(new Date(), {weekStartsOn: 1})
   const [isSelected, setIsSelected] = useState(
-    format(weekStart, 'yyyy-MM-dd'),
+ 
   )
  
 

@@ -92,7 +92,7 @@ const StyledHeader = styled.header`
 
     /* height: 45px; */
     align-self: center;
-    border-bottom: 1px solid ${(props) => props.theme.black};
+ 
     opacity: 1;
   }
   .signoutM {

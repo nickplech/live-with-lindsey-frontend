@@ -585,7 +585,7 @@ function DashMobile() {
   if (!data) return null
 
   const items = data.allItems
-  const userPic = me.image.publicUrlTransformed
+  const userPic = me.image && me.image.publicUrlTransformed
   const firstName= me.firstName
 
   return (

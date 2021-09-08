@@ -4,7 +4,7 @@ import styled from 'styled-components'
 
 const Button = styled.div`
   z-index: 999999;
-  transform: translate(-15px, 15px);
+  transform: translate(-20px, 20px);
   cursor: pointer;
   right: 0;
   position: absolute;

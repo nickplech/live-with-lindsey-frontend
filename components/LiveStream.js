@@ -67,15 +67,20 @@ const ChatFrame = styled.div`
       ${props => props.open && 'grid-column: 2'};
    display: ${props => props.open ? 'flex' : 'none'};
     }
- .name {
- z-index:2000;
-   width: 100%;
+    .close-container {
+      display: flex; 
    position: relative;
-   justify-content: flex-end;
-   height: 40px;
-   display: flex;
+      justify-content: flex-end;
+      width: 100%;height: 40px;
    align-items: center;
    background: transparent;
+    }
+ .name {
+ z-index:2000;
+ 
+   position: relative;
+ 
+ 
    font-family: 'Bison';
    color:white; 
    padding: 0;
@@ -87,6 +92,9 @@ const ChatFrame = styled.div`
  .arrow {
    height: 20px;
    width: 20px;
+      cursor: pointer;
+ z-index: 6000;
+ 
    transform: rotate(90deg);
    margin-left: 10px;
    margin-right: 10px;
@@ -152,7 +160,7 @@ function LiveStream({ id }) {
       <Griddy open={open}>
         <VideoLiveJs id={id} options={videoJsOptions}/>
             <ChatFrame open={open}>
-              <div className="name">close chat <img className="arrow" src="../static/img/uparrow.svg" onClick={() => handleToggleChat()} /> </div>
+              <div className="close-container"><p onClick={() => handleToggleChat()} className="name">close chat</p> <img onClick={() => handleToggleChat()} className="arrow" src="../static/img/uparrow.svg"  /> </div>
               <GetChats
                 name={name}
                 itemId={id}

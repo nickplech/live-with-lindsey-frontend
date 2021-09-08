@@ -5,11 +5,14 @@ import styled from 'styled-components'
 import gql from 'graphql-tag'
 import { useMutation } from '@apollo/client'
 import Error from './ErrorMessage'
+ 
 
 const TWO_FACTOR_MUTATION = gql`
   mutation TWO_FACTOR_MUTATION($id: ID!) {
     twoFactorAuth(id: $id) {
-      message
+      id
+      firstName
+      cellPhone
     }
   }
 `
@@ -29,7 +32,7 @@ const Wrap = styled.div`
   position: relative;
   flex-flow: column;
   justify-content: center;
-  margin-top: 150px;
+  margin-top: 0px;
   align-items: center;
   overflow-x: hidden;
   padding: 75px 15px;
@@ -80,20 +83,18 @@ const EmptyFoo = styled.div`
   }
 `
 const Icon = styled.img`
-height: 50px;
-width: 50px;
+height: 40px;
+width: 40px;
+margin-bottom: 20px;
 `
-const MobileScreenShareIcon = styled.img`
-height: 50px;
-width: 50px;
-`
+
 const Div = styled.div`
   width: 100%;
 
   margin: 0 auto;
   display: flex;
   flex-flow: column;
-  justify-content: center;
+  /* justify-content: center; */
   align-items: center;
   font-family: 'Bison';
   h1 {
@@ -113,13 +114,13 @@ const Div = styled.div`
     color: ${(props) => props.theme.second};
   }
 `
-const P = styled.p`
-  color: slategray;
+const P = styled.button`
+ 
 
   text-align: center;
   border: 3px solid ${(props) => props.theme.second};
   padding: 5px 15px;
-
+font-family: 'Bison';
   transition: 0.3s;
   font-size: 20px;
   color: white;
@@ -134,9 +135,10 @@ const P = styled.p`
 const EntryUi = styled.form`
   display: flex;
   justify-content: space-evenly;
+  flex-flow: column;
   align-items: center;
   margin: 0 auto;
-  transform: translateY(50px);
+  transform: translateY(0px);
   input {
     height: 40px;
     margin: 10px;
@@ -162,7 +164,7 @@ const EntryUi = styled.form`
     -moz-appearance: textfield;
   }
   a {
-    border: 2px solid #f8b0b0;
+  
     background: transparent;
     color: #f8b0b0;
     &:disabled {
@@ -170,8 +172,41 @@ const EntryUi = styled.form`
       cursor: not-allowed;
     }
   }
+  h6 {
+    color: slategray;
+    font-size: 17px;
+    margin: 0;
+  }
+  p {
+    color: slategray;
+    font-size: 22px;
+  }
 `
-
+ 
+const Flexy = styled.div`
+display: flex;
+flex-flow: row;
+width: 350px;
+margin: 0 auto;
+color: slategray;
+height: 100px;
+justify-content: center;
+align-items: center;
+p {
+  margin: 0 5px;
+  font-size: 18px;
+}
+a {
+  padding: 3px 6px;
+  border-radius: 5px;
+  background: #f8b0b0;
+  color: white;
+}
+div {
+  margin: 0 15px;
+}
+`
+ 
 const TwoFacAuth = ({ id, userId }) => {
   const [message, setMessage ] = useState('')
   const [ui, setUi] = useState(false)
@@ -179,19 +214,19 @@ const TwoFacAuth = ({ id, userId }) => {
   console.log(tfa)
 
   const theId = id ? id : userId
-  const [twoFactorAuth, { error }] = useMutation(TWO_FACTOR_MUTATION, {
+  const [twoFactorAuth, {data, loading }] = useMutation(TWO_FACTOR_MUTATION, {
     variables: { id: theId },
   })
 
-  const [twoFactorAuthCheck, { loading }] = useMutation(
+  const [twoFactorAuthCheck, {  error }] = useMutation(
     TWO_FACTOR_CHECK_MUTATION,
     { variables: { twoFac: tfa.toString(), id: theId } },
   )
 
-  function updateTfa(e) {
-    const number = e.target.value
+  function updateTfa(tfa) {
+ 
 
-    setTfa(number)
+    setTfa(tfa)
   }
 
   async function handleSubmitTfa(e) {
@@ -199,6 +234,10 @@ const TwoFacAuth = ({ id, userId }) => {
 
     console.log(tfa.toString(), theId)
     await twoFactorAuthCheck()
+    if(error) {
+  toast(error)
+ 
+}
   }
 
   async function sendTextMsg() {
@@ -207,90 +246,80 @@ const TwoFacAuth = ({ id, userId }) => {
     await setMessage(res.data.message)
     await setUi(true)
   }
+
+  
   return (
     <>
+  
       {userId || id ? (
-        <Wrap>
+         <Wrap> <Div><Icon src='../static/img/lock-closed.svg' />
+                     <h1>
+                 
+                  Let's keep your account secure
+                </h1></Div>
+               {error && <Error error={error} /> }
+       { ui === true ?  <EntryUi>
+          
+       
+        <OtpInput
+          value={tfa}
+          onChange={updateTfa}
+          numInputs={5}
+          inputStyle={{
+            fontSize: '24px',
+            width: '36px',
+            height: '36px',
+            margin: '4px',
+            borderTop: '0px',
+            borderLeft: '0px',
+            borderRight: '0px',
+            outline: 'none',
+            borderColor: '#000a46',
+          }}
+          Style={{
+            margin: '20px auto',
+            padding: '10px',
+          }}
+        
+        />
+         <h6>Enter the code sent to Your Phone Number {data?.twoFactorAuth?.cellPhone}</h6>
+
+        <a className="authButton"
+          disabled={tfa.length !== 5 || loading}
+          onClick={handleSubmitTfa}
+        >
+          <img height="40" width="40" src="../static/img/uparrow.svg" />
+        </a>
+        <Flexy>
+          <div>
+        <p>
+          Didn't get a code ? &nbsp;
+           </p>
+
+            <a>Send Again</a>
+        </div>
+     <div>
+        <p>Wrong number ? &nbsp;</p>
+       
+          <a>Update here</a>
+    </div>
+    </Flexy>
+    </EntryUi> : 
           <EmptyFoo>
-            <Div>
-              <h1>One Last Step!</h1>
+            <Div> 
               <p>
-                Upon clicking the button below, you will be sent a text message
-                (standard carrier rates apply). Simply{' '}
-                <span>
-                  enter the five digit one-time passcode in the box that appears
-                </span>
-                , submit and you'll be on your way!
-              </p>
-              <img
-                height="75"
-                src="../static/img/plane.svg"
-                alt="airplane sms"
-              />
+                Click below to send yourself a text message containing an Authentication Code
+                (standard carrier rates apply)
+               
+                
+              </p>  
+           
               <P onClick={sendTextMsg}>Send Authentication Text</P>
             </Div>
           </EmptyFoo>
-          {ui === true && (
-            <EntryUi>
-              <div className="main">
-                <h3>Welcome, {twoFactorAuth.message}</h3>
-
-                <h4>
-                  <Icon src='../static/img/lock-closed.svg' />
-                  Let's keep your account secure
-                </h4>
-
-                <MobileScreenShareIcon className="phone" />
-
-                <h6>Enter the code we sent to 502-399-3121</h6>
-
-                <OtpInput
-                  value={tfa}
-                  onChange={(tfa) => {
-                    console.info(tfa)
-                    updateTfa(tfa)
-                  }}
-                  numInputs={6}
-                  inputStyle={{
-                    fontSize: '24px',
-                    width: '36px',
-                    height: '36px',
-                    margin: '4px',
-                    borderTop: '0px',
-                    borderLeft: '0px',
-                    borderRight: '0px',
-                    outline: 'none',
-                    borderColor: '#000a46',
-                  }}
-                  Style={{
-                    margin: '20px auto',
-                    padding: '10px',
-                  }}
-                  isInputNum
-                />
-                <a
-                  disabled={tfa.length !== 5 || loading}
-                  onClick={handleSubmitTfa}
-                >
-                  Authenticate
-                </a>
-                <p>
-                  Didn't get a code ? &nbsp;
-                
-                    <a>Send Again</a>
-                
-                </p>
-
-                <p>Wrong number ? &nbsp;</p>
-               
-                  <a>Update here</a>
-            
-              </div>
-              <></>
-            </EntryUi>
-          )}
-        </Wrap>
-      ) : null}
+    }
+      </Wrap>
+      ) : null}  
     </>
   )
 }

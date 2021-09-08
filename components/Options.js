@@ -9,17 +9,11 @@ import {usePeerSocket} from "./contexts/PrivatePeerSocket";
 // import {
 //   TwitterIcon,
 //   TwitterShareButton,
-//   WhatsappShareButton,
-//   WhatsappIcon,
+//   EmailShareButton
 //   FacebookIcon,
 //   FacebookShareButton,
 // } from "react-share";
-// import {
-//   UserOutlined,
-//   CopyOutlined,
-//   InfoCircleOutlined,
-//   PhoneOutlined,
-// } from "@ant-design/icons";
+ 
  const Wrap = styled.div`
  display: flex;
 flex-flow: column;

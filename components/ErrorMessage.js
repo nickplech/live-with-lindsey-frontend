@@ -2,19 +2,19 @@
 import React from 'react'
 import styled from 'styled-components'
 const ErrorStyles = styled.div`
-  padding: 2rem;
+  padding: 1rem;
   background: white;
   font-family: 'Bison';
   margin: 2rem 0;
   border: 1px solid rgba(0, 0, 0, 0.05);
   border-left: 5px solid red;
-  background: rgba(220, 20, 20, .5);
+  background: white;
   letter-spacing: 2px;
   p {
     margin: 0;
     font-weight: 100;  font-family: 'Bison';
 
-  color: white;
+  color: red;
   }
   strong {
     margin-right: 1rem;

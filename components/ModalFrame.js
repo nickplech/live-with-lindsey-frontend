@@ -313,8 +313,7 @@ console.log(inputs.date)
     const label = reason.name
     return { value, label }
   })
-  const pricingArr = [...Array(20).keys()]
-
+   
   const needsClass = selectedOption && selectedOption.length
   const needsDateTime = inputs.date && inputs.date !== null
   const tooManyTags = selectedTags.length > 10

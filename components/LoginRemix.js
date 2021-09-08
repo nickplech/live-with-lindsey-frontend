@@ -100,7 +100,7 @@ const Form2 = styled.form`
   margin: 20px;
   margin-top: 0px;
   font-size: 1.5rem;
-  line-height: 1.5;
+ 
   font-weight: 600;
   position: relative;
   @media (min-width: 768px) {
@@ -110,15 +110,14 @@ const Form2 = styled.form`
     font-family: 'Bison thickoutline';
     margin: 0;
     margin-bottom: 5px;
-    font-size: 28px;
+    font-size: 30px;
+    
     color: ${(props) => props.theme.primary};
-    @media (min-width: 321px) {
-      margin-bottom: 5px;
-      font-size: 38px;
-    }
+  
     @media (min-width: 768px) {
-      font-size: 48px;
-      margin-bottom: 30px;
+      font-size: 44px;
+      line-height: 44px;
+      margin-bottom: 20px;
     }
   }
   input,

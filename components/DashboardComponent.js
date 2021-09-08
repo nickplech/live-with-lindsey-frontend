@@ -534,7 +534,7 @@ function DashboardComponent() {
   if (!data) return null
 
   const items = data.allItems
-  const userPic = me && me.image.publicUrlTransformed
+  const userPic = me.image && me.image.publicUrlTransformed
   const firstName= me && me.firstName
   return (
     <>

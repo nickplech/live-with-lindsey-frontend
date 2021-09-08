@@ -58,7 +58,7 @@ const SignUpTitle = styled.h3`
   font-family: 'Felix';
   font-size: 36px;
   /* line-height: 26px; */
-  margin: 26px auto;
+  margin: 18px auto;
   z-index: 1000;
   position: relative;
   color: ${(props) => props.theme.second};

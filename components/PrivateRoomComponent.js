@@ -37,7 +37,8 @@ height: calc(100vh - 60px);
       height: 100%;
       object-fit: cover;
       position: absolute;
-    
+      -webkit-transform: scaleX(-1);
+  transform: scaleX(-1);
     }
 .user_other {
   display: flex;
@@ -48,6 +49,8 @@ height: calc(100vh - 60px);
   z-index: 8888888;
   border-radius: 5px;
 cursor: grab;
+-webkit-transform: scaleX(-1);
+  transform: scaleX(-1); 
 }
 `
 
@@ -123,7 +126,7 @@ const PrivateRoomComponent = ({isAdmin}) => {
       
      
       {callAccepted && !callEnded && (
-      <motion.video playsInline ref={userVideo} autoPlay className="user_other" drag
+      <motion.video style={{transform: 'scaleX(-1)'}} playsInline ref={userVideo} autoPlay className="user_other" drag
       dragConstraints={constraintsRef} />
       
       )}

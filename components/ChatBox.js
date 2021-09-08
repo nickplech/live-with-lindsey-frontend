@@ -142,6 +142,9 @@ const Message = styled.div`
   position: relative;
   min-width: 100px;
   font-family: 'Comfortaa';
+  /* white-space: pre-wrap; */
+  word-break: break-all;
+  overflow-wrap: break-word; 
 `
 const UserName = styled.span`
   font-size: 13px;

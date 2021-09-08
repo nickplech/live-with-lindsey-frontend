@@ -25,7 +25,7 @@ const AdminSettingsContent = () => {
       <Tabs.Tab id="tab4" title="weighty">
         <UpdateEquipment />
       </Tabs.Tab>
-      <Tabs.Tab id="tab5" title="private">
+      <Tabs.Tab id="tab5" title="person">
         <CreatePrivateClass />
       </Tabs.Tab>
     </Tabs>

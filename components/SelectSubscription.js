@@ -14,10 +14,29 @@ const Wrap = styled.div`
   .header {
     grid-row: 1;
     grid-column: 1/4;
-    background: rgba(30, 30, 30, 1);
+    background: rgb(30, 30, 30);
     height: 100%;
     width: 100%;
+    justify-content: center;
+   
+    align-items: center;
+
   }
+      h1 {
+       font-family: 'Bison';
+       width: 95%;
+       transform: translate(0, 50px);
+    color: white;
+    max-width: 600px;
+    text-align: center;
+    font-size: 3.6rem;
+    margin:0 auto;
+    line-height: 3.6rem;
+    letter-spacing: 2px;
+    }
+    .lwl {
+      color: #f8b0b0;
+    }
   .packages {
     grid-column: 1;
     width: 100%;
@@ -145,15 +164,15 @@ const Wrap = styled.div`
   .all_access {
     color: ${(props) => props.theme.second};
   }
-  h1 {
+  /* h1 {
     color: ${(props) => props.theme.second};
     font-family: 'Felix';
-    line-height: 3.2rem;
+  
     font-size: 38px;
     width: 600px;
     position: absolute;
     transform: translateY(200px);
-  }
+  } */
   /* ul {
     list-style: none;
     padding: none;
@@ -179,7 +198,7 @@ function SelectSubscription({ handleSetPlan }) {
   return (
     <>
       <Wrap>
-        <div className="header"></div>
+        <div className="header"><h1>Pick the <span className="lwl">Live with Lindsey</span> Subscription that's the best fit for You</h1></div>
         <div className="packages">
           <div className="free">
             <h2>Pay-As-You-Go</h2>

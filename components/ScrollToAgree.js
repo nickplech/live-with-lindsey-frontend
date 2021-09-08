@@ -20,7 +20,7 @@ const SickestButton = styled.button`
   margin: 0 auto;
   border-radius: 5px;
   font-family: 'Bison';
-
+transform: translate(0, 3px);
   font-size: 2rem;
   padding: 0.5rem 1.2rem;
   font-size: 1.8rem;
@@ -43,8 +43,8 @@ const SickestButton = styled.button`
 `
 
 const TextBody = styled.div`
-  max-width: 500px;
-  max-height: 650px;
+  max-width:350px;
+    height: 400px;
   overflow: scroll;
   border-radius: 5px;
   font-family: 'comfortaa';
@@ -55,7 +55,7 @@ const TextBody = styled.div`
     font-size: 14px;
   }
 `
-export default function Example({ hasAgreedToWaiver, setHasAgreedToWaiver }) {
+export default function ScrollToAgree({ hasAgreedToWaiver, setHasAgreedToWaiver }) {
   const buttonRef = useRef()
   const terms = useRef()
   console.log(terms)
@@ -80,7 +80,7 @@ export default function Example({ hasAgreedToWaiver, setHasAgreedToWaiver }) {
     if (isComplete) {
       setBeenClicked(true)
     }
-    console.log(scrollYProgress)
+   
     console.log(isComplete)
     return
   }
@@ -195,7 +195,7 @@ export default function Example({ hasAgreedToWaiver, setHasAgreedToWaiver }) {
         <SickestButton
           ref={buttonRef}
           onClick={handleClick}
-          disabled={isComplete === false}
+          // disabled={isComplete === false}
           type="submit"
         >
           Agree &amp; Sign Up

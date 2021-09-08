@@ -21,7 +21,7 @@ const NavStyles = styled.ul`
 
     font-size: 1.1em;
     background: none;
-    border: 0;
+    border:none;
     color: ${(props) => props.theme.offWhite};
     height: 20px;
     z-index: 5;

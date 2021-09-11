@@ -16,13 +16,14 @@ import {
   addMinutes,
   startOfWeek,
 } from 'date-fns'
+import Emoji from './Emoji'
 import { useToast } from './contexts/LocalState'
 import ProductSlider from './ProductSlider'
 import TickerFeed from './TickerFeed'
 import { useUser } from './User'
 
 const USERS_WEEK_QUERY = gql`
-  query USERS_WEEK_QUERY($id: [ID], $date: String) {
+  query USERS_WEEK_QUERY($id: [ID], $date: DateTime) {
     allItems(
       where: { AND: [{ user_some: { id_in: $id } }, { date_gte: $date }] }
       orderBy: "date"
@@ -33,6 +34,9 @@ const USERS_WEEK_QUERY = gql`
       name
       status
       stillAvailable
+      private {
+        id
+      }
       reason {
         id
         name
@@ -48,11 +52,16 @@ const USERS_WEEK_QUERY = gql`
 `
 
 const STREAMS_QUERY = gql`
-  query STREAMS_QUERY($date: String) {
-    allItems(where: { date_gte: $date }, orderBy: "date") {
+  query STREAMS_QUERY($date: DateTime) {
+    allItems(where: { date_gte: $date, private_is_null: true }, orderBy: "date") {
       id
       price
       date
+      private {
+        
+          id
+        
+      }
       user {
         id
       }
@@ -206,6 +215,7 @@ const SubText = styled.p`
       }
     }
   }
+ 
 `
 const ClassList = styled.div`
   transition: 0.2s;
@@ -527,15 +537,16 @@ function DashboardComponent() {
     weekStartsOn: 0,
   })
   const { error, loading, data } = useQuery(USERS_WEEK_QUERY, {
-    variables: { date: format(weekStarts, 'yyyy-MM-dd'), id: me && me.id },
+    variables: { date: format(weekStarts, 'dd/MM/yyyy'), id: me && me.id },
   })
   if (loading) return <Loader />
   if (error) return <Error error={error} />
   if (!data) return null
 
   const items = data.allItems
-  const userPic = me.image && me.image.publicUrlTransformed
+  const userPic = me.image ? me.image.publicUrlTransformed : '../static/img/profpic.svg'
   const firstName= me && me.firstName
+ 
   return (
     <>
       <Pad>
@@ -616,9 +627,9 @@ function TodaysClasses({ items, id }) {
                 className={onHoverState ? 'animate' : ''}
               >
                 {' '}
-                on-demand workout
+                on-demand workout 
               </span>
-            </Link>
+            </Link> <Emoji symbol="💪" label="flexed bicep" />
           </SubText>
         </Div>
       </>
@@ -637,14 +648,20 @@ function TodaysClasses({ items, id }) {
             const today = new Date().getDate()
             const todayOnly = new Date(item.date)
             const matchesBoth = todayOnly.getDate() === today
-            const intLength = item.reason.classLength.split(' ')
-            const intSplit = parseInt(intLength[0])
-            const endTime = addMinutes(todayOnly, intSplit)
 
-            const intInterval = isWithinInterval(new Date(), {
-              start: todayOnly,
-              end: new Date(endTime),
-            })
+//             function checkIfInterval(classLength){
+//  const intLength =  item.reason.classLength.split(' ')
+//             const intSplit = parseInt(intLength[0])
+//             const endTime = addMinutes(todayOnly, intSplit)
+//  const intInterval = isWithinInterval(new Date(), {
+//               start: todayOnly,
+//               end: new Date(endTime),
+//             })
+
+//             }
+           
+
+           
 
             const fifteenBefore = subMinutes(todayOnly, 15)
             const openUp = isAfter(new Date(), new Date(fifteenBefore))
@@ -653,14 +670,14 @@ function TodaysClasses({ items, id }) {
               return (
                 <div key={item.id} className="course">
                   <div className="course-preview">
-                    <h4>{item.reason.name}</h4>
+                    <h4>{item.reason && item.reason.name}</h4>
                     <div className="card__clock-info">
                       <svg className="card__clock" viewBox="0 0 30 30">
                         <path d="M12,20A7,7 0 0,1 5,13A7,7 0 0,1 12,6A7,7 0 0,1 19,13A7,7 0 0,1 12,20M19.03,7.39L20.45,5.97C20,5.46 19.55,5 19.04,4.56L17.62,6C16.07,4.74 14.12,4 12,4A9,9 0 0,0 3,13A9,9 0 0,0 12,22C17,22 21,17.97 21,13C21,10.88 20.26,8.93 19.03,7.39M11,14H13V8H11M15,1H9V3H15V1Z" />
                       </svg>{' '}
                       <span className="card__time">
                         {' '}
-                        {item.reason.classLength}
+                        {item.reason && item.reason.classLength}
                       </span>
                     </div>
                   </div>
@@ -699,10 +716,10 @@ function TodaysClasses({ items, id }) {
    
                   <Status status={item.status}>
                     <div className="live-status">
-                      {item.status}{' '}
-                      {item.status === 'LIVE' && <span className="circle" />}
+                      {item.status &&  item.status}{' '}
+                      {item.status && item.status === 'LIVE' && <span className="circle" />}
                     </div>
-                    {item.status === 'GOING LIVE' ? (
+                    {item.status &&  item.status === 'GOING LIVE' ? (
                       <h6>
                         {formatDistanceToNow(todayOnly, { addSuffix: true })}
                       </h6>
@@ -727,7 +744,7 @@ function TodaysClasses({ items, id }) {
                 {' '}
                 on-demand workout
               </span>
-            </Link>
+            </Link><Emoji  symbol="💪" label="flexed bicep" />
           </SubText>
         </Div>
       )}{' '}
@@ -737,10 +754,11 @@ function TodaysClasses({ items, id }) {
 
 function ScheduledClasses({ inCart, id }) {
   const { error, loading, data } = useQuery(STREAMS_QUERY, {
-    variables: { date: format(new Date(), 'yyyy-MM-dd') },
+    variables: { date: format(new Date(), 'dd/MM/yyyy') },
   })
   if (loading) return <Loader />
   if (error) return <Error error={error} />
+  console.log(data.allItems)
   const ownsItem = data.allItems.map((item) => {
     const theUsers = item.user.find((theUser) => {
       return theUser.id === id
@@ -748,6 +766,7 @@ function ScheduledClasses({ inCart, id }) {
     return theUsers
   })
   if (!data.allItems.length)
+   
     return (
       <Div>
         <P>That's it for this week!</P>

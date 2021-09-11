@@ -325,7 +325,7 @@ function WeekView({ id, today, items }) {
                       </h2>
                     </div>
                     <div className="course-info">
-                      <h3>{item.reason.name}</h3>
+                      <h3>{item.reason && item.reason.name}</h3>
                       <div className="dotbox">
                         {dotNames.map((dot, i) => {
                           const matches = dot.name === item.status 

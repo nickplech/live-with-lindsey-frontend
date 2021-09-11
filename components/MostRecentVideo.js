@@ -2,6 +2,7 @@ import React, { useRef, useState, useEffect, useLayoutEffect } from 'react'
 import styled from 'styled-components'
 import Link from 'next/link'
 import gql from 'graphql-tag'
+import {format} from 'date-fns'
 import { useQuery } from '@apollo/client'
 import Loader from './Loader'
 import { motion, useViewportScroll, useTransform } from 'framer-motion'
@@ -11,6 +12,7 @@ const MOST_RECENT_VIDEO_QUERY = gql`
     allVideoOnDemands(orderBy: "createdAt_DESC") {
       id
       url
+      date
       thumbnailUrl
       item {
         id
@@ -187,6 +189,15 @@ const Wrap = styled.div`
     line-height: 34px;
     padding-left: 5px;
   }
+  img {
+    display: inline-flex;
+    transform: translate(10px, 2.5px);
+  }
+  h3 {
+    font-size: 18px;
+    display: inline-flex;
+    margin: 0 15px;
+  }
   p {
     margin: 0;
     z-index: 80000;
@@ -233,7 +244,9 @@ function MostRecentVideo(props) {
     <Wrap>
       <div className="right">
         <h2>{mostRecentVod.name}</h2>
+       
         <p>{mostRecentVod.description}</p>
+        <span><img src="../static/img/calendar.svg" height="20" width="20" alt="calendar graphic to represent date which video first aired live" />  <h3>aired on: {format(new Date(mostRecentVod.date), 'MMM dd, yyyy')}</h3></span>
       </div>
       <div className="left">
         <TheItem

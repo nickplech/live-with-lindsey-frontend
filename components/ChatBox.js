@@ -258,7 +258,7 @@ function ChatBox({ itemId, messages }) {
     const val = value
     setContent(val)
   }
-
+console.log(chatMessages)
   const isEmpty = content.length < 1
   const tooLong = content.length > 160
 
@@ -320,7 +320,7 @@ function ChatBox({ itemId, messages }) {
 
   const sendMessage = async (content) => {
     const { businessName, id } = me
-    const image = me.image.publicUrlTransformed
+    const image = me.image ? me.image.publicUrlTransformed : '../static/img/profpic.svg'
     const createdAt = new Date()
     addToChat()
 
@@ -338,10 +338,11 @@ function ChatBox({ itemId, messages }) {
       <StyledChat>
         {messages &&
           chatMessages.map((message, i) => {
-            const profilePic = message.message
-              ? message.image
-              : message.createdBy.image.publicUrlTransformed
-
+             const profilePic = me.image ?
+               message.createdBy.image.publicUrlTransformed
+               : '../static/img/profpic.svg'
+             // const profilePic = me.image ? me.image.publicUrlTransformed : '../static/img/profpic.svg'
+   
             const lastMessage = chatMessages.length - 1 === i
 
             return (

@@ -296,13 +296,13 @@ const TwoFacAuth = ({ id, userId }) => {
           Didn't get a code ? &nbsp;
            </p>
 
-            <a>Send Again</a>
+            <a onClick={sendTextMsg}>Send Again</a>
         </div>
-     <div>
+     {/* <div>
         <p>Wrong number ? &nbsp;</p>
        
-          <a>Update here</a>
-    </div>
+          <a onClick={updatePhoneNumber}>Update here</a>
+    </div> */}
     </Flexy>
     </EntryUi> : 
           <EmptyFoo>

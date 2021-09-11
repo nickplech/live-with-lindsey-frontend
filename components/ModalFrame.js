@@ -4,7 +4,7 @@ import useForm from '../lib/useForm'
 import gql from 'graphql-tag'
 import Slider, {createSliderWithTooltip, SliderTooltip} from 'rc-slider';
 import 'rc-slider/assets/index.css';
-import { format } from 'date-fns'
+import { format, formatISO } from 'date-fns'
 import { useMutation, useQuery } from '@apollo/client'
 import SickButton from './styles/SickButton'
 import Error from './ErrorMessage'
@@ -22,7 +22,7 @@ const CREATE_CLASS_MUTATION = gql`
     $name: String
     $reason: ID!
     $price: Int
-    $date: String
+    $date: DateTime!
     $equipment: [ID!]
     $tags: [ID!]
   ) {
@@ -34,7 +34,9 @@ const CREATE_CLASS_MUTATION = gql`
       equipment: $equipment
       tags: $tags
     ) {
-      message
+      id
+      date
+      name
     }
   }
 `
@@ -286,7 +288,7 @@ console.log(inputs.date)
     CREATE_CLASS_MUTATION,
     {
       variables: {
-        date: inputs.date,
+        date: formatISO(new Date(inputs.date)),
         reason: selectedOption && selectedOption.value,
         price: parseInt(priceState),
         name: selectedOption && selectedOption.label,
@@ -296,11 +298,11 @@ console.log(inputs.date)
       refetchQueries: [
         {
           query: STREAMS_QUERY,
-          variables: { date: format(new Date(), 'yyyy-MM-dd') },
+          variables: { date: format(new Date(), 'dd/MM/yyyy') },
         },
         {
           query: STREAMS_ADMIN_QUERY,
-          variables: { date: format(new Date(), 'yyyy-MM-dd') },
+          variables: { date: format(new Date(), 'dd/MM/yyyy') },
         },
       ],
     },

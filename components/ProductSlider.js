@@ -399,7 +399,7 @@ const MenuItem = ({
   ownsItem,
   itemOwned,
 }) => {
-  const cleanName = name.toLowerCase().replace(/\s/g, '')
+  const cleanName = name && name.toLowerCase().replace(/\s/g, '')
   const currentlyLive = active === id
   return (
     <>
@@ -414,7 +414,7 @@ const MenuItem = ({
           id={id}
         />
 
-        <Link href={{ pathname: '/class/[...id]', query: { id: id } }}>
+        <Link href={{ pathname: '/class', query: { id: id } }}>
           <a>
             <div className="theDiv">
               <h1>{name}</h1>
@@ -462,14 +462,14 @@ export function ProductSlider({ allItems, active, inCart, ownsItem }) {
                   <Slide key={item.id} index={i}>
                     <MenuItem
                       next={i}
-                      name={item.reason.name}
+                      name={item.reason && item.reason.name}
                       inCart={inCart}
                       id={item.id}
                       theIndex={i}
                       ownsItem={ownsItem}
                       // key={item.id}
                       date={item.date}
-                      classLength={item.reason.classLength}
+                      classLength={item.reason && item.reason.classLength}
                     />
                   </Slide>
                 )
@@ -497,12 +497,12 @@ export function ProductSlider({ allItems, active, inCart, ownsItem }) {
                   <MenuItem
                     active={active}
                     next={i}
-                    name={item.reason.name}
+                    name={item.reason && item.reason.name}
                     inCart={inCart}
                     id={item.id}
                     theIndex={i}
                     date={item.date}
-                    classLength={item.reason.classLength}
+                    classLength={item.reason && item.reason.classLength}
                     time={item.date}
                     ownsItem={ownsItem}
                     itemOwned={itemOwned}

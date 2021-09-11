@@ -294,7 +294,7 @@ function SingleClass({ id, userId }) {
       })
     : false
  
-
+console.log(item.date)
   return (
     <Div>
       <ClassBackground

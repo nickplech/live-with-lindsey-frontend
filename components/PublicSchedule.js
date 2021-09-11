@@ -14,8 +14,8 @@ import {
 } from 'pure-react-carousel'
 
 const STREAMS_QUERY = gql`
-  query STREAMS_QUERY($date: String) {
-    allItems(where: { date_gte: $date }, orderBy: "date") {
+  query STREAMS_QUERY($date: DateTime) {
+    allItems(where: { date_gte: $date, private_is_null: true }, orderBy: "date") {
       id
       price
       date
@@ -387,23 +387,23 @@ const Div = styled.div`
 `
 
 const MenuItem = ({ id, name, date, classLength }) => {
-  const cleanName = name.toLowerCase().replace(/\s/g, '')
+  const cleanName = name &&  name.toLowerCase().replace(/\s/g, '')
  
   return (
     <MenItem
       image={`../static/img/classbackgrounds/smallfinal/${cleanName}.png`}
       className="menu-item-wrapper"
     >
-      <Link href={{ pathname: '/class/[id]', query: { id: id } }}>
+      <Link href={{ pathname: '/class', query: { id: id } }}>
         <a>
           <div className="theDiv">
-            <h1>{name}</h1>
+            <h1>{name && name}</h1>
             <p>{format(new Date(date), 'eeee - MMM dd | h:mm aa')}</p>
             <div className="card__clock-info">
               <svg className="card__clock" viewBox="0 0 24 24">
                 <path d="M12,20A7,7 0 0,1 5,13A7,7 0 0,1 12,6A7,7 0 0,1 19,13A7,7 0 0,1 12,20M19.03,7.39L20.45,5.97C20,5.46 19.55,5 19.04,4.56L17.62,6C16.07,4.74 14.12,4 12,4A9,9 0 0,0 3,13A9,9 0 0,0 12,22C17,22 21,17.97 21,13C21,10.88 20.26,8.93 19.03,7.39M11,14H13V8H11M15,1H9V3H15V1Z" />
               </svg>{' '}
-              <span className="card__time">{classLength}</span>
+              <span className="card__time">{classLength && classLength}</span>
             </div>
           </div>
         </a>
@@ -456,11 +456,11 @@ export function ProductSlider() {
                     <Slide key={item.id} index={i}>
                       <MenuItem
                         next={i}
-                        name={item.reason.name}
+                        name={item.reason && item.reason.name}
                         id={item.id}
                         theIndex={i}
                         date={item.date}
-                        classLength={item.reason.classLength}
+                        classLength={item.reason &&  item.reason.classLength}
                         time={item.date}
                       />
                     </Slide>
@@ -503,11 +503,11 @@ export function ProductSlider() {
                     <Slide key={item.id} index={i}>
                       <MenuItem
                         next={i}
-                        name={item.reason.name}
+                        name={item.reason && item.reason.name}
                         id={item.id}
                         theIndex={i}
                         date={item.date}
-                        classLength={item.reason.classLength}
+                        classLength={item.reason && item.reason.classLength}
                         time={item.date}
                       />
                     </Slide>

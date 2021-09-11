@@ -1512,7 +1512,7 @@ function PhotoArray() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 1 }}
-          src="../static/img/vodhead.png"
+          src="../static/img/vodheaderblur.png"
         />
   
       </BlackAndWhite>

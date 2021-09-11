@@ -1,6 +1,6 @@
 import React from 'react'
 import Popup from 'reactjs-popup'
-import Account from './Account'
+import Emoji from './Emoji'
 import styled from 'styled-components'
 
 const Background = styled.div`
@@ -16,8 +16,22 @@ const Wrap = styled.div`
   display: flex;
   position: relative;
   .buttonio {
+    width: 300px;
     cursor: pointer;
+    margin-top: 20px;
+    display: grid;
+    grid-template-columns: 30px 1fr;
+    grid-template-rows: 40px;
+    &:nth-child(1) {
+      grid-column: 1;
+      grid-row: 1;
+    }
+    &:nth-child(2) {
+      grid-column: 2;
+      grid-row: 1;
+    }
   }
+ 
 `
 const Mode = styled.div`
   box-shadow: 0px 10px 5px -3px rgba(20, 20, 20, 0.2);
@@ -74,7 +88,7 @@ function ModalPicture({ image }) {
       <Popup
         trigger={
           <div className="buttonio">
-            <p>Click To Read More...</p>
+           <Emoji symbol="👉" label="backhand index pointing right" /> <span>Click To Read More...</span>
           </div>
         }
         modal
@@ -87,7 +101,7 @@ function ModalPicture({ image }) {
               <button className="close" onClick={close}>
                 &times;
               </button>
-              <h1>Meet Your Trainer</h1>
+              <h1><Emoji symbol="👋" label="waving hand sign"/> Meet Your Trainer </h1>
               <div className="content">
                 I'm Lindsey, your new virtual fitness coach. I have been an
                 athlete my entire life, I was a competitive swimmer for 13+
@@ -115,7 +129,9 @@ function ModalPicture({ image }) {
                 fitness to one of celebration, not punishment, inspire them to
                 know anything is possible, and guide them along the way, all
                 while having the literal BEST time.{' '}
-                <h1>ABOUT LIVE WITH LINDSEY</h1>
+                <h1><Emoji symbol="✨" label="Sparkles
+" /> ABOUT LIVE WITH LINDSEY<Emoji symbol="✨" label="Sparkles
+" /> </h1>
                 So, what can you expect out of these classes? My approach to
                 training and fitness in general is first and foremost, FUN! I'm
                 here to help you reach your goals, with the biggest smile on

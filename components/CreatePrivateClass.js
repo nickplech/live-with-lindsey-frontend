@@ -2,7 +2,7 @@ import Router from 'next/router'
 import React, { useState } from 'react'
 import useForm from '../lib/useForm'
 import gql from 'graphql-tag'
- 
+ import {formatISO} from 'date-fns'
 import 'rc-slider/assets/index.css';
 import { format } from 'date-fns'
 import { useMutation, useQuery } from '@apollo/client'
@@ -10,7 +10,7 @@ import SickButton from './styles/SickButton'
 import Error from './ErrorMessage'
 import { STREAMS_ADMIN_QUERY } from './AdminCalendarAlt'
 
-import MultiSelectEquipment from './MultiSelectEquipment'
+ 
 
 import Select from 'react-select'
  
@@ -131,8 +131,8 @@ const CREATE_PRIVATE_CLASS_MUTATION = gql`
   mutation CREATE_PRIVATE_CLASS_MUTATION(
 
     $price: Int
-    $date: String
-    $equipment: [ID!]
+    $date: DateTime!
+ 
    
     $userId: ID!
   ) {
@@ -140,11 +140,15 @@ const CREATE_PRIVATE_CLASS_MUTATION = gql`
 
       price: $price
       date: $date
-      equipment: $equipment
+ 
      
 userId: $userId
     ) {
-      message
+      id
+      date
+      private {
+        id
+      }
     }
   }
 `
@@ -171,15 +175,13 @@ const SignUpTitle = styled.h3`
 
 
 function CreatePrivateClass() {
-  
-  const [equipmentId, setEquipmentSearch] = useState('')
+   
   const [priceState, setPriceState] = useState('')
-
-  const [selectedEquipment, setSelectedEquipment] = useState([])
+ 
 
   const [selectedOption, setSelectedOption] = useState('')
 
-  const [privateClassUser, setPrivateClassUser] = useState()
+ 
 
 
 
@@ -187,35 +189,25 @@ function CreatePrivateClass() {
     setSelectedOption(e)
   }
   
-  const handleEquipmentSearch = (item) => {
-    let selectedCopy = [...selectedEquipment]
-    selectedCopy.push(item.id)
-    setSelectedEquipment(selectedCopy)
-    setEquipmentSearch(item.id)
-  }
-
-  const removeEquipmentSearch = (item) => {
-    const filteredEquip = selectedEquipment.filter((i) => i !== item.id)
-    setSelectedEquipment(filteredEquip)
-  }
+ 
 
 
   const { inputs, handleChange } = useForm({
     date: new Date(),
     reason: '',
   })
-
+ 
   const [createPrivate, { loading, error }] = useMutation(
     CREATE_PRIVATE_CLASS_MUTATION,
     {
       variables: {
-        date: inputs.date,
+        date: formatISO(new Date(inputs.date)),
 
         price: parseInt(priceState),
 
-        equipment: selectedEquipment,
+  
    
-        userId: privateClassUser
+        userId: selectedOption && selectedOption.value
       },
       refetchQueries: [
   
@@ -293,7 +285,7 @@ function CreatePrivateClass() {
                     
                     <SickButton
                       disable={
-                        loading || needsClass || needsDateTime || tooManyTags
+                        loading || needsClass || needsDateTime 
                       }
                       style={{ marginTop: '50px' }}
                       type="submit"

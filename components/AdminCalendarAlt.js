@@ -7,13 +7,22 @@ import { startOfWeek, format } from 'date-fns'
 import addDays from 'date-fns/addDays'
 import Loader from './Loader'
 const STREAMS_ADMIN_QUERY = gql`
-  query STREAMS_ADMIN_QUERY($date: String) {
+  query STREAMS_ADMIN_QUERY($date: DateTime) {
     allItems(where: { date_gte: $date }, orderBy: "date") {
       id
       price
       date
       name
+      private {
+        id
+      }
       status
+      private {
+        id
+        firstName
+        lastName
+        businessName
+      }
       stillAvailable
       user {
         id
@@ -64,7 +73,94 @@ background: rgba(140,140,140,.1);
     height: 100%;
   }
 `
+const PrivateWorkout = styled.div`
+  background: rgba(240, 240, 240, 0.7);
 
+grid-template-columns: 30px 1fr 60px;
+grid-template-rows: 1fr  ;
+border: 1px dotted slategrey;
+border-radius: 5px;
+padding: 0px;
+align-items: center;
+width: 90%;
+position: relative;
+margin: 10px auto;
+height: 80px;
+display: grid;
+transition: 0.3s;
+&:hover {
+  transform: translateX(5px);
+}
+
+.dayday {
+  grid-column: 2;
+  grid-row: 1;
+  font-size: 20px;
+  font-family: 'Bison';
+  letter-spacing: 2px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0 auto;
+  line-height: 14px;
+}
+.middle {     
+
+  font-family: 'Bison';
+  letter-spacing: 2px;
+padding: 4px;
+  line-height: 16px;
+  color: slategrey; grid-column: 2;
+  flex-flow: column;
+ justify-content: center;
+ align-items: center;
+ text-align: center;
+  width: 100%;
+}
+
+.date {
+  grid-column: 2;
+  grid-row: 2;
+  margin: 0;
+  line-height: 14px;
+  font-size: 16px;
+margin: 0 auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.control_room {
+  grid-column: 3;
+  border-radius: 0 3px 3px 0;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  grid-row: 1/3;
+  background: ${(props) => props.theme.second};
+  color: white;
+  padding: 0 0px;
+  cursor: pointer;
+
+}
+img {
+  transition: .4s;
+  &:hover {
+    transform: rotate(360deg);
+  }
+}
+span {
+  background: ${(props) =>
+    props.status === 'COMPLETE' ? 'rgba(20,120,20,.7)' : 'grey'};
+  border-radius: 3px 0 0 3px;
+  height: 100%;
+  grid-column: 1;
+  grid-row: 1/3;
+
+  color: white;
+  padding: 0 0px;
+}
+`
 const Workout = styled.div`
   background: rgba(240, 240, 240, 0.7);
 
@@ -169,14 +265,14 @@ function AdminCalendarAlt() {
   })
 
   const { error, loading, data } = useQuery(STREAMS_ADMIN_QUERY, {
-    variables: { date: format(weekStarts, 'yyyy-MM-dd') },
+    variables: { date: format(weekStarts, 'dd/MM/yyyy') },
   })
   if (loading) return <Loader />
   if (error) return <Error error={error} />
   if (!data) return null
 
   const theDataLength = data.allItems.length
-  console.log(theDataLength)
+ 
     const today = format(new Date(), 'M/dd')
   const passedArray = data.allItems.filter(workout => {
     const date = format(new Date(workout.date), 'M/dd')
@@ -213,11 +309,29 @@ function AdminCalendarAlt() {
           
         
           
-          <Workout key={item.id}   status={item.status} >
+          item.private ? <PrivateWorkout>         < div className="middle"><div className="title">{item.private && item.private.firstName + ' ' + item.private.lastName + ' ' + item.private.businessName}</div> <div >{test}</div>
+          {' '}</div>
+         
+           
+        
+          
+            <Link
+              href={{
+                pathname: '/privateclass',
+                query: { id: item.id },
+              }}
+            >
+              <div className="control_room">
+              <img height="30" src="../static/img/gear.svg" />
+           </div> 
+           </Link></PrivateWorkout> : <Workout key={item.id}   status={item.status} >
                
             <span />
-            <div className="middle"> <div >{test}</div>
-            <div className="title">{item.name}</div>{' '}</div>
+           < div className="middle">
+           <div className="title">
+                  {item.reason.name}</div>
+                   <div >{test}</div>
+            {' '}</div>
            
              
           
@@ -233,7 +347,7 @@ function AdminCalendarAlt() {
              </div> 
              </Link>
             
-          </Workout>
+          </Workout> 
         )
       })}</Col1><Col2>
       <div className="today"><h1>Today's Classes</h1></div>
@@ -243,11 +357,29 @@ function AdminCalendarAlt() {
           
         
           
-          <Workout key={item.id}   status={item.status} >
+          item.private ? <PrivateWorkout>         < div className="middle"><div className="title">{item.private && item.private.firstName + ' ' + item.private.lastName + ' ' + item.private.businessName}</div> <div >{test}</div>
+          {' '}</div>
+         
+           
+        
+          
+            <Link
+              href={{
+                pathname: '/privateclass',
+                query: { id: item.id },
+              }}
+            >
+              <div className="control_room">
+              <img height="30" src="../static/img/gear.svg" />
+           </div> 
+           </Link></PrivateWorkout> : <Workout key={item.id}   status={item.status} >
                
             <span />
-            <div className="middle"> <div >{test}</div>
-            <div className="title">{item.name}</div>{' '}</div>
+            <div className="middle">
+            <div className="title">
+                  {item.reason.name}</div>
+                   <div >{test}</div>
+            {' '}</div>
            
              
           
@@ -263,7 +395,7 @@ function AdminCalendarAlt() {
              </div> 
              </Link>
             
-          </Workout>
+          </Workout> 
         )
       })}</Col2><Col3>
       <div className="future"><h1>Upcoming Classes</h1></div>
@@ -274,15 +406,32 @@ function AdminCalendarAlt() {
           
         
           
-          <Workout key={item.id}  status={item.status} >
-               
-            <span />
-            <div className="middle"> <div >{test}</div>
-            <div className="title">{item.name}</div>{' '}</div>
+          item.private ?
+            <PrivateWorkout>         
+              <div className="middle">
+                <div className="title">
+                  {item.private && item.private.firstName + ' ' + item.private.lastName + ' ' + item.private.businessName}</div> <div >{test}</div>
+            {' '}</div>
            
              
           
             
+              <Link
+                href={{
+                  pathname: '/privateclass',
+                  query: { id: item.id },
+                }}
+              >
+                <div className="control_room">
+                <img height="30" src="../static/img/gear.svg" />
+             </div> 
+             </Link></PrivateWorkout> : 
+            <Workout key={item.id}  status={item.status} >
+              <span />
+              <div className="middle">
+                <div className="title">
+                  {item.reason.name}</div> <div >{test}</div>
+            {' '}</div>
               <Link
                 href={{
                   pathname: '/livecontrolroom',
@@ -295,6 +444,7 @@ function AdminCalendarAlt() {
              </Link>
             
           </Workout>
+         
         )
       })}</Col3>
     </Calendar>

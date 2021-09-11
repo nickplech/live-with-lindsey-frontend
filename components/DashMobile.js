@@ -23,7 +23,7 @@ import { useUser } from './User'
 import { motion } from 'framer-motion'
 
 const USERS_WEEK_QUERY = gql`
-  query USERS_WEEK_QUERY($id: [ID], $date: String) {
+  query USERS_WEEK_QUERY($id: [ID], $date: DateTime) {
     allItems(
       where: { AND: [{ user_some: { id_in: $id } }, { date_gte: $date }] }
       orderBy: "date"
@@ -49,7 +49,7 @@ const USERS_WEEK_QUERY = gql`
 `
 
 const STREAMS_QUERY = gql`
-  query STREAMS_QUERY($date: String) {
+  query STREAMS_QUERY($date: DateTime) {
     allItems(where: { date_gte: $date }, orderBy: "date") {
       id
       price
@@ -578,7 +578,7 @@ function DashMobile() {
     weekStartsOn: 0,
   })
   const { error, loading, data } = useQuery(USERS_WEEK_QUERY, {
-    variables: { date: format(weekStarts, 'yyyy-MM-dd'), id: me.id },
+    variables: { date: format(weekStarts, 'dd/MM/yyyy'), id: me.id },
   })
   if (loading) return <Loader />
   if (error) return <Error error={error} />
@@ -711,14 +711,14 @@ function TodaysClasses({ items, active, isSelected, setIsSelected }) {
             const today = new Date().getDate()
             const todayOnly = new Date(item.date)
             const matchesBoth = todayOnly.getDate() === today
-            const intLength = item.reason.classLength.split(' ')
-            const intSplit = parseInt(intLength[0])
-            const endTime = addMinutes(todayOnly, intSplit)
+            // const intLength = item.reason.classLength.split(' ')
+            // const intSplit = parseInt(intLength[0])
+            // const endTime = addMinutes(todayOnly, intSplit)
 
-            const intInterval = isWithinInterval(new Date(), {
-              start: todayOnly,
-              end: new Date(endTime),
-            })
+            // const intInterval = isWithinInterval(new Date(), {
+            //   start: todayOnly,
+            //   end: new Date(endTime),
+            // })
 
             const fifteenBefore = subMinutes(todayOnly, 15)
             const openUp = isAfter(new Date(), new Date(fifteenBefore))
@@ -738,7 +738,7 @@ function TodaysClasses({ items, active, isSelected, setIsSelected }) {
                       </div>
                     </div> */}
                   <div className="course-info">
-                    <h4>{item.reason.name}</h4>
+                    <h4>{item.reason && item.reason.name}</h4>
                     <h1> {format(new Date(item.date), 'h:mm aa')}</h1>
                     <h2> {format(new Date(item.date), 'eeee | MMMM dd')}</h2>
                   </div>
@@ -774,10 +774,10 @@ function TodaysClasses({ items, active, isSelected, setIsSelected }) {
 
                   <Status status={item.status}>
                     <div className="live-status">
-                      {item.status}{' '}
-                      {item.status === 'LIVE' && <span className="circle" />}
+                      {item.status && item.status}{' '}
+                      {item.status && item.status === 'LIVE' && <span className="circle" />}
                     </div>
-                    {item.status === 'GOING LIVE' ? (
+                    {item.status && item.status === 'GOING LIVE' ? (
                       <h6>
                         {formatDistanceToNow(todayOnly, { addSuffix: true })}
                       </h6>
@@ -812,7 +812,7 @@ function TodaysClasses({ items, active, isSelected, setIsSelected }) {
 
 function ScheduledClasses({ inCart, id, active }) {
   const { error, loading, data } = useQuery(STREAMS_QUERY, {
-    variables: { date: format(new Date(), 'yyyy-MM-dd') },
+    variables: { date: format(new Date(), 'dd/MM/yyyy') },
   })
   if (loading) return <Loader />
   if (error) return <Error error={error} />

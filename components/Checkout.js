@@ -442,7 +442,7 @@ function useCheckout() {
       refetchQueries: [
         {
           query: USERS_WEEK_QUERY,
-          variables: { date: format(weekStarts, 'yyyy-MM-dd'), id: me.id },
+          variables: { date: format(weekStarts, 'dd/MM/yyyy'), id: me.id },
         },
         { query: CURRENT_USER_QUERY },
       ],

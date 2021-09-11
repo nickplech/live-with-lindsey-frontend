@@ -128,19 +128,20 @@ const Wind = styled(motion.div)`
   justify-content: center;
   align-items: center;
   flex-flow: column;
-  font-size: 22px;
+  font-size: 22px;  background-color: ${(props) => props.theme.second};
+  overflow: hidden;
   box-shadow: 0px 3px 4px -2px rgba(20, 20, 20, 0.2);
   z-index: 40000;
   font-family: 'Bison';
-  &:before {
-    background-color: ${(props) => props.theme.second};
+  /* &:before {
+  
     z-index: 11000;
     height: 100%;
     border-radius: 10px;
     width: 100%;
     position: absolute;
     content: '';
-  }
+  } */
   p {
     z-index: 12000;
     margin: 5px;
@@ -230,8 +231,9 @@ export default function Reviews() {
                     <div
                       style={{
                         color: 'white',
-
-                        fontSize: '192px',
+                        transform: 'translateY(35%)',
+                        left: '20px',
+                        fontSize: '182px',
                         position: 'absolute',
                         zIndex: 100000,
                         opacity: '.2',

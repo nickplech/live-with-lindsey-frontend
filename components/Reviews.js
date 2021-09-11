@@ -231,9 +231,9 @@ export default function Reviews() {
                     <div
                       style={{
                         color: 'white',
-                        transform: 'translateY(35%)',
+                        transform: 'translateY(20%)',
                         left: '20px',
-                        fontSize: '182px',
+                        fontSize: '350px',
                         position: 'absolute',
                         zIndex: 100000,
                         opacity: '.2',

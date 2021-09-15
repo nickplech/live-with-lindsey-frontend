@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import styled from 'styled-components'
+import { motion } from 'framer-motion'
 import Loader from './Loader'
 import gql from 'graphql-tag'
 import { useQuery } from '@apollo/client'
@@ -8,6 +9,7 @@ import WeekViewTwo from './WeekViewTwo'
 import Link from 'next/link'
 import {
   format,
+  formatISO,
   formatDistanceToNow,
   isPast,
   isWithinInterval,
@@ -17,6 +19,7 @@ import {
   startOfWeek,
 } from 'date-fns'
 import Emoji from './Emoji'
+import LiveWithLindseyVideoText from './LiveWithLindseyVideoText'
 import { useToast } from './contexts/LocalState'
 import ProductSlider from './ProductSlider'
 import TickerFeed from './TickerFeed'
@@ -53,7 +56,7 @@ const USERS_WEEK_QUERY = gql`
 
 const STREAMS_QUERY = gql`
   query STREAMS_QUERY($date: DateTime) {
-    allItems(where: { date_gte: $date, private_is_null: true }, orderBy: "date") {
+    allItems(where: {  AND: [{ private_is_null: true }, { date_gte: $date }]}, orderBy: "date") {
       id
       price
       date
@@ -77,31 +80,31 @@ const STREAMS_QUERY = gql`
 const Pad = styled.div`
   overflow-x: hidden;
   position: relative;
-
-`
-const Grid = styled.div`
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  grid-template-rows: ${(props) =>
-    props.items.length === 0 ? '1fr' : 'minmax(150px, 300px) 1fr'};
-  /* grid-row-gap: 50px; */
-  width: 100%;
-  position: relative;
-   
   .line {
-    display: none;
+    display: flex;
     color: white;
-    transform: translate(65px, -105px);
+    transform: translate(140px, -90px);
     padding: 0;
     position: absolute;
     color: white;
     opacity: 1;
-    font-size: 35px;
+    font-size: 25px;
     margin-top: 0;
     z-index: 999;
     font-family: 'Felix';
     grid-column: 1;
   }
+`
+
+const Grid = styled.div`
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: ${(props) =>
+    props.items.length === 0 ? '1fr' : 'minmax(150px, 300px) 1fr'};
+ 
+  width: 100%;
+  position: relative;
+   
 `
 
 const Title = styled.div`
@@ -221,7 +224,7 @@ const ClassList = styled.div`
   transition: 0.2s;
   grid-column: 1;
   grid-row: 1;
-  transform: translateY(-25px);
+  transform: translateY(-30px);
   position: relative;
   z-index: 500;
 
@@ -353,7 +356,7 @@ const ClassList = styled.div`
     color: #fff;
     font-size: 16px;
     padding: 8px 5px;
-    min-width: 170px;
+    min-width: 190px;
     margin-top: 35px;
     letter-spacing: 1px;
     cursor: pointer;
@@ -413,12 +416,16 @@ const ClassList = styled.div`
       opacity: 0.8;
     }
   }
+  .private {
+
+  }
 `
+
 const Status = styled.div`
   grid-column: 3;
   text-align: right;
-  padding-right: 10px;
-  width: 100%;
+  padding-right: 8px;
+ 
   font-family: 'Bison';
   .live-status {
     ${(props) =>
@@ -431,6 +438,24 @@ const Status = styled.div`
         : null};
     letter-spacing: 3px;
     font-size: 18px;
+  }
+   .live-status2 {
+    ${(props) =>
+      props.status === 'GOING LIVE'
+        ? 'background: lightgrey'
+        : props.status === 'COMPLETE'
+        ? 'background: lightgrey'
+        : props.status === 'LIVE'
+        ? 'background: green'
+        : null};
+  color: grey;
+    letter-spacing: 3px;
+    font-size: 17px;
+    padding: 3px 3px;
+    border-radius: 5px;
+    margin-top: 8px;
+    line-height: 18px;
+      text-align: center;
   }
   .circle {
     background-color: rgba(255, 82, 82, 1);
@@ -483,45 +508,65 @@ const Schedule = styled.div`
   }
 `
 const TodayName = styled.span`
-  transform: translate(35px, -105px);
+  transform: translate(35px, -95px);
   padding: 0;
   position: absolute;
   color: white;
-
-  opacity: 1;
-  font-size: 35px;
+cursor: pointer;
+   opacity: ${(props) => (props.isSelected === 'week' ? 0.5 : 1)};
+  font-size:30px;
   margin-top: 0;
   z-index: 999;
   font-family: 'Felix';
 `
 const WeekName = styled.span`
-  display: none;
+  display: flex;
   color: white;
-  transform: translate(65px, -105px);
+  transform: translate(155px, -95px);
   padding: 0;
   position: absolute;
   color: white;
   opacity: ${(props) => (props.isSelected === 'week' ? 1 : 0.5)};
-  font-size: ${(props) => (props.isSelected === 'week' ? '35px' : '20px')};
+    font-size: 30px;
   margin-top: 0;
   z-index: 999;
   font-family: 'Felix';
-  grid-column: 1;
-
-  @media (max-width: 992px) {
+ 
+  cursor: pointer;
+  /* @media (max-width: 992px) {
     display: flex;
-    /* font-size: ${(props) =>
-      props.isSelected === 'week' ? '35px' : '20px'}; */
+    font-size: ${(props) =>
+      props.isSelected === 'week' ? '35px' : '20px'};
     font-size: 26px;
-    transform: translate(170px, -85px);
-    cursor: pointer;
-  }
+    /* transform: translate(170px, -85px); */
+  
+  } */
 `
-
+const slideOut = {
+  in: {
+    opacity: 1,
+    display: 'flex',
+    transition: {
+      type: 'tween',
+      stiffness: 200,
+    },
+  },
+  out: {
+    opacity: 0,
+    display: 'none',
+    transition: {
+      type: 'tween',
+      stiffness: 200,
+    },
+    transitionEnd: {
+      display: 'none',
+    },
+  },
+}
 function DashboardComponent() {
   const me = useUser()
-  const { isSelected, setIsSelected } = useToast()
-
+ 
+ const { active, isSelected, setIsSelected } = useToast()
   const today = new Date()
   const count = me && me.cart.reduce(
     (tally, cartItem) => tally + cartItem.quantity,
@@ -537,7 +582,7 @@ function DashboardComponent() {
     weekStartsOn: 0,
   })
   const { error, loading, data } = useQuery(USERS_WEEK_QUERY, {
-    variables: { date: format(weekStarts, 'dd/MM/yyyy'), id: me && me.id },
+    variables: { date: formatISO(weekStarts), id: me && me.id },
   })
   if (loading) return <Loader />
   if (error) return <Error error={error} />
@@ -558,9 +603,32 @@ function DashboardComponent() {
           showPic={true}
        firstName={firstName}
         />
+         <TodayName
+          setIsSelected={setIsSelected}
+          isSelected={isSelected}
+          onClick={(e) => setIsSelected('today')}
+          className="today"
+        >
+          TODAY{' '}
+        </TodayName>{' '}
+        <span className="line">|</span>
+        <WeekName
+          setIsSelected={setIsSelected}
+          isSelected={isSelected}
+          onClick={(e) => setIsSelected('week')}
+          className="mobile"
+        >
+          WEEK
+        </WeekName>
+    
         <Grid items={items}>
           {items.length === 0 ? null : (
             <>
+                   <motion.div
+                variants={slideOut}
+                initial="in"
+                animate={isSelected === 'today' ? 'in' : 'out'}
+              >
               <TodaysClasses
                 setIsSelected={setIsSelected}
                 isSelected={isSelected}
@@ -569,13 +637,19 @@ function DashboardComponent() {
               
                 id={me && me.id}
               />
-
+              </motion.div>
+       <motion.div
+                variants={slideOut}
+                initial="in"
+                animate={isSelected === 'today' ? 'out' : 'in'}
+              >
               <WeekViewTwo
                 items={items}
               
                 today={today}
                 id={me && me.id}
               />
+              </motion.div>
             </>
           )}
           <Schedule items={items}>
@@ -603,18 +677,18 @@ function TodaysClasses({ items, id }) {
 
   const todaysClasses = items
   const changeUi = todaysClasses.map((theClass) => {
+   
     const today = new Date().getDate()
     const todayOnly = new Date(theClass.date)
     const matchesBoth = todayOnly.getDate() === today
+ 
     return matchesBoth
   })
 
   if (!todaysClasses)
     return (
       <>
-        <TodayName className="today">TODAY </TodayName>{' '}
-        <span className="line">|</span>
-        <WeekName className="mobile">WEEK</WeekName>
+ 
         <Div>
           <p className="smaller">Rest Day? You've earned it!</p>
           <SubText>
@@ -637,9 +711,7 @@ function TodaysClasses({ items, id }) {
 
   return (
     <>
-      <TodayName className="today">TODAY </TodayName>{' '}
-      <span className="line">|</span>
-      <WeekName className="mobile">WEEK</WeekName>
+        
       {changeUi.some((fromToday) => {
         return fromToday === true
       }) ? (
@@ -668,9 +740,70 @@ function TodaysClasses({ items, id }) {
 
             if (matchesBoth)
               return (
+                item.private ?
+                
+                <div key={item.id} className="course private">
+                  <div className="course-preview">
+                    <h4>{item.reason && item.reason.name}</h4>
+                    <div className="card__clock-info">
+                      <svg className="card__clock" viewBox="0 0 30 30">
+                        <path d="M12,20A7,7 0 0,1 5,13A7,7 0 0,1 12,6A7,7 0 0,1 19,13A7,7 0 0,1 12,20M19.03,7.39L20.45,5.97C20,5.46 19.55,5 19.04,4.56L17.62,6C16.07,4.74 14.12,4 12,4A9,9 0 0,0 3,13A9,9 0 0,0 12,22C17,22 21,17.97 21,13C21,10.88 20.26,8.93 19.03,7.39M11,14H13V8H11M15,1H9V3H15V1Z" />
+                      </svg>{' '}
+                      <span className="card__time">
+                        {' '}
+                        {item.reason && item.reason.classLength}
+                      </span>
+                    </div>
+                  </div>
+                  <div className="course-info">
+                    <h1> {format(new Date(item.date), 'h:mm aa')}</h1>
+                    <h2> {format(new Date(item.date), 'eeee | MMMM dd')}</h2>
+
+                    {item.status === 'LIVE' ? (
+                      <Link
+                        href={{
+                          pathname: '/privateclass',
+                          query: { id: item.id },
+                        }}
+                      
+                      >
+                        <a className="btn">
+                          Enter Private Studio{' '}
+                          <img
+                            style={{
+                              transform: 'rotate(180deg)',
+                              marginLeft: '3px',
+                            }}
+                            width="20px"
+                            src="../static/img/arrow-back.svg"
+                            alt="arrow"
+                          />
+                        </a>
+                      </Link>
+                    ) : (
+                      <button className="btn-dis">{`Currently Unavailable`}</button>
+                    )}
+                  </div>
+   
+                  <Status status={item.status}>
+                    <div className="live-status2">
+             
+                      {item.status && item.status === 'LIVE' && 'Open'}
+                 
+                    {item.status &&  item.status === 'GOING LIVE' ? (
+                     'Upcoming'
+                    ) : null}
+                    {item.status &&  item.status === 'COMPLETE' ? (
+                      'Complete'
+                    ) : null}   </div>
+                  </Status>{' '}
+                </div>
+               
+                :
                 <div key={item.id} className="course">
                   <div className="course-preview">
                     <h4>{item.reason && item.reason.name}</h4>
+                    <h4>{item.name && item.name} </h4>
                     <div className="card__clock-info">
                       <svg className="card__clock" viewBox="0 0 30 30">
                         <path d="M12,20A7,7 0 0,1 5,13A7,7 0 0,1 12,6A7,7 0 0,1 19,13A7,7 0 0,1 12,20M19.03,7.39L20.45,5.97C20,5.46 19.55,5 19.04,4.56L17.62,6C16.07,4.74 14.12,4 12,4A9,9 0 0,0 3,13A9,9 0 0,0 12,22C17,22 21,17.97 21,13C21,10.88 20.26,8.93 19.03,7.39M11,14H13V8H11M15,1H9V3H15V1Z" />
@@ -753,18 +886,23 @@ function TodaysClasses({ items, id }) {
 }
 
 function ScheduledClasses({ inCart, id }) {
+ 
+const today = new Date().toLocaleString();
+const isonow = formatISO(new Date(today)) 
+ 
   const { error, loading, data } = useQuery(STREAMS_QUERY, {
-    variables: { date: format(new Date(), 'dd/MM/yyyy') },
+    variables: { date: isonow },
   })
   if (loading) return <Loader />
   if (error) return <Error error={error} />
-  console.log(data.allItems)
+ 
   const ownsItem = data.allItems.map((item) => {
     const theUsers = item.user.find((theUser) => {
       return theUser.id === id
     })
     return theUsers
   })
+  console.log(data.allItems)
   if (!data.allItems.length)
    
     return (
@@ -775,14 +913,16 @@ function ScheduledClasses({ inCart, id }) {
       </Div>
     )
   return (
+ 
     <ProductSlider
     
       inCart={inCart}
       ownsItem={ownsItem}
       allItems={data.allItems}
     />
+ 
   )
 }
 
-export default DashboardComponent
+export default React.memo(DashboardComponent)
 export { STREAMS_QUERY, USERS_WEEK_QUERY }

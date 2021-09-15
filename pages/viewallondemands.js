@@ -7,7 +7,7 @@ import ViewAllTemplate from '../components/ViewAllTemplate'
 const ViewAllOnDemands = ({query}) => {
   return (
     <>
-      <PhotoArray />
+      <PhotoArray title={query.category} />
    
       <ViewAllTemplate  title={query.category}/>
 

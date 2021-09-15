@@ -8,7 +8,7 @@ import  {usePeerSocket}  from './contexts/PrivatePeerSocket'
 const Wrap = styled(motion.div)`
 position: relative;
 display: flex;
- 
+ overflow: hidden;
    .video-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, 300px);
@@ -53,7 +53,31 @@ cursor: grab;
   transform: scaleX(-1); 
 }
 `
-
+const IconBar = styled.div`
+position: fixed;
+bottom: 10px;
+left: 10px;
+display: flex;
+.icons {
+  display: flex;
+  margin: 5px;
+  justify-content: center;
+  align-items: center;
+  background: #f8b0b0;
+  border-radius: 50%;
+  height: 30px;
+ 
+  cursor: pointer;
+  width: 30px;
+  &:hover {
+    opacity: .5;
+  }
+}
+img {
+  height: 20px;
+  width: 20px;
+}
+`
 
 const CallingNow = styled.div`
 background: rgba(245,245,245,.8);
@@ -167,8 +191,32 @@ const PrivateRoomComponent = ({isAdmin}) => {
       </CallingNow>
     
  
-)}
-       
+  )}
+  <IconBar>
+        <div className="icons"
+                onClick={() => handleScreenSharing()} title="share your screen">
+                <img src="../static/img/share_screen.svg" alt="share screen" />
+              </div>
+               <div className="icons"
+                onClick={() => updateVideo()}  title="toggle your camera on/off">
+                {myVdoStatus ? (
+                <img src="../static/img/videocamera.svg" alt="toggle camera off" />
+              ) : (
+         <img src="../static/img/xxx.svg" alt="toggle camera back on" />
+              )}
+                
+              </div>
+               <div className="icons"
+                onClick={() => updateMic()} title="toggle your microphone on/off">
+              
+                            {myMicStatus ? (
+    <img src="../static/img/microphone.svg" alt="toggle microphone" />
+              ) : (
+         <img src="../static/img/xxx.svg" alt="toggle camera back on" />
+              )}
+                
+              </div>
+              </IconBar>
         </Wrap>
     )
 }

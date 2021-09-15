@@ -298,11 +298,11 @@ console.log(inputs.date)
       refetchQueries: [
         {
           query: STREAMS_QUERY,
-          variables: { date: format(new Date(), 'dd/MM/yyyy') },
+          variables: { date: formatISO(new Date()) },
         },
         {
           query: STREAMS_ADMIN_QUERY,
-          variables: { date: format(new Date(), 'dd/MM/yyyy') },
+          variables: { date: formatISO(new Date()) },
         },
       ],
     },

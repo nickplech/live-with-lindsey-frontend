@@ -58,7 +58,7 @@ const Recomended = styled.div`
 const Videos = styled.div`
  
 
-  margin: 30px 20px 0 20px;
+  margin: 10px 20px 0 20px;
   border-radius: 10px;
   display: flex;
   align-items: flex-end;
@@ -113,11 +113,11 @@ const Videos = styled.div`
 
 const H1 = styled.h1`
   color: ${(props) => props.theme.third};
-
+text-align: center;
   font-family: 'Bison';
   letter-spacing: 2px;
-  margin: 30px 20px 10px;
-  font-size: 22px;
+  margin: 30px 20px 0px;
+  font-size: 24px;
   /* transform: translateY(-70px); */
   position: relative;
 `
@@ -138,7 +138,7 @@ function Recommended({ tags, id }) {
 
   return (
     <TheSection>
-      <H1>Recomended Based on This Workout</H1>
+      <H1>You May Also Like These Classes</H1>
       <Recomended>
         {allVideoOnDemands.map((video, i) => {
           return (

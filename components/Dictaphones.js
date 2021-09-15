@@ -4,9 +4,6 @@ import SpeechRecognition from 'react-speech-recognition'
 
 export default function Dictaphone({
   handleClick,
-  // updateStatus,
-  // active,
-  // status,
 }) {
   const [showFirstWidget, setShowFirstWidget] = useState(true)
 
@@ -23,9 +20,6 @@ export default function Dictaphone({
     <div>
       {showFirstWidget && (
         <DictaphoneWidgetA
-          // updateStatus={updateStatus}
-          // active={active}
-          // status={status}
           handleClick={handleClick}
         />
       )}

@@ -132,12 +132,12 @@ const CREATE_PRIVATE_CLASS_MUTATION = gql`
 
     $price: Int
     $date: DateTime!
- 
+    $name: String
    
     $userId: ID!
   ) {
     createPrivate(
-
+      name: $name
       price: $price
       date: $date
  
@@ -145,6 +145,7 @@ const CREATE_PRIVATE_CLASS_MUTATION = gql`
 userId: $userId
     ) {
       id
+      name
       date
       private {
         id
@@ -173,9 +174,9 @@ const SignUpTitle = styled.h3`
   color: ${(props) => props.theme.second};
 `
 
-
+const nameOptions = [{value: '15 Minutes', label: '15 Minute Session'},{value: '30 Minutes', label: '30 Minute Session'}, {value: '45 Minutes', label: '45 Minute Session'},{value: '60 Minutes', label: '60 Minute Session'},{value: '90 Minutes', label: '90 Minute Session'}]
 function CreatePrivateClass() {
-   
+   const [nameState, setNameState] = useState('')
   const [priceState, setPriceState] = useState('')
  
 
@@ -262,6 +263,22 @@ function CreatePrivateClass() {
                         onChange={handleChange}
                       />
                     </label>
+                      <label htmlFor="classlength">
+                      SELECT SESSION LENGTH
+                    </label>
+                    <Select
+          
+                      className="basic-single"
+                      classNamePrefix="select"
+                      type="select"
+                      value={nameState}
+                      isClearable={true}
+                      required
+                      onChange={(e) => setNameState(e)}
+                      isSearchable={true}
+                      name="classlength"
+                      options={nameOptions}
+                    />
                     <label htmlFor="client">
                       SELECT A CLIENT
                     </label>

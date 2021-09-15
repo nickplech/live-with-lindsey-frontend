@@ -8,6 +8,7 @@ import WeekViewTwo from './WeekViewTwo'
 import Link from 'next/link'
 import {
   format,
+  formatISO,
   formatDistanceToNow,
   isPast,
   isWithinInterval,
@@ -17,6 +18,7 @@ import {
   startOfWeek,
 } from 'date-fns'
 import { useToast } from './contexts/LocalState'
+import Emoji from './Emoji'
 import ProductSlider from './ProductSlider'
 import TickerFeed from './TickerFeed'
 import { useUser } from './User'
@@ -33,6 +35,9 @@ const USERS_WEEK_QUERY = gql`
       date
       name
       status
+       private {
+        id
+      }
       stillAvailable
       reason {
         id
@@ -55,6 +60,9 @@ const STREAMS_QUERY = gql`
       price
       date
       user {
+        id
+      }
+      private {
         id
       }
       reason {
@@ -578,7 +586,7 @@ function DashMobile() {
     weekStartsOn: 0,
   })
   const { error, loading, data } = useQuery(USERS_WEEK_QUERY, {
-    variables: { date: format(weekStarts, 'dd/MM/yyyy'), id: me.id },
+    variables: { date: formatISO(weekStarts), id: me.id },
   })
   if (loading) return <Loader />
   if (error) return <Error error={error} />
@@ -695,7 +703,7 @@ function TodaysClasses({ items, active, isSelected, setIsSelected }) {
                 {' '}
                 on-demand workout
               </span>
-            </Link>
+            </Link><Emoji  symbol="💪" label="flexed bicep" />
           </SubText>
         </Div>
       </>
@@ -793,7 +801,7 @@ function TodaysClasses({ items, active, isSelected, setIsSelected }) {
           <SubText>
             Still looking to sweat?
             <br /> Crush an
-            <Link href="/ondemand">
+            <Link href="/ondemand"> 
               <span
                 onMouseOver={handleSetOnHoverState}
                 onMouseOut={noHover}
@@ -802,7 +810,7 @@ function TodaysClasses({ items, active, isSelected, setIsSelected }) {
                 {' '}
                 on-demand workout
               </span>
-            </Link>
+            </Link><Emoji  symbol="💪" label="flexed bicep" />
           </SubText>
         </Div>
       )}{' '}
@@ -812,7 +820,7 @@ function TodaysClasses({ items, active, isSelected, setIsSelected }) {
 
 function ScheduledClasses({ inCart, id, active }) {
   const { error, loading, data } = useQuery(STREAMS_QUERY, {
-    variables: { date: format(new Date(), 'dd/MM/yyyy') },
+    variables: { date: formatISO(new Date()) },
   })
   if (loading) return <Loader />
   if (error) return <Error error={error} />
@@ -840,5 +848,5 @@ function ScheduledClasses({ inCart, id, active }) {
   )
 }
 
-export default DashMobile
+export default React.memo(DashMobile)
 export { STREAMS_QUERY, USERS_WEEK_QUERY }

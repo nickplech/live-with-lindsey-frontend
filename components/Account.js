@@ -103,7 +103,7 @@ function Account() {
 
     // Validate file type
     if (!file.type || validImageTypes.indexOf(file.type) === -1) {
-      addToast('Please provide a valid image type: GIF, JPG, or PNG.', {
+      toast('Please provide a valid image type: GIF, JPG, or PNG.', {
         appearance: 'error',
         autoDismiss: true,
       });

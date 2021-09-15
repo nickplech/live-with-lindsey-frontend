@@ -11,7 +11,7 @@ import { useUser, CURRENT_USER_QUERY } from './User'
 import gql from 'graphql-tag'
 import Router from 'next/router'
 import styled from 'styled-components'
-import { format, startOfWeek } from 'date-fns'
+import { format, startOfWeek, formatISO } from 'date-fns'
 import { useMutation } from '@apollo/client'
 import calcTotalPrice from '../lib/calcTotalPrice'
 import processDiscount from '../lib/processDiscount'
@@ -442,7 +442,7 @@ function useCheckout() {
       refetchQueries: [
         {
           query: USERS_WEEK_QUERY,
-          variables: { date: format(weekStarts, 'dd/MM/yyyy'), id: me.id },
+          variables: { date: formatISO(weekStarts), id: me.id },
         },
         { query: CURRENT_USER_QUERY },
       ],

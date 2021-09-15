@@ -24,7 +24,7 @@ const Wrapper = styled.div`
 const Container = styled(animated.div)`
   position: relative;
   display: grid;
-  grid-template-columns: repeat(4, minmax(50px, 150px));
+  grid-template-columns: repeat(4, 150px);
   grid-gap: 10px;
   padding: 20px;
   justify-content: center;

@@ -517,4 +517,4 @@ export function ProductSlider({ allItems, active, inCart, ownsItem }) {
   )
 }
 
-export default ProductSlider
+export default React.memo(ProductSlider)

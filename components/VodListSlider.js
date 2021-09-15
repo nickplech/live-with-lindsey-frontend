@@ -223,7 +223,7 @@ const Wrap = styled.div`
   .menu-item-wrapper {
     user-select: none;
     cursor: grab;
-    border-radius: 10px;
+    border-radius: 3px;
     /* background: rgba(245, 245, 245, 0.8); */
     box-shadow: 0 2px 1px rgba(0, 0, 0, 0.09), 0 4px 2px rgba(0, 0, 0, 0.09),
       0 8px 4px rgba(0, 0, 0, 0.09), 0 16px 8px rgba(0, 0, 0, 0.09),

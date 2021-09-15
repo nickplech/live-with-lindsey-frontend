@@ -7,7 +7,7 @@ import { SocketProvider } from '../../components/contexts/SocketProvider'
 const Stream = () => {
   const router = useRouter()
 
-  console.log(router.query.userId)
+  // console.log(router.query.userId)
 
   return (
     <PleaseSignIn>

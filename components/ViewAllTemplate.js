@@ -3,6 +3,7 @@ import gql from 'graphql-tag'
 import { useQuery } from '@apollo/client'
 import styled from 'styled-components'
 import Loader from './Loader'
+import SearchByTag from './SearchByTag'
 import Error from './ErrorMessage'
 import { ALL_ITEMS_QUERY } from './Items'
 import VanillaTilt from 'vanilla-tilt'
@@ -106,6 +107,7 @@ function ViewAllTemplate({title}) {
         <Tite style={{ marginTop: '70px', marginLeft: '30px' }}>
         {title}
         </Tite>
+        <SearchByTag />
     <TheSection>
     
         {allVideoOnDemands.map((video, i) => {

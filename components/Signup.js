@@ -23,6 +23,7 @@ const SIGNUP_MUTATION = gql`
     $email: String!
     $password: String!
     $liabilityWaiver: String!
+    $subscription: String!
   ) {
     createUser(
       data: {
@@ -33,6 +34,7 @@ const SIGNUP_MUTATION = gql`
         email: $email
         password: $password
         liabilityWaiver: { create: { status: $liabilityWaiver } }
+        subscription: $subscription
       }
     ) {
       id
@@ -42,6 +44,7 @@ const SIGNUP_MUTATION = gql`
       hasPassedTwoFac
       businessName
       email
+      subscription
     }
   }
 `
@@ -86,6 +89,7 @@ function Signup() {
     lastName: '',
     cellPhone: '',
     businessName: '',
+    subscription: '',
   })
   const [signup, { error, loading, data }] = useMutation(SIGNUP_MUTATION, {
     variables: { ...inputs, liabilityWaiver: 'AGREED' },
@@ -122,7 +126,7 @@ function Signup() {
               inputs.password === inputs.confirmPassword
             if (doesMatch) {
               const res = await signup()
-              console.log(res)
+           
               Router.push({
                 pathname: `/twoFactor/${res.data.createUser.id}`,
               })

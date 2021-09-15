@@ -46,7 +46,13 @@ letter-spacing: 2px;
  }
 `
  
-
+const TheTitle = styled.img`
+z-index: 9999;
+position: absolute;
+width: 350px;
+left: 20px;
+height: auto;
+`
 const Row = styled(motion.div)`
 
  
@@ -72,7 +78,7 @@ const Img = styled(motion.img)`
       /* transform: translateY(-50px); */
     }
   `
-function PhotoArray() {
+function PhotoArray({title}) {
  
   return (
    
@@ -1507,7 +1513,7 @@ function PhotoArray() {
   <span>YOGA</span>
   </div>
      </Row>
-
+ 
 <Img
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}

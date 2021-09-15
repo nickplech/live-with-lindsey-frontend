@@ -30,20 +30,7 @@ const Container = styled.div`
     position: relative;
   }
 `
-const WeekTitle = styled.p`
-  display: none;
-  @media (min-width: 992px) {
-    transform: translate(75px, -140px);
-    display: flex;
-    padding: 0;
-    position: absolute;
-    color: white;
-    font-size: 35px;
-    z-index: 800;
-    font-family: 'Felix';
-    grid-column: 2;
-  }
-`
+
 const ClassList = styled.ul`
   /* transition: 0.2s; */
   display: flex;
@@ -74,7 +61,7 @@ const Course = styled.li`
   position: relative;
   z-index: 20000;
   margin: 5px auto;
-  width: 90%;
+  width: 95%;
   max-width: 600px;
   height: 65px;
   transition: 0.3s;
@@ -291,7 +278,7 @@ function WeekView({ id, today, items }) {
 
   return (
     <>
-      <WeekTitle>WEEK VIEW</WeekTitle>
+      {/* <WeekTitle>WEEK VIEW</WeekTitle> */}
 
       <Container>
         <AnimateSharedLayout>

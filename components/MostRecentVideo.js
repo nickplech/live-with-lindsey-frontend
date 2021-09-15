@@ -26,28 +26,31 @@ const MOST_RECENT_VIDEO_QUERY = gql`
 
 const TheItem = styled.div`
   height: 320px;
-  width: 93%;
+  width: 90%;
   transform: rotate(-3deg);
-  border-radius: 5px;
+  border-radius: 2px;
   display: flex;
   align-items: flex-end;
+  justify-content: center;
   cursor: pointer;
   margin: 0 auto;
   transition: 0.2s;
   position: relative;
-  z-index: 900;
-
+  z-index: 1000;
+ 
   box-shadow: 0 2px 1px rgba(0, 0, 0, 0.09), 0 4px 2px rgba(0, 0, 0, 0.09),
     0 8px 4px rgba(0, 0, 0, 0.09), 0 16px 8px rgba(0, 0, 0, 0.09),
     0 32px 16px rgba(0, 0, 0, 0.03);
   background: ${(props) => props.theme.primary};
+  
   &:before {
     position: absolute;
     height: 320px;
     width: 100%;
     content: '';
     grid-column: 1;
-    border-radius: 5px;
+    border-radius: 2px;
+    opacity: 1;
     margin: 0 auto;
     z-index: 40;
     box-shadow: 0 8px 6px -5px rgba(0, 0, 0, 0.2);
@@ -73,11 +76,11 @@ const TheItem = styled.div`
   }
   @media (min-width: 992px) {
     height: 320px;
-    width: 93%;
+    width: 90%;
   }
   @media (min-width: 1100px) {
     height: 320px;
-    width: 93%;
+    width: 90%;
   }
   h3 {
     color: white;
@@ -93,18 +96,15 @@ const TheItem = styled.div`
   }
 
   .ribbon {
-    width: 240px;
+    width: 210px;
     height: auto;
     z-index: 999999;
     transform: translate(0px, -20px);
     position: absolute;
+  left: 0;
   }
 
-  span {
-    right: -25px;
-    top: 30px;
-    transform: rotate(-45deg);
-  }
+ 
   button {
     border: none;
     justify-self: center;
@@ -168,7 +168,7 @@ const Wrap = styled.div`
   }
 
   .right {
-    width: 95%;
+    width: 90%;
     grid-row: 2;
     grid-column: 1;
     margin: 0 auto;
@@ -191,7 +191,7 @@ const Wrap = styled.div`
   }
   img {
     display: inline-flex;
-    transform: translate(10px, 2.5px);
+    transform: translate(0px, 3.5px);
   }
   h3 {
     font-size: 18px;
@@ -206,6 +206,7 @@ const Wrap = styled.div`
     letter-spacing: 2px;
     color: slategrey;
     line-height: 26px;
+    margin-bottom: 10px;
   }
 `
 
@@ -247,6 +248,9 @@ function MostRecentVideo(props) {
        
         <p>{mostRecentVod.description}</p>
         <span><img src="../static/img/calendar.svg" height="20" width="20" alt="calendar graphic to represent date which video first aired live" />  <h3>aired on: {format(new Date(mostRecentVod.date), 'MMM dd, yyyy')}</h3></span>
+       
+        <span><img src="../static/img/clock.svg" height="20" width="20" alt="class length icon" />  <h3>60 mins</h3></span>
+ 
       </div>
       <div className="left">
         <TheItem

@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import gql from 'graphql-tag'
 import Link from 'next/link'
 import { useQuery } from '@apollo/client'
-import { startOfWeek, format } from 'date-fns'
+import { startOfWeek, format, formatISO } from 'date-fns'
 import addDays from 'date-fns/addDays'
 import Loader from './Loader'
 const STREAMS_ADMIN_QUERY = gql`
@@ -265,7 +265,7 @@ function AdminCalendarAlt() {
   })
 
   const { error, loading, data } = useQuery(STREAMS_ADMIN_QUERY, {
-    variables: { date: format(weekStarts, 'dd/MM/yyyy') },
+    variables: { date: formatISO(weekStarts) },
   })
   if (loading) return <Loader />
   if (error) return <Error error={error} />
@@ -322,7 +322,7 @@ function AdminCalendarAlt() {
               }}
             >
               <div className="control_room">
-              <img height="30" src="../static/img/gear.svg" />
+             Enter Session
            </div> 
            </Link></PrivateWorkout> : <Workout key={item.id}   status={item.status} >
                
@@ -370,7 +370,7 @@ function AdminCalendarAlt() {
               }}
             >
               <div className="control_room">
-              <img height="30" src="../static/img/gear.svg" />
+             Enter Session
            </div> 
            </Link></PrivateWorkout> : <Workout key={item.id}   status={item.status} >
                
@@ -423,7 +423,7 @@ function AdminCalendarAlt() {
                 }}
               >
                 <div className="control_room">
-                <img height="30" src="../static/img/gear.svg" />
+  Enter Session
              </div> 
              </Link></PrivateWorkout> : 
             <Workout key={item.id}  status={item.status} >

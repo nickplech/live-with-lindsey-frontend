@@ -1,5 +1,6 @@
 import * as React from 'react'
 import { useEffect, useState, useRef } from 'react'
+import { motion, useViewportScroll, useTransform } from "framer-motion";
 
 import styled from 'styled-components'
 

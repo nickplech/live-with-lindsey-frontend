@@ -18,14 +18,14 @@ const ItemStyle = styled(motion.div)`
     0 32px 16px rgba(0, 0, 0, 0.09);
   grid-template-rows: 1fr;
   grid-template-columns: 35px 1fr;
-  border-radius: 5px;
+  border-radius: 3px;
   height: 100%;
   width: 90%;
   margin: 0 auto;
   /* min-height: 300px; */
   user-select: none;
   cursor: grab;
-  border-radius: 15px;
+
   /* background: rgba(245, 245, 245, 0.8); */
 
   align-items: center;
@@ -37,7 +37,7 @@ const ItemStyle = styled(motion.div)`
     display: flex;
     justify-content: center;
     align-items: center;
-    border-radius: 15px 0 0 15px;
+    border-radius: 3px;
     grid-column: 1;
     grid-row: 1/2;
     height: 100%;
@@ -73,7 +73,7 @@ const ItemStyle = styled(motion.div)`
     display: flex;
     flex-flow: column;
     justify-content: center;
-    border-radius: 15px;
+    border-radius: 3px;
     align-items: center;
     width: 100%;
     height: 100%;
@@ -92,7 +92,7 @@ const ItemStyle = styled(motion.div)`
     margin: 0;
     position: absolute;
     height: 200px;
-    border-radius: 0 0 10px 10px;
+    border-radius: 3px;
     padding: 5px 15px;
     width: 100%;
     color: white;
@@ -215,7 +215,7 @@ export default function Item({ videoOnDemand, subscription }) {
           <h2 style={{ transform: 'skew(-10deg)' }} className="classTitle">
             <Lock
               subscription={subscription}
-              src="../static/img/lock-closed.svg"
+              src="../static/img/lock2.svg"
               alt="locked out"
             />{' '}
             {videoOnDemand.name.toUpperCase()}

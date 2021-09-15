@@ -338,9 +338,10 @@ console.log(chatMessages)
       <StyledChat>
         {messages &&
           chatMessages.map((message, i) => {
-             const profilePic = me.image ?
-               message.createdBy.image.publicUrlTransformed
-               : '../static/img/profpic.svg'
+                      const profilePic = message.message
+              ? message.image
+              : message.createdBy.image.publicUrlTransformed
+
              // const profilePic = me.image ? me.image.publicUrlTransformed : '../static/img/profpic.svg'
    
             const lastMessage = chatMessages.length - 1 === i

@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import Link from 'next/link'
 import DaySelector from './DaySelector'
 import gql from 'graphql-tag'
-import { format, startOfWeek, addDays } from 'date-fns'
+import { format, startOfWeek, addDays, formatISO } from 'date-fns'
 import { useQuery } from '@apollo/client'
 import {
   CarouselProvider,
@@ -414,13 +414,14 @@ const MenuItem = ({ id, name, date, classLength }) => {
 
 export function ProductSlider() {
   const weekStart = startOfWeek(new Date(), {weekStartsOn: 1})
+  const IsoWeek = formatISO(weekStart)
   const [isSelected, setIsSelected] = useState(
  
   )
  
 
   const { error, loading, data } = useQuery(STREAMS_QUERY, {
-    variables: { date: isSelected ? isSelected : weekStart },
+    variables: { date: isSelected ? formatISO(new Date(isSelected)) : IsoWeek },
   })
   const addTheDays = (day) => {
     setIsSelected(day)

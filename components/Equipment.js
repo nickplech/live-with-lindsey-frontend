@@ -6,7 +6,7 @@ display: flex;
 justify-content: center;
 margin: 0 auto;
 align-items: center;
-flex-flow: row;
+ 
 `
 const Div = styled.div`
 
@@ -16,11 +16,13 @@ const Div = styled.div`
   align-items: center;
   margin: 10px 10px;
   font-family: 'Comfortaa';
-  border: 2px dashed rgba(10,10,10,.1);
+  border: 2px dashed rgba(10,10,10,.2);
   background: transparent;
   color: ${(props) => props.color};
-  height: 155px;
-  width:200px;
+ padding: 5px;
+ height: 135px;
+ transform: translateY(-2.5px);
+  width:150px;
   text-align: center;
   cursor: pointer;
   border-radius: 5px;

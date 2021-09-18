@@ -203,7 +203,7 @@ function SelectSubscription({ handleSetPlan }) {
           <div className="free">
             <h2>Pay-As-You-Go</h2>
             <p>pay-per-live</p>
-            <button onClick={(e) => handleSetPlan(e, 'free')}>
+            <button onClick={(e) => handleSetPlan(e, 'PAYPERLIVE')}>
               Free Account
             </button>
           </div>
@@ -211,7 +211,7 @@ function SelectSubscription({ handleSetPlan }) {
           <img width="220" src="../static/img/aap.svg" />
             <h2>UNLIMITED LIVES &amp; On-Demand</h2>
             <h3>$99/mo</h3>
-            <button onClick={(e) => handleSetPlan(e, 'allAccess')}>
+            <button onClick={(e) => handleSetPlan(e, 'ALLACCESS')}>
               All-Access Pass
             </button>
           </div>

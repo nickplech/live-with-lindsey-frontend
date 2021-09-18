@@ -80,7 +80,7 @@ const StyledSignUpStepper = styled.div`
 `
 
 function Signup() {
-  const [hasAgreedToWaiver, setHasAgreedToWaiver] = useState(null)
+  const [hasAgreedToWaiver, setHasAgreedToWaiver] = useState('')
   const [phoneValue, setPhoneValue] = useState('')
   const { inputs, handleChange } = useForm({
     email: '',
@@ -89,7 +89,7 @@ function Signup() {
     lastName: '',
     cellPhone: '',
     businessName: '',
-    subscription: '',
+    subscription: 'PAYPERLIVE',
   })
   const [signup, { error, loading, data }] = useMutation(SIGNUP_MUTATION, {
     variables: { ...inputs, liabilityWaiver: 'AGREED' },
@@ -190,9 +190,9 @@ function Signup() {
                     id="cellPhone"
                     name="cellPhone"
                     className="short"
-                    minlength="14"
+                    minLength="14"
                  
-                    maxlength="14"
+                    maxLength="14"
                     placeholder="(###)###-####"
                     required
                     value={formatPhoneNumber(inputs.cellPhone)}

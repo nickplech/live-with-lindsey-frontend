@@ -4,6 +4,7 @@ import { motion } from 'framer-motion'
 import Loader from './Loader'
 import gql from 'graphql-tag'
 import { useQuery } from '@apollo/client'
+ 
 import Error from './ErrorMessage'
 import WeekViewTwo from './WeekViewTwo'
 import Link from 'next/link'
@@ -21,7 +22,7 @@ import {
 import Emoji from './Emoji'
 import LiveWithLindseyVideoText from './LiveWithLindseyVideoText'
 import { useToast } from './contexts/LocalState'
-import ProductSlider from './ProductSlider'
+
 import TickerFeed from './TickerFeed'
 import { useUser } from './User'
 
@@ -54,75 +55,23 @@ const USERS_WEEK_QUERY = gql`
   }
 `
 
-const STREAMS_QUERY = gql`
-  query STREAMS_QUERY($date: DateTime) {
-    allItems(where: {  AND: [{ private_is_null: true }, { date_gte: $date }]}, orderBy: "date") {
-      id
-      price
-      date
-      private {
-        
-          id
-        
-      }
-      user {
-        id
-      }
-      reason {
-        id
-        name
-        classLength
-      }
-    }
-  }
-`
 
 const Pad = styled.div`
   overflow-x: hidden;
+  grid-column: 1;
   position: relative;
-  .line {
-    display: flex;
-    color: white;
-    transform: translate(140px, -90px);
-    padding: 0;
-    position: absolute;
-    color: white;
-    opacity: 1;
-    font-size: 25px;
-    margin-top: 0;
-    z-index: 999;
-    font-family: 'Felix';
-    grid-column: 1;
-  }
+
 `
 
-const Grid = styled.div`
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  grid-template-rows: ${(props) =>
-    props.items.length === 0 ? '1fr' : 'minmax(150px, 300px) 1fr'};
- 
+const Switcher = styled.div`
+
+ height: 100%;
+ z-index: 100;
   width: 100%;
   position: relative;
    
 `
 
-const Title = styled.div`
-  display: flex;
-  margin: 20px 0px 0px 25px;
-  width: 100%;
-  border-bottom: 3px solid rgba(20, 20, 20, 0.2);
-  font-family: 'Felix';
-  font-size: 32px;
-  color: ${(props) => props.theme.second};
-  margin: ${(props) =>
-    props.items.length === 0 ? ' -90px 0px 0px 25px' : '20px 0px 0px 25px'};
-  @media (max-width: 992) {
-    font-size: 22px;
-    margin: ${(props) =>
-      props.items.length === 0 ? ' -70px 0px 0px 25px' : '20px 0px 0px 25px'};
-  }
-`
 
 const Div = styled.div`
   width: 100%;
@@ -134,7 +83,7 @@ const Div = styled.div`
   justify-content: center;
   text-align: center;
   align-items: center;
-  transform: translateY(-30px);
+margin-top: 20px;
   font-family: 'Bison';
   padding-top: 0px;
 
@@ -148,11 +97,10 @@ const Div = styled.div`
     justify-content: center;
     text-align: center;
     align-items: center;
-    transform: translateY(-30px);
+  margin-top: 20px;
     font-family: 'Bison';
     padding-top: 0px;
-    grid-column: 1;
-    grid-row: 1;
+  
   }
   .smaller {
     margin: 5px auto;
@@ -222,9 +170,8 @@ const SubText = styled.p`
 `
 const ClassList = styled.div`
   transition: 0.2s;
-  grid-column: 1;
-  grid-row: 1;
-  transform: translateY(-30px);
+ 
+margin-top: 20px;
   position: relative;
   z-index: 500;
 
@@ -422,10 +369,11 @@ const ClassList = styled.div`
 `
 
 const Status = styled.div`
-  grid-column: 3;
+  
   text-align: right;
   padding-right: 8px;
- 
+ position: absolute;
+ right: 40px;
   font-family: 'Bison';
   .live-status {
     ${(props) =>
@@ -486,62 +434,7 @@ const Status = styled.div`
     }
   }
 `
-const Schedule = styled.div`
-  font-family: 'Felix';
-  text-transform: uppercase;
-  z-index: 900;
-  grid-row: ${(props) => (props.items.length === 0 ? 1 : 2)};
-  grid-column: 1/3;
-  width: 100%;
-  position: relative;
-  h1 {
-    margin: 2px;
-    font-size: 46px;
-  }
-  .subTight {
-    display: ${(props) => (props.items.length === 0 ? 'flex' : 'none')};
-    color: white;
-    font-family: 'Bison';
-    margin: 0;
-    transform: translate(30px, -10px);
-    letter-spacing: 2px;
-  }
-`
-const TodayName = styled.span`
-  transform: translate(35px, -95px);
-  padding: 0;
-  position: absolute;
-  color: white;
-cursor: pointer;
-   opacity: ${(props) => (props.isSelected === 'week' ? 0.5 : 1)};
-  font-size:30px;
-  margin-top: 0;
-  z-index: 999;
-  font-family: 'Felix';
-`
-const WeekName = styled.span`
-  display: flex;
-  color: white;
-  transform: translate(155px, -95px);
-  padding: 0;
-  position: absolute;
-  color: white;
-  opacity: ${(props) => (props.isSelected === 'week' ? 1 : 0.5)};
-    font-size: 30px;
-  margin-top: 0;
-  z-index: 999;
-  font-family: 'Felix';
- 
-  cursor: pointer;
-  /* @media (max-width: 992px) {
-    display: flex;
-    font-size: ${(props) =>
-      props.isSelected === 'week' ? '35px' : '20px'};
-    font-size: 26px;
-    /* transform: translate(170px, -85px); */
-  
-  } */
-`
+
 const slideOut = {
   in: {
     opacity: 1,
@@ -563,17 +456,20 @@ const slideOut = {
     },
   },
 }
+
+  
+
 function DashboardComponent() {
   const me = useUser()
  
- const { active, isSelected, setIsSelected } = useToast()
+ const { isToday, handleIt, active } = useToast()
   const today = new Date()
-  const count = me && me.cart.reduce(
+  const count =  me.cart.reduce(
     (tally, cartItem) => tally + cartItem.quantity,
     0,
   )
 
-  const inCart = me && me.cart.map((cartItem) => {
+  const inCart = me.cart.map((cartItem) => {
     const cartItemIdArray = cartItem && cartItem.item.id
     return cartItemIdArray
   })
@@ -589,50 +485,26 @@ function DashboardComponent() {
   if (!data) return null
 
   const items = data.allItems
-  const userPic = me.image ? me.image.publicUrlTransformed : '../static/img/profpic.svg'
-  const firstName= me && me.firstName
  
   return (
     <>
       <Pad>
-        <TickerFeed
-          today={today}
-          count={count}
-          me={me}
-          pic={userPic}
-          showPic={true}
-       firstName={firstName}
-        />
-         <TodayName
-          setIsSelected={setIsSelected}
-          isSelected={isSelected}
-          onClick={(e) => setIsSelected('today')}
-          className="today"
-        >
-          TODAY{' '}
-        </TodayName>{' '}
-        <span className="line">|</span>
-        <WeekName
-          setIsSelected={setIsSelected}
-          isSelected={isSelected}
-          onClick={(e) => setIsSelected('week')}
-          className="mobile"
-        >
-          WEEK
-        </WeekName>
+   
+       
     
-        <Grid items={items}>
+  
+ 
           {items.length === 0 ? null : (
             <>
                    <motion.div
                 variants={slideOut}
                 initial="in"
-                animate={isSelected === 'today' ? 'in' : 'out'}
+                animate={isToday ? 'in' : 'out'}
               >
               <TodaysClasses
-                setIsSelected={setIsSelected}
-                isSelected={isSelected}
-                onClick={(e) => setIsSelected('today')}
+          
+                isToday={isToday}
+               
                 items={items}
               
                 id={me && me.id}
@@ -641,25 +513,19 @@ function DashboardComponent() {
        <motion.div
                 variants={slideOut}
                 initial="in"
-                animate={isSelected === 'today' ? 'out' : 'in'}
+                animate={isToday ? 'out' : 'in'}
               >
               <WeekViewTwo
                 items={items}
               
                 today={today}
-                id={me && me.id}
+                id={me.id}
               />
               </motion.div>
             </>
           )}
-          <Schedule items={items}>
-            <Title items={items}>Scheduled Live Workouts </Title>
-            <p className="subTight">
-              Explore this week's Live Workouts below!
-            </p>
-            <ScheduledClasses  id={me && me.id} inCart={inCart} />
-          </Schedule>
-        </Grid>
+
+       
       </Pad>
     </>
   )
@@ -885,44 +751,6 @@ function TodaysClasses({ items, id }) {
   )
 }
 
-function ScheduledClasses({ inCart, id }) {
- 
-const today = new Date().toLocaleString();
-const isonow = formatISO(new Date(today)) 
- 
-  const { error, loading, data } = useQuery(STREAMS_QUERY, {
-    variables: { date: isonow },
-  })
-  if (loading) return <Loader />
-  if (error) return <Error error={error} />
- 
-  const ownsItem = data.allItems.map((item) => {
-    const theUsers = item.user.find((theUser) => {
-      return theUser.id === id
-    })
-    return theUsers
-  })
-  console.log(data.allItems)
-  if (!data.allItems.length)
-   
-    return (
-      <Div>
-        <P>That's it for this week!</P>
-        <P>Please Check back Sunday for the Upcoming Live Schedule</P>
-        <img height="60" src="../static/img/heartsig.svg" />
-      </Div>
-    )
-  return (
- 
-    <ProductSlider
-    
-      inCart={inCart}
-      ownsItem={ownsItem}
-      allItems={data.allItems}
-    />
- 
-  )
-}
 
-export default React.memo(DashboardComponent)
-export { STREAMS_QUERY, USERS_WEEK_QUERY }
+export default  DashboardComponent  
+export { USERS_WEEK_QUERY }

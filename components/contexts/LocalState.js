@@ -16,7 +16,8 @@ const STATUS_MUTATION = gql`
 function ToastStateProvider({ children }) {
   
   const [imgSrc, setImgSrc] = useState([])
- 
+   const [isToday, setIsToday] = useState(true)
+
   const [triggerTime, setTriggerTime] = useState(false)
   const [isSelected, setIsSelected] = useState('today')
   const weekStarts = startOfWeek(new Date(), {
@@ -46,7 +47,9 @@ function ToastStateProvider({ children }) {
      } )
   }
     
- 
+  const handleIt = () => {
+     setIsToday(prev => prev === isToday && !prev)
+ }
 
       
   const handleClick = () => {
@@ -64,6 +67,8 @@ function ToastStateProvider({ children }) {
       value={{
         loading,
         isSelected,
+        isToday,
+        handleIt,
         setIsSelected,
         updateStatus,
         imgSrc,

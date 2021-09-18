@@ -4,10 +4,10 @@ import styled from 'styled-components'
 import Link from 'next/link'
 import { format } from 'date-fns'
 import CartCount from './CartCount'
-
+import {useToast} from './contexts/LocalState'
 const Offline = styled.div`
   width: 100%;
-  height: 270px;
+  height: 230px;
   color: white;
   background: rgb(30, 30, 30);
   z-index: 0;
@@ -38,6 +38,53 @@ const Offline = styled.div`
       transform: translate(20px, 0px);
     }
   }
+`
+const SwithButtons = styled.div`
+  color: white;
+ width: 300px;
+display: flex;
+ position:absolute;
+ bottom: 10px;
+ .todayName {
+ 
+  padding: 0;
+  position: relative;
+ 
+  color: white;
+cursor: pointer;
+   opacity: ${(props) => (props.isToday ? 1 : 0.5)};
+  font-size:30px;
+ 
+  z-index: 999;
+  font-family: 'Felix';
+ }
+   .line {
+    display: flex;
+ 
+    padding: 0;
+    position: relative;
+ 
+    opacity: 1;
+    font-size:28px;
+    margin-left: 3px;
+    z-index: 999;
+    font-family: 'Felix';
+ 
+  }
+ .weekName {
+  display: flex;
+
+  padding: 0;
+  position: relative;
+  
+  opacity: ${(props) => (props.isToday ? 0.5 : 1  )};
+    font-size: 30px;
+ 
+  z-index: 999;
+  font-family: 'Felix';
+ 
+  cursor: pointer;
+ }
 `
 const TodayButton = styled.div`
   height: 33px;
@@ -114,7 +161,7 @@ const OnDemandPic = styled.a`
 `
 
 function TickerFeed({ count, me, firstName, showPic, pic, today }) {
-  
+   const { isToday, handleIt, active } = useToast()
   const userPic = me.image ? me.image.publicUrlTransformed : '../static/img/profpic.svg'
   return (
     <Offline>
@@ -139,6 +186,24 @@ function TickerFeed({ count, me, firstName, showPic, pic, today }) {
           <img src="../static/img/wod.svg" alt="on demand workout videos" />
         </OnDemandPic>
       </Link>
+             <SwithButtons  isToday={isToday}
+        >
+  <div className="todayName"
+         
+          onClick={(e) => handleIt()}
+         
+        >
+          TODAY{' '}
+        </div>{' '}
+        <span className="line" >|</span>
+        <div className="weekName"
+        
+          onClick={(e) => handleIt()}
+   
+        >
+          WEEK
+        </div>
+   </SwithButtons>
     </Offline>
   )
 }

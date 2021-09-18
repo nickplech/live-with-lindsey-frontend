@@ -4,7 +4,7 @@ import TwoFacAuth from '../../components/TwoFacAuth'
 
 const TwoFac = () => {
   const router = useRouter()
-  console.log(router.query.id)
+ // console.log(router.query.id)
   return <TwoFacAuth id={router.query.id} />
 }
 

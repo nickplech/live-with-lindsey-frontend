@@ -66,6 +66,21 @@ const Wrap = styled.div`
     padding-bottom: 3px;
     border-bottom: 3px solid white;
   }
+  .authButton {
+    background: #f8b0b0;
+    color: white;
+    border-radius: 5px;
+    padding: 2px 6px;
+    letter-spacing: 2px;
+    font-size: 18px;
+    border: none;
+    cursor: pointer;
+    transition: .3s;
+&:hover {
+  transform: scale(1.06);
+  box-shadow: 0 8px 7px -3px rgba(0,0,0,.2);
+}
+  }
 `
 const EmptyFoo = styled.div`
   background-color: white;
@@ -282,14 +297,14 @@ const TwoFacAuth = ({ id, userId }) => {
           }}
         
         />
-         <h6>Enter the code sent to Your Phone Number {data?.twoFactorAuth?.cellPhone}</h6>
+         <h6>Enter the code sent to Phone Number {data?.twoFactorAuth?.cellPhone}</h6>
 
-        <a className="authButton"
+        {ui && <a className="authButton"
           disabled={tfa.length !== 5 || loading}
           onClick={handleSubmitTfa}
         >
-          <img height="40" width="40" src="../static/img/uparrow.svg" />
-        </a>
+          Submit Code to Verify! 
+        </a>}
         <Flexy>
           <div>
         <p>

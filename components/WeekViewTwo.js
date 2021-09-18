@@ -12,37 +12,33 @@ import { format } from 'date-fns'
 const Container = styled.div`
   width: 100%;
   margin: 0px auto;
-  grid-column: 1;
-  grid-row: 1;
-  list-style: none;
+     position: relative;
+z-index: 100;
   display: flex;
   height: 100%;
   z-index: 200;
-  transform: translate(0px, -30px);
+   list-style: none;
   overflow-y: scroll;
-  position: absolute;
+ 
   overscroll-behavior: contain;
   &::-webkit-scrollbar {
     display: none; // Safari and Chrome
   }
-  @media (min-width: 992px) {
-    grid-column: 2;
-    position: relative;
-  }
+ 
 `
 
 const ClassList = styled.ul`
   /* transition: 0.2s; */
   display: flex;
   flex-flow: column;
-  list-style: none;
+
   width: 100%;
   padding-bottom: 15px;
   margin: 0 auto;
-
+  list-style: none;
   background: transparent;
 
-  position: absolute;
+  position: relative;
   overscroll-behavior: contain;
   &::-webkit-scrollbar {
     display: none; // Safari and Chrome
@@ -277,12 +273,10 @@ function WeekView({ id, today, items }) {
 
 
   return (
-    <>
-      {/* <WeekTitle>WEEK VIEW</WeekTitle> */}
-
-      <Container>
+ 
+ 
         <AnimateSharedLayout>
-          {' '}
+        
           <ClassList>
             {items.map((item, i) => {
               const today = format(new Date(), 'M/dd')
@@ -419,8 +413,8 @@ function WeekView({ id, today, items }) {
             })}
           </ClassList>{' '}
         </AnimateSharedLayout>
-      </Container>
-    </>
+
+  
   )
 }
 

@@ -193,17 +193,7 @@ function LoginRemix(props) {
             e.preventDefault()
             const res = await signin()
             console.log(res)
-            // var socket = await io()
-            // socket.on(
-            //   'msg',
-            //   function (message) {
-            //     console.log(message)
-            //   },
-            //   function (err) {
-            //     console.error(err)
-            //     throw new Error(err)
-            //   },
-            // )
+ 
             resetForm()
           }}
         >

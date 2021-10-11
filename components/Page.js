@@ -6,6 +6,7 @@ import Header from './Header'
 import Meta from './Meta'
 import { ToastContainer, toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
+
 import { useToast } from './contexts/LocalState'
 const theme = {
   red: '#FF0000',
@@ -84,12 +85,21 @@ const StyledContainer = styled(ToastContainer).attrs({
 `;
 export default function Page({ children }) {
   const userSocket = useUserSocket()
+ 
   const {updateStatus} = useToast()
 
   useEffect(() => {
     if (userSocket == null) return
-    userSocket.on('updateActiveStatus', ({classId, status}) => {
-      toast(`${classId} has just been updated to ${status}`)
+    userSocket.on('updateActiveStatus', ({classId, theName, status}) => {
+      if (status === 'GOING LIVE') { 
+        toast(`${theName} has been set to STANDBY, class will resume momentarily`)
+      }
+      if (status === 'LIVE') { 
+        toast(` ${theName} is now ${status}!`)
+      }
+      if (status === 'COMPLETE') {
+        toast(`${theName} is no longer live streaming & will shortly be added to on-demand library`)
+      }
       updateStatus(classId, status)
     
     })

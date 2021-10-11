@@ -352,7 +352,7 @@ console.log(inputs.date)
                       e.preventDefault()
                       await createNewClass()
                       Router.push({
-                        pathname: '/dashboard',
+                        pathname: '/',
                       })
                     }}
                   >

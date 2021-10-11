@@ -222,7 +222,7 @@ const Tags = styled.div`
   position: relative;
   z-index: 2280;
   margin: 0px 20px;
-  transform: translateY(-65px);
+  transform: translateY(-70px);
   text-transform: uppercase;
   display: flex;
  align-items: center;
@@ -234,18 +234,19 @@ const Tags = styled.div`
     color: white;
     max-height: 24px;
     border-radius: 2px;
-    padding: 0px 5px;
+    padding: 0px 3px;
     letter-spacing: 3px;
     cursor: pointer;
-
+font-size: 12px;
+line-height: 16px;
     font-family: 'Bison';
     opacity: 0.8;
     &:hover {
-      opacity: .5;
+      opacity: 1;
     }
   }
   div {
-    font-size: 20px;
+    font-size: 16px;
     padding: 0;
     margin: 0 10px 0 0;
   }
@@ -368,7 +369,7 @@ function SingleItem({ id }) {
 
   const [updateVideoOnDemandMake] = useMutation(
     VOD_MUTATION,
-    { variables: { id: id, isFavorite: me.id } },
+    { variables: { id: id, isFavorite:me && me.id } },
     {
       refetchQueries: [
         {
@@ -385,7 +386,7 @@ function SingleItem({ id }) {
 
   const [updateVideoOnDemandTake] = useMutation(
     REMOVE_MUTATION,
-    { variables: { id: id, isFavorite: me.id } },
+    { variables: { id: id, isFavorite:me &&  me.id } },
     {
       refetchQueries: [
         {

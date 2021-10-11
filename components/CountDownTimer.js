@@ -99,9 +99,9 @@ function CountDownTimer(props) {
           }}
         >
           {props.status === 'LIVE'
-            ? 'Class Currently In Session'
+            ? 'Currently In Session'
             : props.status === 'COMPLETE'
-            ? 'This Live Class Has Concluded'
+            ? 'Live Class Has Ended'
             : 'On Standby'}
         </span>
       )}

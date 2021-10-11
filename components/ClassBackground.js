@@ -3,7 +3,7 @@ import 'video.js/dist/video-js.css'
 import CountDownTimer from './CountDownTimer'
 import VideoSignUp from './VideoSignUp'
 import styled from 'styled-components'
-
+import ShareButtons from './ShareButtons'
 const Background = styled.div`
   display: flex;
   justify-content: center;
@@ -39,6 +39,7 @@ function ClassBackground(props) {
   const cleanName = props.name.toLowerCase().replace(/\s/g, '')
   return (
     <Background>
+            <ShareButtons classId={props.classId}/>
       <VideoPlayer name={cleanName}  />
       <Title src="../static/img/countdown2live.svg" alt="countdown to live" />
       <CountDownTimer status={props.status} date={props.date} />

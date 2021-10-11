@@ -52,15 +52,17 @@ const P = styled.p`
   
   cursor: pointer;
 `
-export default function ControlDots({ updateStatus, id, status }) {
+export default function ControlDots({ updateStatus, theName, id, status }) {
   const [statusStateVersion, setStatusStateVersion] = useState(status)
+  
   const userSocket = useUserSocket()
-  const changeActiveStatus = async (id, name) => {
+  const changeActiveStatus = async (id, theName, name) => {
     
     setStatusStateVersion(name)
 
     userSocket.emit('activityChange', {
       classId: id,
+      theName: theName,
       status: name,
     })
   }
@@ -75,6 +77,7 @@ export default function ControlDots({ updateStatus, id, status }) {
             <Item
               key={color.name}
               color={color.color}
+              theName={theName}
               name={color.name}
               isSelected={isSelected}
               id={id}
@@ -87,13 +90,13 @@ export default function ControlDots({ updateStatus, id, status }) {
   )
 }
 
-function Item({ id, color, name, isSelected, changeActiveStatus }) {
+function Item({ id, color, theName, name, isSelected, changeActiveStatus }) {
   console.log(isSelected)
   return (
     <div style={{ flexFlow: 'column' }}>
       <li
         className="item"
-        onClick={() => changeActiveStatus(id, name)}
+        onClick={() => changeActiveStatus(id, theName, name)}
         style={{ backgroundColor: color, opacity: `${isSelected ? 1 : 0.3}` }}
       >
         {isSelected && (

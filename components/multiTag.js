@@ -70,10 +70,10 @@ const TheSelected = styled.div`
   display: inline-block;
   font-size: 12px;
   word-wrap: none;
-  background-color: transparent;
-  border: 2px solid ${(props) => props.theme.fourth};
-  color: ${(props) => props.theme.fourth};
-  border-radius: 5px;
+  background-color: ${(props) => props.theme.third};
+ 
+  color: white;
+  border-radius: 2px;
 `
 const SearchStyles = styled.div`
   position: relative;

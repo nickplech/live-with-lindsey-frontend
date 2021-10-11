@@ -171,7 +171,7 @@ const Mode = styled.div`
     position: fixed;
     display: flex;
     justify-content: center;
-    justify-self: center;
+    justify-self: flex-start  ;
     align-items: center;
     outline: none;
     padding: 2px 5px;
@@ -344,7 +344,7 @@ export default function PhotoBoothModal({
 const [selectedIndex, setSelectedIndex] = useState(null)
   const [audio] = useState(false)
   const [time, setTime] = useState(5)
-
+ 
   const videoConstraints = {
     height: 1080,
     width: 1920,
@@ -447,7 +447,7 @@ const updateImage = () => {
                   mirrored
                   videoConstraints={videoConstraints}
                   ref={webcamRef}
-                  width={1200}
+                  width={'100%'}
                   screenshotFormat="image/jpeg"
                 />
                 <Counter>

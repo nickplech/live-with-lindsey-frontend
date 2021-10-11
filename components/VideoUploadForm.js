@@ -1,16 +1,34 @@
 import { useEffect, useRef, useState } from 'react'
 import Router from 'next/router'
-import * as UpChunk from '@mux/upchunk'
-import useSwr from 'swr'
-import Button from './button'
-import Spinner from './spinner'
-import ErrorMessage from './error-message'
+// import * as UpChunk from '@mux/upchunk'
+// import useSwr from 'swr'
+ import { useMutation } from '@apollo/client'
+ import gql from 'graphql-tag'
+import Loader from './Loader'
+import Error from './ErrorMessage'
+const UPLOAD_VOD_VIDEO = gql`
+  mutation UPLOAD_VOD_VIDEO(
+    $name: String
+    $description: String
+$file: Upload
+  ) {
+    uploadNewVideoOnDemand(
+      name: $name
+      description: $description
+    file: $file
+    ) {
+      id
+      url
+      description
+      name
+    }
+  }
+`
 
-const fetcher = (url) => {
-  return fetch(url).then((res) => res.json())
-}
 
 const VideoUploadForm = () => {
+  const [nameState, setNameState] = useState('test')
+  const [descriptionState, setDescriptionState] = useState('testutesrtttyyty')
   const [isUploading, setIsUploading] = useState(false)
   const [isPreparing, setIsPreparing] = useState(false)
   const [uploadId, setUploadId] = useState(null)
@@ -18,63 +36,48 @@ const VideoUploadForm = () => {
   const [errorMessage, setErrorMessage] = useState('')
   const inputRef = useRef(null)
 
-  const { data, error } = useSwr(
-    () => (isPreparing ? `/api/upload/${uploadId}` : null),
-    fetcher,
-    { refreshInterval: 5000 }
-  )
 
-  const upload = data && data.upload
+const [uploadNewVideoOnDemand, {data, loading, error}] = useMutation(UPLOAD_VOD_VIDEO, {variables: {name: nameState,  description: descriptionState }})
+  const upload = data && data.VideoOnDemand
 
   useEffect(() => {
-    if (upload && upload.asset_id) {
+    if (upload && upload.id) {
       Router.push({
-        pathname: `/asset/${upload.asset_id}`,
+        pathname: `/item/${upload.id}`,
         scroll: false,
       })
     }
   }, [upload])
 
-  if (error) return <ErrorMessage message="Error fetching api" />
-  if (data && data.error) return <ErrorMessage message={data.error} />
+  if (error) return <Error error="Error fetching api" />
+  if (data && data.error) return <Error error={data.error} />
 
   const createUpload = async () => {
-    try {
-      return fetch('/api/upload', {
-        method: 'POST',
-      })
-        .then((res) => res.json())
-        .then(({ id, url }) => {
-          setUploadId(id)
-          return url
-        })
-    } catch (e) {
-      console.error('Error in createUpload', e)
-      setErrorMessage('Error creating upload')
-    }
+   await uploadNewVideoOnDemand({variables: { file:  inputRef.current.files[0],  }})
+   if(loading) return <Loader />
+   if(error) return <Error error={error}/>
+   
+ 
   }
 
   const startUpload = (evt) => {
     setIsUploading(true)
-    const upload = UpChunk.createUpload({
-      endpoint: createUpload,
-      file: inputRef.current.files[0],
-    })
+ createUpload()
 
-    upload.on('error', (err) => {
-      setErrorMessage(err.detail)
-    })
+    // upload.on('error', (err) => {
+    //   setErrorMessage(err.detail)
+    // })
 
-    upload.on('progress', (progress) => {
-      setProgress(Math.floor(progress.detail))
-    })
+    // upload.on('progress', (progress) => {
+    //   setProgress(Math.floor(progress.detail))
+    // })
 
-    upload.on('success', () => {
-      setIsPreparing(true)
-    })
+    // upload.on('success', () => {
+    //   setIsPreparing(true)
+    // })
   }
 
-  if (errorMessage) return <ErrorMessage message={errorMessage} />
+  if (errorMessage) return <Error error={error} />
 
   return (
     <>
@@ -86,13 +89,13 @@ const VideoUploadForm = () => {
             ) : (
               <div>Uploading...{progress ? `${progress}%` : ''}</div>
             )}
-            <Spinner />
+            <Loader />
           </>
         ) : (
           <label>
-            <Button type="button" onClick={() => inputRef.current.click()}>
+            <button type="button" onClick={() => inputRef.current.click()}>
               Select a video file
-            </Button>
+            </button>
             <input type="file" onChange={startUpload} ref={inputRef} />
           </label>
         )}

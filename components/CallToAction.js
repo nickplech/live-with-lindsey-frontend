@@ -25,7 +25,7 @@ const BlackBack = styled.div`
   padding: 0;
   position: absolute;
 
-  z-index: 80000;
+  z-index: 2000;
   background: rgb(30, 30, 30);
   transform: translateY(125px);
 `
@@ -58,7 +58,7 @@ const Block = styled.div`
   border-radius: 10px;
   padding: 40px;
   transform: translate(0, 40px);
-  z-index: 90000;
+  z-index: 2000;
   display: grid;
   grid-template-columns: 1fr   1fr;
   height: 240px;

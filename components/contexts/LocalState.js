@@ -16,7 +16,7 @@ const STATUS_MUTATION = gql`
 function ToastStateProvider({ children }) {
   
   const [imgSrc, setImgSrc] = useState([])
-   const [isToday, setIsToday] = useState(true)
+   const [isToday, setIsToday] = useState('today')
 
   const [triggerTime, setTriggerTime] = useState(false)
   const [isSelected, setIsSelected] = useState('today')
@@ -28,7 +28,7 @@ function ToastStateProvider({ children }) {
  
 
   const updateStatus = async (id, name) => {  
-    console.log(id,name)
+    console.log(id,  name)
     await updateItem({
       variables: { id: id, status: name } }, {
       update(cache, {data: { updateItem}}) {
@@ -47,8 +47,8 @@ function ToastStateProvider({ children }) {
      } )
   }
     
-  const handleIt = () => {
-     setIsToday(prev => prev === isToday && !prev)
+  const handleIt = (buttonName) => {
+     setIsToday(buttonName)
  }
 
       

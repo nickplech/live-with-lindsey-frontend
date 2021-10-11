@@ -13,7 +13,7 @@ import styled from 'styled-components'
 
 const Wrapper = styled.div`
   width: 100%;
-  height: 400px;
+  height: 200px;
   background: white;
   padding: 0px;
   display: flex;
@@ -69,8 +69,8 @@ function SearchByTag({ tags }) {
     config: config.stiff,
     from: { size: '100%', background: '#3b543b' },
     to: {
-      size: open ? '80%' : '100%',
-      background: open ? 'white' : 'rgb(30,30,30)',
+      size: open ? '80%' : '20%',
+      background: open ? 'white' : '#6b996b',
     },
   })
   const transition = useTransition(open ? tags : [], {

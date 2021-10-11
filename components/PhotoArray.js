@@ -46,13 +46,7 @@ letter-spacing: 2px;
  }
 `
  
-const TheTitle = styled.img`
-z-index: 9999;
-position: absolute;
-width: 350px;
-left: 20px;
-height: auto;
-`
+
 const Row = styled(motion.div)`
 
  

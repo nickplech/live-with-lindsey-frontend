@@ -1,14 +1,20 @@
 import React, {useState} from 'react'
 import styled from 'styled-components'
-
+import {
+  TwitterIcon,
+  TwitterShareButton,
+  EmailShareButton,
+  FacebookIcon,
+  FacebookShareButton,
+} from "react-share";
 const StyledDiv = styled.div`
 .share-buttons {
   position: absolute;
-  width: 200px;
-  height: 242px;
-  top: 50%;
+  
+  height: 202px;
+  bottom: 10px;
   z-index: 8000;
-  left: .5%;
+  left: 10px;
 &:first-child {
   margin-top: 0;
 }
@@ -16,8 +22,8 @@ const StyledDiv = styled.div`
 .share-button {
   display: flex;
   position: relative;
-  height: 40px;
-  margin-bottom: 30px; cursor: pointer;
+  height: 30px;
+  margin-bottom: 0px; cursor: pointer;
 }
 .share-button:hover .share-button-secondary-content {
   -webkit-transform: translate3d(0, 0, 0);
@@ -25,12 +31,11 @@ const StyledDiv = styled.div`
 }
 .share-button-primary {
   position: absolute;
-  background: #fff;
-  width: 55px;
-  height: 55px;
+   
+ 
   display: flex;
   text-align: center;
-  border-radius: 50%;
+ 
 }
 .share-button-icon {
   display: flex;
@@ -45,19 +50,19 @@ justify-self: center;
 .share-button-secondary {
   overflow: hidden;
   margin-left: 15px;
-  height: 40px;
+  height: 25px;
 }
 .share-button-secondary-content {
   font-family: sans-serif;
   font-size: 1em;
   background: #fff;
   display: flex;
-  margin-top: 11px;
-  height:30px;
+  margin-top: 2px;
+  height:22px;
   text-align: left;
-  padding-left: 50px;
-  padding-right: 18px;
-  line-height: 30px;
+  padding-left: 30px;
+  padding-right: 8px;
+  line-height: 22px;
   color: #242424;
   border-radius: 0 20px 20px 0;
   -webkit-transform: translate3d(-100%, 0, 0);
@@ -69,7 +74,7 @@ justify-self: center;
 }
 
 `
-function ShareButtons() {
+function ShareButtons({classId}) {
 
   return (
     <StyledDiv>
@@ -81,7 +86,13 @@ function ShareButtons() {
       </div>
     </div>
     <div className="share-button-primary">
-      <i className="share-button-icon fa fa-twitter"></i>
+    <TwitterShareButton
+              url={`https://lindseyharrod.com/class?${classId}/`}
+              title={`Join this meeting with the given code `}
+              className='share_icon'
+            >
+              <TwitterIcon size={26} round className='share_border' />
+            </TwitterShareButton> 
     </div>
   </div>
 
@@ -92,7 +103,13 @@ function ShareButtons() {
       </div>
     </div>
     <div className="share-button-primary">
-      <i className="share-button-icon fa fa-facebook"></i>
+    <FacebookShareButton
+              url={`https://lindseyharrod.com/class?${classId}/`}
+              title={`Join this meeting with the given code `}
+              className='share_icon'
+            >
+              <FacebookIcon size={26} round />
+            </FacebookShareButton>
     </div>
   </div>
 </div>
@@ -101,3 +118,7 @@ function ShareButtons() {
 }
 
 export default ShareButtons
+  
+           
+
+            

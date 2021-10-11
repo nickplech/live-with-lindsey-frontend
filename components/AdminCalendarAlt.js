@@ -4,7 +4,7 @@ import gql from 'graphql-tag'
 import Link from 'next/link'
 import { useQuery } from '@apollo/client'
 import { startOfWeek, format, formatISO } from 'date-fns'
-import addDays from 'date-fns/addDays'
+
 import Loader from './Loader'
 const STREAMS_ADMIN_QUERY = gql`
   query STREAMS_ADMIN_QUERY($date: DateTime) {
@@ -13,19 +13,15 @@ const STREAMS_ADMIN_QUERY = gql`
       price
       date
       name
-      private {
-        id
-      }
+      private 
       status
-      private {
-        id
-        firstName
-        lastName
-        businessName
-      }
+    
       stillAvailable
       user {
         id
+              firstName
+        lastName
+        businessName
       }
       reason {
         id
@@ -259,7 +255,7 @@ const Col3 = styled.div`
   grid-column: 3; 
 `
 function AdminCalendarAlt() {
-  const [modalOpen, setModalOpen] = useState(false)
+
   const weekStarts = startOfWeek(new Date(), {
     weekStartsOn: 0,
   })
@@ -276,24 +272,16 @@ function AdminCalendarAlt() {
     const today = format(new Date(), 'M/dd')
   const passedArray = data.allItems.filter(workout => {
     const date = format(new Date(workout.date), 'M/dd')
-
-   
-   
     return date < today
   })
 
 
   const todayArray = data.allItems.filter(workout => {
     const date = format(new Date(workout.date), 'M/dd')
-
-  
-   
     return date === today
   })
   const futureArray = data.allItems.filter(workout => {
     const date = format(new Date(workout.date), 'M/dd')
- 
-   
     return date > today
   })
 
@@ -306,22 +294,16 @@ function AdminCalendarAlt() {
       {passedArray.map((item, i) => {
              const test = format(new Date(item.date), 'eeee - M/dd | h:mm aa')
         return (
-          
-        
-          
-          item.private ? <PrivateWorkout>         < div className="middle"><div className="title">{item.private && item.private.firstName + ' ' + item.private.lastName + ' ' + item.private.businessName}</div> <div >{test}</div>
-          {' '}</div>
-         
-           
-        
-          
+          item.private ? <PrivateWorkout>        
+            < div className="middle"><div className="title">{item.private && item.user[0].firstName + ' ' + item.user[0].lastName + ' ' + item.user[0].businessName}</div> <div >{test}</div>
+          </div>
             <Link
               href={{
                 pathname: '/privateclass',
                 query: { id: item.id },
               }}
             >
-              <div className="control_room">
+              <div style={{lineHeight: '14px', letterSpacing: '2px'}} className="control_room">
              Enter Session
            </div> 
            </Link></PrivateWorkout> : <Workout key={item.id}   status={item.status} >
@@ -332,10 +314,6 @@ function AdminCalendarAlt() {
                   {item.reason.name}</div>
                    <div >{test}</div>
             {' '}</div>
-           
-             
-          
-            
               <Link
                 href={{
                   pathname: '/livecontrolroom',
@@ -346,7 +324,6 @@ function AdminCalendarAlt() {
                 <img height="30" src="../static/img/gear.svg" />
              </div> 
              </Link>
-            
           </Workout> 
         )
       })}</Col1><Col2>
@@ -354,16 +331,9 @@ function AdminCalendarAlt() {
       {todayArray.map((item, i) => {
              const test = format(new Date(item.date), 'eeee - M/dd | h:mm aa')
         return (
-          
-        
-          
-          item.private ? <PrivateWorkout>         < div className="middle"><div className="title">{item.private && item.private.firstName + ' ' + item.private.lastName + ' ' + item.private.businessName}</div> <div >{test}</div>
+          item.private ? <PrivateWorkout key={item.id}>         < div className="middle"><div className="title">{item.user && item.user[0].firstName + ' ' + item.user[0].lastName + ' ' + item.user[0].businessName}</div> <div >{test}</div>
           {' '}</div>
-         
-           
-        
-          
-            <Link
+          <Link
               href={{
                 pathname: '/privateclass',
                 query: { id: item.id },
@@ -380,10 +350,6 @@ function AdminCalendarAlt() {
                   {item.reason.name}</div>
                    <div >{test}</div>
             {' '}</div>
-           
-             
-          
-            
               <Link
                 href={{
                   pathname: '/livecontrolroom',
@@ -410,7 +376,7 @@ function AdminCalendarAlt() {
             <PrivateWorkout>         
               <div className="middle">
                 <div className="title">
-                  {item.private && item.private.firstName + ' ' + item.private.lastName + ' ' + item.private.businessName}</div> <div >{test}</div>
+                  {item.user && item.user[0].firstName + ' ' + item.user[0].lastName + ' ' + item.user[0].businessName}</div> <div >{test}</div>
             {' '}</div>
            
              

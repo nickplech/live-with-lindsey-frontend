@@ -1,11 +1,9 @@
 import React, {useState} from 'react'
 import gql from 'graphql-tag'
-import useForm from '../lib/useForm'
+ 
 import { useMutation } from '@apollo/client'
 import { CURRENT_USER_QUERY } from './User'
 import { useUser } from './User'
-import SickButton from './styles/SickButton'
-import Form from './styles/Form'
 import { toast } from 'react-toastify'
 import styled from 'styled-components'
 const UPDATE_USER_MUTATION = gql`
@@ -93,9 +91,7 @@ function Account() {
   if (!me) return null
   const validImageTypes = 'image/gif, image/jpeg, image/jpg, image/png'
 
-  const { inputs, handleChange, resetForm } = useForm({
-    image: '',
-  })
+  
   const handleImageChange = files => {
     setNewImage(false)
     const file = files ? files[0] : false;
@@ -150,20 +146,11 @@ function Account() {
   const theData = data && data.updateUser.image.publicUrlTransformed
   const straightData = me.image && me.image.publicUrlTransformed
   const defaultPic = '../static/img/profpic.svg'
-  console.log(inputs)
+ 
   return (
     <Width>
       <form
-        onSubmit={async (e) => {
-          e.preventDefault()
-          console.log(inputs)
-          const res = await updateUser(
-            { variables: { ...inputs, id: me.id } },
-            { refetchQueries: { query: CURRENT_USER_QUERY } },
-          )
-          console.log(res)
-          await resetForm()
-        }}
+ 
       >
         {straightData ? (
           <Img pic={straightData} />
@@ -174,7 +161,7 @@ function Account() {
         )}
 
         <label className="custom-file-upload" style={{ margin: '15px auto' }} htmlFor="file">
-          {inputs.image && 'Click Update to Display New Image'}
+ 
           Upload{loading ? 'ing' : null} Profile Pic
           <input
             disabled={loading}

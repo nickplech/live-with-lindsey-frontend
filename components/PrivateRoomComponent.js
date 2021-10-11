@@ -1,14 +1,27 @@
 import React, { useState, useRef} from 'react'
 import { motion } from "framer-motion";
 import Options from './Options'
+import Loader from './Loader'
+import Error from './ErrorMessage'
 import SickButton  from './styles/SickButton'
 import styled from 'styled-components'
 import  {usePeerSocket}  from './contexts/PrivatePeerSocket'
+import {useQuery} from '@apollo/client'
+import gql from 'graphql-tag'
 
+const PRIVATE_AUTH_QUERY = gql`
+  query PRIVATE_AUTH_QUERY($id: ID!) {
+    privateAuth(id: $id) {
+     message
+    }
+  }
+`
 const Wrap = styled(motion.div)`
 position: relative;
 display: flex;
  overflow: hidden;
+ height: calc(100vh - 60px);
+ width: 100vw;
    .video-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, 300px);
@@ -16,7 +29,7 @@ display: flex;
       position: absolute;   
     }
         .opt-wrap {
-      position: relative;
+      position: fixed;
 display: flex;
 width: 100%;
 height: calc(100vh - 60px);
@@ -25,32 +38,32 @@ margin: 0 auto;
     justify-content: center;
     align-items: flex-end;}
 
-`
-const Grid = styled.div`
+ 
 .user_me {
-display: flex;
+display: flex;  
+
 width: 100%;
 height: calc(100vh - 60px);
+-webkit-transform: scaleX(-1);
+  transform: scaleX(-1); 
 }
     video {
       width: 100%;
       height: 100%;
       object-fit: cover;
       position: absolute;
-      -webkit-transform: scaleX(-1);
-  transform: scaleX(-1);
+ 
     }
 .user_other {
   display: flex;
-  position: absolute;
+  position: relative;
   height: 150px;
   width: auto;
   background: lightgray;
   z-index: 8888888;
   border-radius: 5px;
 cursor: grab;
--webkit-transform: scaleX(-1);
-  transform: scaleX(-1); 
+ 
 }
 `
 const IconBar = styled.div`
@@ -99,11 +112,11 @@ button {
     margin: 5px;
 }
 `
-const PrivateRoomComponent = ({isAdmin}) => {
+const PrivateRoomComponent = ({isAdmin, classId}) => {
   const constraintsRef = useRef(null);
 
   const [isModalVisible, setIsModalVisible] = useState(false);
-  // const { me, callAccepted, myVideo, userVideo, callEnded, stream, call} = usePeerSocket
+
   const {
     call,
     callAccepted,
@@ -118,10 +131,6 @@ const PrivateRoomComponent = ({isAdmin}) => {
     leaveCall,
     leaveCall1,
     answerCall,
-    // sendMsg: sendMsgFunc,
-    // msgRcv,
-    // chat,
-    // setChat,
     userName,
     myVdoStatus,
     screenShare,
@@ -134,27 +143,37 @@ const PrivateRoomComponent = ({isAdmin}) => {
     updateMic,
   } = usePeerSocket()
   const handleCancel = () => {
-    setIsModalVisible(false);
-    leaveCall1();
-    window.location.reload();
-  };
+    setIsModalVisible(false)
+    leaveCall1()
+    window.location.reload()
+  }
+
+  const { data, loading, error } = useQuery(PRIVATE_AUTH_QUERY, {
+    variables: { id: classId },
+  })
+
+  if (loading) return <Loader />
+  if (error) return <Error error={error} />
+if (!data === null) return null
     return (
-        <Wrap ref={constraintsRef}>
-            <Grid  >
+
+        <Wrap    >
      
       
        {stream &&
            
-            <video playsInline muted ref={myVideo} autoPlay className="user_me" />
+           <motion.video   drag   dragConstraints={{ top: 0, right: 0, bottom: 0, left: 0 }}      dragTransition={{ bounceStiffness: 600, bounceDamping: 20 }}
+           dragElastic={0.5}
+           whileTap={{ cursor: "grabbing" }} playsInline muted ref={myVideo} autoPlay className="user_other" />
        }        
       
      
       {callAccepted && !callEnded && (
-      <motion.video style={{transform: 'scaleX(-1)'}} playsInline ref={userVideo} autoPlay className="user_other" drag
-      dragConstraints={constraintsRef} />
+      <video  playsInline ref={userVideo} autoPlay  className="user_me"  
+      />
       
       )}
-    </Grid>
+ 
     {isAdmin && <div className="opt-wrap">   <Options/></div>}
 
     {call.isReceivingCall && !callAccepted && (
@@ -170,7 +189,7 @@ const PrivateRoomComponent = ({isAdmin}) => {
      
       
           onClick={() => {
-            answerCall();
+            answerCall()
             setIsModalVisible(false)
           }}
        
@@ -180,8 +199,9 @@ const PrivateRoomComponent = ({isAdmin}) => {
         <SickButton
 
           onClick={() => {
-            setIsModalVisible(false)
-            handleCancel()
+              handleCancel()
+ 
+          
           }}
        
         >

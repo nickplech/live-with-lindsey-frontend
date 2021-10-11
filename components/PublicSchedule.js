@@ -15,10 +15,11 @@ import {
 
 const STREAMS_QUERY = gql`
   query STREAMS_QUERY($date: DateTime) {
-    allItems(where: { date_gte: $date, private_is_null: true }, orderBy: "date") {
+    allItems(where: { date_gte: $date, private_not: true }, orderBy: "date") {
       id
       price
       date
+     
       reason {
         id
         name
@@ -415,14 +416,19 @@ const MenuItem = ({ id, name, date, classLength }) => {
 export function ProductSlider() {
   const weekStart = startOfWeek(new Date(), {weekStartsOn: 1})
   const IsoWeek = formatISO(weekStart)
-  const [isSelected, setIsSelected] = useState(
- 
-  )
- 
+  const [isSelected, setIsSelected] = useState(null)
+  const [theWeekList, setTheWeekList] = useState([])
 
   const { error, loading, data } = useQuery(STREAMS_QUERY, {
-    variables: { date: isSelected ? formatISO(new Date(isSelected)) : IsoWeek },
+    variables: { date: isSelected ? formatISO(new Date(isSelected)) : weekStart },
   })
+  useEffect(() => {
+    const theClasses = data && data.allItems
+    if(data && theClasses.length === 0) return 
+    setTheWeekList(data && data.allItems)
+  }, [data])
+
+  console.log(theWeekList)
   const addTheDays = (day) => {
     setIsSelected(day)
   }
@@ -441,18 +447,18 @@ export function ProductSlider() {
           isIntrinsicHeight="yes"
           infinite="yes"
           visibleSlides={1}
-          totalSlides={data.allItems.length}
+          totalSlides={theWeekList && theWeekList.length}
         >
-          {data.allItems.length > 0 ? (
+          {theWeekList && theWeekList.length   ? (
             <>
-              <ButtonBack disabled={data.allItems.length < 2}>
+              <ButtonBack disabled={theWeekList && theWeekList.length < 2}>
                 &lsaquo;
               </ButtonBack>
-              <ButtonNext disabled={data.allItems.length < 2}>
+              <ButtonNext disabled={theWeekList && theWeekList.length < 2}>
                 &rsaquo;
               </ButtonNext>
               <Slider>
-                {data.allItems.map((item, i) => {
+                {theWeekList.map((item, i) => {
                   return (
                     <Slide key={item.id} index={i}>
                       <MenuItem
@@ -488,18 +494,18 @@ export function ProductSlider() {
           isIntrinsicHeight="yes"
           infinite="yes"
           visibleSlides={3}
-          totalSlides={data.allItems && data.allItems.length}
+          totalSlides={theWeekList && theWeekList.length}
         >
-          {data.allItems && data.allItems.length > 0 ? (
+          {theWeekList && theWeekList.length > 0 ? (
             <>
-              <ButtonBack disabled={data.allItems.length < 4}>
+              <ButtonBack disabled={theWeekList && theWeekList.length < 4}>
                 &lsaquo;
               </ButtonBack>
-              <ButtonNext disabled={data.allItems.length < 4}>
+              <ButtonNext disabled={theWeekList && theWeekList.length < 4}>
                 &rsaquo;
               </ButtonNext>
               <Slider>
-                {data.allItems.map((item, i) => {
+                {theWeekList && theWeekList.map((item, i) => {
                   return (
                     <Slide key={item.id} index={i}>
                       <MenuItem

@@ -1,12 +1,12 @@
 import React, { useState } from 'react'
- 
+
 import styled from 'styled-components'
 import Loader from './Loader'
 import { CURRENT_USER_QUERY } from './User'
 import { format } from 'date-fns'
 import { useQuery } from '@apollo/client'
 import gql from 'graphql-tag'
-import ShareButtons from './ShareButtons'
+
 import { motion } from 'framer-motion'
 import Footer from './Footer'
 import ClassBackground from './ClassBackground'
@@ -105,6 +105,8 @@ const Equip = styled.div`
     box-shadow: rgba(0, 0, 0, 0.16) 0px 0px 3px;
   }
 `
+
+            
 const Background = styled.div`
   background: #ed4264;
   padding: 20px;
@@ -182,8 +184,8 @@ const Description = styled.h4`
   margin: 0;
   max-width: 900px;
   margin-top: 20px;
-  font-size: 22px;
-  line-height: 26px;
+  font-size: 18px;
+  line-height: 22px;
   font-family: 'Bison';
   letter-spacing: 2px;
 `
@@ -306,6 +308,7 @@ console.log(item.date)
         classId={item.id}
       
       />
+
       <Background>
         <div className="card__clock-info">
           {' '}

@@ -12,18 +12,15 @@ import {
   format,
   formatISO,
   formatDistanceToNow,
-  isPast,
-  isWithinInterval,
   subMinutes,
   isAfter,
-  addMinutes,
   startOfWeek,
 } from 'date-fns'
 import Emoji from './Emoji'
 import LiveWithLindseyVideoText from './LiveWithLindseyVideoText'
 import { useToast } from './contexts/LocalState'
 
-import TickerFeed from './TickerFeed'
+import { usePeerSocket } from './contexts/PrivatePeerSocket'
 import { useUser } from './User'
 
 const USERS_WEEK_QUERY = gql`
@@ -36,11 +33,10 @@ const USERS_WEEK_QUERY = gql`
       price
       date
       name
+      open
       status
       stillAvailable
-      private {
-        id
-      }
+      private 
       reason {
         id
         name
@@ -60,7 +56,7 @@ const Pad = styled.div`
   overflow-x: hidden;
   grid-column: 1;
   position: relative;
-
+ 
 `
 
 const Switcher = styled.div`
@@ -75,29 +71,28 @@ const Switcher = styled.div`
 
 const Div = styled.div`
   width: 100%;
+height:300px;
 
-  height: 350px;
   margin: 0 auto;
   display: flex;
   flex-flow: column;
   justify-content: center;
   text-align: center;
   align-items: center;
-margin-top: 20px;
+margin-top: 0px;
   font-family: 'Bison';
   padding-top: 0px;
-
-  @media (min-width: 992) {
+overflow: hidden;
+  @media (min-width: 992px) {
     width: 100%;
-
-    height: 350px;
+    height:300px;
     margin: 0 auto;
     display: flex;
     flex-flow: column;
     justify-content: center;
     text-align: center;
     align-items: center;
-  margin-top: 20px;
+
     font-family: 'Bison';
     padding-top: 0px;
   
@@ -171,7 +166,7 @@ const SubText = styled.p`
 const ClassList = styled.div`
   transition: 0.2s;
  
-margin-top: 20px;
+margin-top: 10px;
   position: relative;
   z-index: 500;
 
@@ -184,9 +179,9 @@ margin-top: 20px;
     box-shadow: 0 10px 10px -5px rgba(0, 0, 0, 0.2);
     display: grid;
 
-    width: 90%;
+    width: 95%;
     max-width: 800px;
-    margin: 0 20px 20px 20px;
+    margin: 0 auto;
 
     height: 150px;
     overflow: hidden;
@@ -216,8 +211,8 @@ margin-top: 20px;
   .card__clock {
     width: 30px;
     align-self: center;
-    fill: #ad7d52;
-
+    fill: ${(props) => props.theme.third};
+    opacity: 0.6;
     transform: translate(0, 3px); 
   }
   .card__time {
@@ -243,7 +238,7 @@ margin-top: 20px;
     margin: 10px 0;
     transform: translateY(15px);
     line-height: 24px;
-    font-size: 18px;
+    font-size: 16px;
     color: ${(props) => props.theme.third};
     font-family: 'Bison';
   }
@@ -290,7 +285,7 @@ margin-top: 20px;
     padding: 15px;
     position: relative;
     width: 100%;
-    grid-column: 2;
+    grid-column: 2/3;
   }
 
   .btn-dis {
@@ -373,14 +368,14 @@ const Status = styled.div`
   text-align: right;
   padding-right: 8px;
  position: absolute;
- right: 40px;
+ right: 15px;
   font-family: 'Bison';
   .live-status {
     ${(props) =>
       props.status === 'GOING LIVE'
         ? 'color: grey'
         : props.status === 'COMPLETE'
-        ? 'color: green'
+        ? 'color: #6b996b'
         : props.status === 'LIVE'
         ? 'color: red'
         : null};
@@ -394,7 +389,7 @@ const Status = styled.div`
         : props.status === 'COMPLETE'
         ? 'background: lightgrey'
         : props.status === 'LIVE'
-        ? 'background: green'
+        ? 'background: #6b996b'
         : null};
   color: grey;
     letter-spacing: 3px;
@@ -461,18 +456,10 @@ const slideOut = {
 
 function DashboardComponent() {
   const me = useUser()
- 
- const { isToday, handleIt, active } = useToast()
-  const today = new Date()
-  const count =  me.cart.reduce(
-    (tally, cartItem) => tally + cartItem.quantity,
-    0,
-  )
 
-  const inCart = me.cart.map((cartItem) => {
-    const cartItemIdArray = cartItem && cartItem.item.id
-    return cartItemIdArray
-  })
+ const { isToday } = useToast()
+  const today = new Date()
+
 
   const weekStarts = startOfWeek(new Date(), {
     weekStartsOn: 0,
@@ -487,33 +474,28 @@ function DashboardComponent() {
   const items = data.allItems
  
   return (
-    <>
+
       <Pad>
-   
-       
-    
-  
- 
-          {items.length === 0 ? null : (
+      
             <>
-                   <motion.div
+              <motion.div
                 variants={slideOut}
                 initial="in"
-                animate={isToday ? 'in' : 'out'}
+                animate={isToday === 'today' ? 'in' : 'out'}
               >
               <TodaysClasses
           
                 isToday={isToday}
-               
+           
                 items={items}
               
                 id={me && me.id}
               />
               </motion.div>
-       <motion.div
+              <motion.div
                 variants={slideOut}
                 initial="in"
-                animate={isToday ? 'out' : 'in'}
+                animate={isToday === 'today' ? 'out' : 'in'}
               >
               <WeekViewTwo
                 items={items}
@@ -523,15 +505,14 @@ function DashboardComponent() {
               />
               </motion.div>
             </>
-          )}
-
-       
+        
       </Pad>
-    </>
+
   )
 }
 
 function TodaysClasses({ items, id }) {
+
   const [onHoverState, setOnHoverState] = useState(false)
 
   const handleSetOnHoverState = () => {
@@ -540,196 +521,144 @@ function TodaysClasses({ items, id }) {
   const noHover = () => {
     setOnHoverState(false)
   }
-
-  const todaysClasses = items
-  const changeUi = todaysClasses.map((theClass) => {
-   
+  const thisOneIsToday = items.some((item) => {
     const today = new Date().getDate()
-    const todayOnly = new Date(theClass.date)
-    const matchesBoth = todayOnly.getDate() === today
+    const classDate = new Date(item.date).getDate()
+
+    return today === classDate
+  }) 
  
-    return matchesBoth
-  })
-
-  if (!todaysClasses)
-    return (
-      <>
+  return(
+  thisOneIsToday ?
  
-        <Div>
-          <p className="smaller">Rest Day? You've earned it!</p>
-          <SubText>
-            Still looking to sweat?
-            <br /> Crush an
-            <Link href="/ondemand">
-              <span
-                onMouseOver={handleSetOnHoverState}
-                onMouseOut={noHover}
-                className={onHoverState ? 'animate' : ''}
-              >
-                {' '}
-                on-demand workout 
-              </span>
-            </Link> <Emoji symbol="💪" label="flexed bicep" />
-          </SubText>
-        </Div>
-      </>
-    )
+        <ClassList>  
+      {items.map((item) => {
+        const today = new Date().getDate()
+        const classDate = new Date(item.date).getDate()
+        const classTime = new Date(item.date)
+ 
+        const openUp = isAfter(new Date(), new Date(item.open))
 
-  return (
-    <>
-        
-      {changeUi.some((fromToday) => {
-        return fromToday === true
-      }) ? (
-        <ClassList>
-          {todaysClasses.map((item, i) => {
-            const today = new Date().getDate()
-            const todayOnly = new Date(item.date)
-            const matchesBoth = todayOnly.getDate() === today
+        if(today !== classDate) {
+          return 
+        }
+        return (
+          item.private ?
+          
+          <div key={item.id} className="course private">
+            <div className="course-preview">
+              <h4>{item.reason && item.reason.name}</h4>
+              <div className="card__clock-info">
+                <svg className="card__clock" viewBox="0 0 30 30">
+                  <path d="M12,20A7,7 0 0,1 5,13A7,7 0 0,1 12,6A7,7 0 0,1 19,13A7,7 0 0,1 12,20M19.03,7.39L20.45,5.97C20,5.46 19.55,5 19.04,4.56L17.62,6C16.07,4.74 14.12,4 12,4A9,9 0 0,0 3,13A9,9 0 0,0 12,22C17,22 21,17.97 21,13C21,10.88 20.26,8.93 19.03,7.39M11,14H13V8H11M15,1H9V3H15V1Z" />
+                </svg>{' '}
+                <span className="card__time">
+                  {' '}
+                  {item.reason && item.reason.classLength}
+                </span>
+              </div>
+            </div>
+            <div className="course-info">
+              <h1> {format(new Date(item.date), 'h:mm aa')}</h1>
+              <h2> {format(new Date(item.date), 'eeee | MMMM dd')}</h2>
 
-//             function checkIfInterval(classLength){
-//  const intLength =  item.reason.classLength.split(' ')
-//             const intSplit = parseInt(intLength[0])
-//             const endTime = addMinutes(todayOnly, intSplit)
-//  const intInterval = isWithinInterval(new Date(), {
-//               start: todayOnly,
-//               end: new Date(endTime),
-//             })
-
-//             }
-           
-
-           
-
-            const fifteenBefore = subMinutes(todayOnly, 15)
-            const openUp = isAfter(new Date(), new Date(fifteenBefore))
-
-            if (matchesBoth)
-              return (
-                item.private ?
+              {true ? (
+                <Link
+                  href={{
+                    pathname: '/privateclass',
+                    query: { id: item.id },
+                  }}
                 
-                <div key={item.id} className="course private">
-                  <div className="course-preview">
-                    <h4>{item.reason && item.reason.name}</h4>
-                    <div className="card__clock-info">
-                      <svg className="card__clock" viewBox="0 0 30 30">
-                        <path d="M12,20A7,7 0 0,1 5,13A7,7 0 0,1 12,6A7,7 0 0,1 19,13A7,7 0 0,1 12,20M19.03,7.39L20.45,5.97C20,5.46 19.55,5 19.04,4.56L17.62,6C16.07,4.74 14.12,4 12,4A9,9 0 0,0 3,13A9,9 0 0,0 12,22C17,22 21,17.97 21,13C21,10.88 20.26,8.93 19.03,7.39M11,14H13V8H11M15,1H9V3H15V1Z" />
-                      </svg>{' '}
-                      <span className="card__time">
-                        {' '}
-                        {item.reason && item.reason.classLength}
-                      </span>
-                    </div>
-                  </div>
-                  <div className="course-info">
-                    <h1> {format(new Date(item.date), 'h:mm aa')}</h1>
-                    <h2> {format(new Date(item.date), 'eeee | MMMM dd')}</h2>
+                >
+                  <a className="btn" style={{fontSize:'18px'}}>
+                    Enter Private Session{' '}
+                    
+                  </a>
+                </Link>
+              ) : (
+                <button className="btn-dis">Opens Upon Invite</button>
+              )}
+            </div>
 
-                    {item.status === 'LIVE' ? (
-                      <Link
-                        href={{
-                          pathname: '/privateclass',
-                          query: { id: item.id },
-                        }}
-                      
-                      >
-                        <a className="btn">
-                          Enter Private Studio{' '}
-                          <img
-                            style={{
-                              transform: 'rotate(180deg)',
-                              marginLeft: '3px',
-                            }}
-                            width="20px"
-                            src="../static/img/arrow-back.svg"
-                            alt="arrow"
-                          />
-                        </a>
-                      </Link>
-                    ) : (
-                      <button className="btn-dis">{`Currently Unavailable`}</button>
-                    )}
-                  </div>
-   
-                  <Status status={item.status}>
-                    <div className="live-status2">
-             
-                      {item.status && item.status === 'LIVE' && 'Open'}
-                 
-                    {item.status &&  item.status === 'GOING LIVE' ? (
-                     'Upcoming'
-                    ) : null}
-                    {item.status &&  item.status === 'COMPLETE' ? (
-                      'Complete'
-                    ) : null}   </div>
-                  </Status>{' '}
-                </div>
-               
-                :
-                <div key={item.id} className="course">
-                  <div className="course-preview">
-                    <h4>{item.reason && item.reason.name}</h4>
-                    <h4>{item.name && item.name} </h4>
-                    <div className="card__clock-info">
-                      <svg className="card__clock" viewBox="0 0 30 30">
-                        <path d="M12,20A7,7 0 0,1 5,13A7,7 0 0,1 12,6A7,7 0 0,1 19,13A7,7 0 0,1 12,20M19.03,7.39L20.45,5.97C20,5.46 19.55,5 19.04,4.56L17.62,6C16.07,4.74 14.12,4 12,4A9,9 0 0,0 3,13A9,9 0 0,0 12,22C17,22 21,17.97 21,13C21,10.88 20.26,8.93 19.03,7.39M11,14H13V8H11M15,1H9V3H15V1Z" />
-                      </svg>{' '}
-                      <span className="card__time">
-                        {' '}
-                        {item.reason && item.reason.classLength}
-                      </span>
-                    </div>
-                  </div>
-                  <div className="course-info">
-                    <h1> {format(new Date(item.date), 'h:mm aa')}</h1>
-                    <h2> {format(new Date(item.date), 'eeee | MMMM dd')}</h2>
+            <Status status={item.status}>
+              <div className="live-status2">
+       
+                {item.status && item.status === 'LIVE' && 'Open'}
+           
+              {item.status &&  item.status === 'GOING LIVE' ? (
+               'Upcoming'
+              ) : null}
+              {item.status &&  item.status === 'COMPLETE' ? (
+                'Complete'
+              ) : null}   </div>
+            </Status>{' '}
+          </div>
+          :
+          <div key={item.id} className="course">
+            <div className="course-preview">
+              <h4>{item.reason && item.reason.name}</h4>
+              <h4>{item.name && item.name} </h4>
+              <div className="card__clock-info">
+                <svg className="card__clock" viewBox="0 0 30 30">
+                  <path d="M12,20A7,7 0 0,1 5,13A7,7 0 0,1 12,6A7,7 0 0,1 19,13A7,7 0 0,1 12,20M19.03,7.39L20.45,5.97C20,5.46 19.55,5 19.04,4.56L17.62,6C16.07,4.74 14.12,4 12,4A9,9 0 0,0 3,13A9,9 0 0,0 12,22C17,22 21,17.97 21,13C21,10.88 20.26,8.93 19.03,7.39M11,14H13V8H11M15,1H9V3H15V1Z" />
+                </svg>{' '}
+                <span className="card__time">
+                  {' '}
+                  {item.reason && item.reason.classLength}
+                </span>
+              </div>
+            </div>
+            <div className="course-info">
+              <h1> {format(new Date(item.date), 'h:mm aa')}</h1>
+              <h2> {format(new Date(item.date), 'eeee | MMMM dd')}</h2>
 
-                    {openUp ? (
-                      <Link
-                        href={{
-                          pathname: '/stream/[...id]',
-                          query: { id: item.id },
-                        }}
-                      
-                      >
-                        <a className="btn">
-                          Join Live{' '}
-                          <img
-                            style={{
-                              transform: 'rotate(180deg)',
-                              marginLeft: '3px',
-                            }}
-                            width="20px"
-                            src="../static/img/arrow-back.svg"
-                            alt="arrow"
-                          />
-                        </a>
-                      </Link>
-                    ) : (
-                      <button className="btn-dis">{`Open @ ${format(
-                        fifteenBefore,
-                        'h:mm aa',
-                      )} `}</button>
-                    )}
-                  </div>
-   
-                  <Status status={item.status}>
-                    <div className="live-status">
-                      {item.status &&  item.status}{' '}
-                      {item.status && item.status === 'LIVE' && <span className="circle" />}
-                    </div>
-                    {item.status &&  item.status === 'GOING LIVE' ? (
-                      <h6>
-                        {formatDistanceToNow(todayOnly, { addSuffix: true })}
-                      </h6>
-                    ) : null}
-                  </Status>{' '}
-                </div>
-              )
-          })}{' '}
-        </ClassList>
-      ) : (
-        <Div>
+              {openUp ? (
+                <Link
+                  href={{
+                    pathname: '/stream/[...id]',
+                    query: { id: item.id },
+                  }}
+                
+                >
+                  <a className="btn">
+                    Join Live{' '}
+                    <img
+                      style={{
+                        transform: 'rotate(180deg)',
+                        marginLeft: '3px',
+                      }}
+                      width="20px"
+                      src="../static/img/arrow-back.svg"
+                      alt="arrow"
+                    />
+                  </a>
+                </Link>
+              ) : (
+                <button className="btn-dis">{`Open @ ${format(
+                  new Date(item.open),
+                  'h:mm aa',
+                )} `}</button>
+              )}
+            </div>
+
+            <Status status={item.status}>
+              <div className="live-status">
+                {item.status &&  item.status}{' '}
+                {item.status && item.status === 'LIVE' && <span className="circle" />}
+              </div>
+              {item.status &&  item.status === 'GOING LIVE' ? (
+                <h6>
+                  {formatDistanceToNow(classTime, { addSuffix: true })}
+                </h6>
+              ) : null}
+            </Status>
+          </div>
+        )
+    }
+ )}
+</ClassList> 
+: 
+<Div>
           <p className="smaller">Rest Day? You've earned it!</p>
           <SubText>
             Still looking to sweat?
@@ -745,9 +674,8 @@ function TodaysClasses({ items, id }) {
               </span>
             </Link><Emoji  symbol="💪" label="flexed bicep" />
           </SubText>
-        </Div>
-      )}{' '}
-    </>
+</Div>
+  
   )
 }
 

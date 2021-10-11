@@ -1,9 +1,10 @@
-import React from 'react'
+import React, {useState} from 'react'
 import { useMutation, useQuery } from '@apollo/client'
 import Form3 from './styles/Form3'
 import gql from 'graphql-tag'
 import Equipment from './Equipment'
 import Error from './ErrorMessage'
+import {toast} from 'react-toastify'
 import styled from 'styled-components'
 import SickButton from './styles/SickButton'
 import useForm from '../lib/useForm'
@@ -116,18 +117,50 @@ const MenuItem = ({
   )
 }
 function UpdateEquipment() {
+  const [newImage, setNewImage] = useState(false)
+ 
+  const validImageTypes = 'image/gif, image/jpeg, image/jpg, image/png'
+
   const { inputs, handleChange, clearForm } = useForm({
     name: '',
     description: '',
-    image: '',
+ 
   })
-console.log(inputs.image)
+
+  const handleImageChange = files => {
+    setNewImage(false)
+    const file = files ? files[0] : false;
+    if (!file) return
+
+    // Validate file type
+    if (!file.type || validImageTypes.indexOf(file.type) === -1) {
+      toast('Please provide a valid image type: GIF, JPG, or PNG.', {
+        appearance: 'error',
+        autoDismiss: true,
+      })
+      return null
+    }
+
+    // Validate file size
+    if (file.size > 5 * 1024 * 1024) {
+      toast('Maximum image size is 5MB.', {
+        appearance: 'error',
+        autoDismiss: true,
+      })
+      return null
+    }
+
+   if(loading) return <p>loading...</p>
+   setNewImage(file)
+  }
+ 
   const { data, loading } = useQuery(EQUIPMENT_QUERY)
   const [createRequired, { called, error }] = useMutation(
     CREATE_EQUIPMENT_MUTATION,
     {
       variables: {
-        ...inputs
+        ...inputs, 
+        image: newImage
       },
       refetchQueries: [
         {
@@ -142,7 +175,7 @@ console.log(inputs.image)
         onSubmit={async (e) => {
           e.preventDefault()
           await createRequired()
-          await clearForm()
+            clearForm()
         }}
       >
         <Error error={error} />
@@ -165,7 +198,7 @@ console.log(inputs.image)
               return (
              
                   <MenuItem
-              key={item.id + 'desktop'} 
+              key={item.id} 
                    index={i}
                     next={i}
                     name={item.name}
@@ -199,14 +232,19 @@ console.log(inputs.image)
             </label>
             <label style={{marginTop: '25px'}} htmlFor="file">
             Upload an Image
-            <input
-              type="file"
-              id="file"
-              required
-              name="image"
-              placeholder="Upload an image to represent this item in the app"
-              onChange={handleChange}
-            />
+    
+                      <input
+            disabled={loading}
+            type="file"
+            accept={validImageTypes}
+            type="file"
+            onChange={e => handleImageChange(e.target.files)}
+            id="file"
+            name="image"
+            placeholder="Upload an image to represent this item in the app"
+           
+        
+          />
           </label>
             <label htmlFor="description" style={{marginTop: '25px'}}>
               Equipment Description:
@@ -221,7 +259,7 @@ console.log(inputs.image)
               />
             </label>
             <div >
-              <SickButton  type="submit">
+              <SickButton disabled={newImage === false} type="submit">
                 Creat{loading ? 'ing' : 'e'} Equipment
               </SickButton>
             </div>
@@ -236,3 +274,5 @@ export default UpdateEquipment;
 export {EQUIPMENT_QUERY}
 
 
+ 
+ 

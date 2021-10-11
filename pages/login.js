@@ -1,24 +1,15 @@
 import SignInSwitch from '../components/SignInSwitch'
-import DashboardComponent from '../components/DashboardComponent'
-import Footer from '../components/Footer'
-import styled from 'styled-components'
-import DashMobile from '../components/DashMobile'
+  
+ 
 
-const Desktop = styled.div`
- 
-    display: block;
- 
-`
+import DashGrid from '../components/DashGrid'
+
  
 const SignupPage = (props) => (
   <SignInSwitch>
-    <Desktop>
-      <DashboardComponent />
-    </Desktop>
-
-    <Footer />
+    <DashGrid />
   </SignInSwitch>
 )
 
 export default SignupPage
-   
+    

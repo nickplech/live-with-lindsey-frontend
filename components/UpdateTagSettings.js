@@ -83,7 +83,7 @@ function UpdateTagSettings() {
 
   const [createTag, { error, called }] = useMutation(CREATE_TAG_MUTATION, {
     variables: {
-      name: inputs.name,
+      name:inputs.name && inputs.name.toLowerCase()
     },
     refetchQueries: [
       {
@@ -133,7 +133,6 @@ function UpdateTagSettings() {
                   value={inputs.name}
                   onChange={handleChange}
                 />
-                <p style={{margin: 0, fontSize: '12px', transform: 'translateY(-15px)'}}>*Enter name in ALL lowercase for successful alphabetical ordering!</p>
               </label>
 
               <div style={{ marginTop: '40px' }}>

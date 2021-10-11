@@ -26,14 +26,14 @@ const UPDATE_USER_MUTATION = gql`
         businessName: $businessName
         cellPhone: $cellPhone
         email: $email
-        receiveSms: $receiveSms
+      
       }
     ) {
       id
       businessName
       cellPhone
       email
-      receiveSms
+      
     }
   }
 `
@@ -267,11 +267,7 @@ function UpdateUserInfo(props) {
     email: me && me.email,
     
   })
-  const clickSms = debounce(handleSetIsChecked, 500)
-  function handleSetIsChecked() {
- 
-    updateUserSms({variables: {id: me.id, receiveSms: !me.receiveSms}})
-  }
+
 
   const [updateUserSms, {smsError, smsLoading}] = useMutation(UPDATE_USER_TEXTING_MUTATION)
   const [updateUser, { error, loading, called }] = useMutation(
@@ -287,7 +283,14 @@ function UpdateUserInfo(props) {
       refetchQueries: [{ query: CURRENT_USER_QUERY }],
     },
   )
-
+  const clickSms = debounce(handleSetIsChecked, 500)
+  async function handleSetIsChecked() {
+  const smsStatus = !me.receiveSms
+   toast(`You will ${smsStatus === true ? 'now' : 'no longer'} receive SMS workout reminders!`)
+    await updateUserSms({variables: {id: me.id, receiveSms: !me.receiveSms}})
+   
+    
+  }
   const tooShort = !inputs.cellPhone.replace(/[\D]/g, '').match(/^\d{10}$/)
 
 const nameLong = inputs.businessName.length > 14
@@ -295,6 +298,7 @@ const nameLong = inputs.businessName.length > 14
   return (
     <Grid>  
       <h2>Update Account Information</h2>
+          {error && <Error error={error} />}
       <Form
    
         onSubmit={async (e) => {
@@ -305,7 +309,6 @@ const nameLong = inputs.businessName.length > 14
         }}
       >
         
-          {error && <Error error={error} />}
         
           <div className="left">
             

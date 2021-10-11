@@ -49,12 +49,13 @@ const Form2 = styled.form`
     font-family: 'Comfortaa';
     background: transparent;
     border: none;
-    border-bottom: 2px solid rgba(0, 0, 0, 0.2);
+    border: 2px solid rgba(0, 0, 0, 0.2);
+    border-radius: 5px;
     /* margin-top: 0.8rem; */
 
     &:focus {
       outline: 0;
-      border-bottom: 2px solid #f8b0b0;
+      border: 2px solid #f8b0b0;
     }
   }
 

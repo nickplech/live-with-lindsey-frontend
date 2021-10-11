@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect, useLayoutEffect } from 'react'
+import React, { useRef, useState, useEffect } from 'react'
 import styled from 'styled-components'
 import Link from 'next/link'
 import gql from 'graphql-tag'
@@ -37,7 +37,7 @@ const TheItem = styled.div`
   transition: 0.2s;
   position: relative;
   z-index: 1000;
- 
+  user-select: none;
   box-shadow: 0 2px 1px rgba(0, 0, 0, 0.09), 0 4px 2px rgba(0, 0, 0, 0.09),
     0 8px 4px rgba(0, 0, 0, 0.09), 0 16px 8px rgba(0, 0, 0, 0.09),
     0 32px 16px rgba(0, 0, 0, 0.03);
@@ -192,11 +192,12 @@ const Wrap = styled.div`
   img {
     display: inline-flex;
     transform: translate(0px, 3.5px);
+ 
   }
   h3 {
     font-size: 18px;
     display: inline-flex;
-    margin: 0 15px;
+    margin: 0 5px;
   }
   p {
     margin: 0;
@@ -219,7 +220,7 @@ const ParallaxImage = ({ src, ...style }) => {
     clamp: false,
   })
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     const element = ref.current
     setElementTop(element.offsetTop)
   }, [ref])
@@ -249,7 +250,7 @@ function MostRecentVideo(props) {
         <p>{mostRecentVod.description}</p>
         <span><img src="../static/img/calendar.svg" height="20" width="20" alt="calendar graphic to represent date which video first aired live" />  <h3>aired on: {format(new Date(mostRecentVod.date), 'MMM dd, yyyy')}</h3></span>
        
-        <span><img src="../static/img/clock.svg" height="20" width="20" alt="class length icon" />  <h3>60 mins</h3></span>
+        <span><img style={{   marginLeft: '15px' }} src="../static/img/clock.svg" height="20" width="20" alt="class length icon" />  <h3>60 mins</h3></span>
  
       </div>
       <div className="left">
@@ -271,7 +272,7 @@ function MostRecentVideo(props) {
        
           </Link>
 
-          <img className="ribbon" src="../static/img/mostrecent2.svg" />
+          <img  className="ribbon" src="../static/img/mostrecent2.svg" />
         </TheItem>{' '}
         <ParallaxImage />
       </div>

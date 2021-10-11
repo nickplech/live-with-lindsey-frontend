@@ -89,6 +89,10 @@ const Form3 = styled.form`
          ${(props) => props.theme.second} 100%
       )
  }}
+ .basic-single {
+   font-size: 16px;    font-family: 'Comfortaa';
+ 
+ }
 `
 
  
@@ -136,7 +140,7 @@ const CREATE_PRIVATE_CLASS_MUTATION = gql`
    
     $userId: ID!
   ) {
-    createPrivate(
+    createNewPrivate(
       name: $name
       price: $price
       date: $date
@@ -147,9 +151,13 @@ userId: $userId
       id
       name
       date
-      private {
+      user {     
         id
-      }
+        firstName
+         lastName
+         businessName
+    }
+      private 
     }
   }
 `
@@ -175,19 +183,20 @@ const SignUpTitle = styled.h3`
 `
 
 const nameOptions = [{value: '15 Minutes', label: '15 Minute Session'},{value: '30 Minutes', label: '30 Minute Session'}, {value: '45 Minutes', label: '45 Minute Session'},{value: '60 Minutes', label: '60 Minute Session'},{value: '90 Minutes', label: '90 Minute Session'}]
+
 function CreatePrivateClass() {
    const [nameState, setNameState] = useState('')
   const [priceState, setPriceState] = useState('')
- 
+  const [usernameState, setUserNameState] = useState('')
 
   const [selectedOption, setSelectedOption] = useState('')
 
- 
 
 
 
   function handleSelectedOption(e) {
     setSelectedOption(e)
+    setUserNameState(e.label)
   }
   
  
@@ -195,19 +204,16 @@ function CreatePrivateClass() {
 
   const { inputs, handleChange } = useForm({
     date: new Date(),
-    reason: '',
+
   })
  
-  const [createPrivate, { loading, error }] = useMutation(
+  const [createNewPrivate, { loading, error }] = useMutation(
     CREATE_PRIVATE_CLASS_MUTATION,
     {
       variables: {
         date: formatISO(new Date(inputs.date)),
-
+        name: nameState.label,
         price: parseInt(priceState),
-
-  
-   
         userId: selectedOption && selectedOption.value
       },
       refetchQueries: [
@@ -237,9 +243,9 @@ function CreatePrivateClass() {
     <Form3
          onSubmit={async (e) => {
             e.preventDefault()
-            await createPrivate()
+            await createNewPrivate()
             Router.push({
-              pathname: '/dashboard',
+              pathname: '/',
             })
           }}
     >
@@ -251,37 +257,9 @@ function CreatePrivateClass() {
                 <div className="header">
                   <SignUpTitle>Private Class Scheduler</SignUpTitle>
                 </div>
-
-                    <label htmlFor="date">
-                      SELECT DATE &amp; TIME
-                      <input
-                        id="date"
-                        name="date"
-                        type="datetime-local"
-                        required
-                        defaultValue={inputs.date}
-                        onChange={handleChange}
-                      />
-                    </label>
-                      <label htmlFor="classlength">
-                      SELECT SESSION LENGTH
-                    </label>
-                    <Select
-          
-                      className="basic-single"
-                      classNamePrefix="select"
-                      type="select"
-                      value={nameState}
-                      isClearable={true}
-                      required
-                      onChange={(e) => setNameState(e)}
-                      isSearchable={true}
-                      name="classlength"
-                      options={nameOptions}
-                    />
-                    <label htmlFor="client">
+                  <label htmlFor="client">
                       SELECT A CLIENT
-                    </label>
+                 
                     <Select
           
                       className="basic-single"
@@ -295,7 +273,35 @@ function CreatePrivateClass() {
                       name="client"
                       options={optionList}
                     />
-         
+            </label>
+                    <label htmlFor="date">
+                      SELECT DATE &amp; TIME
+                      <input
+                        id="date"
+                        name="date"
+                        type="datetime-local"
+                        required
+                        defaultValue={inputs.date}
+                        onChange={handleChange}
+                      />
+                    </label>
+                      <label htmlFor="classlength">
+                      SELECT SESSION LENGTH
+                   
+                    <Select
+          
+                      className="basic-single"
+                      classNamePrefix="select"
+                      type="select"
+                      value={nameState}
+                      isClearable={true}
+                      required
+                      onChange={(e) => setNameState(e)}
+                      isSearchable={true}
+                      name="classlength"
+                      options={nameOptions}
+                    />
+   </label>
           
                   
  

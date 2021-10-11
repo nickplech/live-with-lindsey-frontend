@@ -43,7 +43,7 @@ const SwithButtons = styled.div`
   color: white;
  width: 300px;
 display: flex;
- position:absolute;
+ position:absolute; user-select: none;
  bottom: 10px;
  .todayName {
  
@@ -52,15 +52,15 @@ display: flex;
  
   color: white;
 cursor: pointer;
-   opacity: ${(props) => (props.isToday ? 1 : 0.5)};
+   opacity: ${(props) => (props.isToday === 'today' ? 1 : 0.5)};
   font-size:30px;
- 
+
   z-index: 999;
   font-family: 'Felix';
  }
    .line {
     display: flex;
- 
+   
     padding: 0;
     position: relative;
  
@@ -73,11 +73,11 @@ cursor: pointer;
   }
  .weekName {
   display: flex;
-
+ 
   padding: 0;
   position: relative;
   
-  opacity: ${(props) => (props.isToday ? 0.5 : 1  )};
+  opacity: ${(props) => (props.isToday === 'week' ? 1 : 0.5  )};
     font-size: 30px;
  
   z-index: 999;
@@ -160,9 +160,9 @@ const OnDemandPic = styled.a`
   }
 `
 
-function TickerFeed({ count, me, firstName, showPic, pic, today }) {
+function TickerFeed({ count,  firstName, showPic, pic, today }) {
    const { isToday, handleIt, active } = useToast()
-  const userPic = me.image ? me.image.publicUrlTransformed : '../static/img/profpic.svg'
+  // const userPic = me?.image ? me.image.publicUrlTransformed : '../static/img/profpic.svg'
   return (
     <Offline>
       <span>
@@ -190,7 +190,7 @@ function TickerFeed({ count, me, firstName, showPic, pic, today }) {
         >
   <div className="todayName"
          
-          onClick={(e) => handleIt()}
+          onClick={(e) => handleIt('today')}
          
         >
           TODAY{' '}
@@ -198,7 +198,7 @@ function TickerFeed({ count, me, firstName, showPic, pic, today }) {
         <span className="line" >|</span>
         <div className="weekName"
         
-          onClick={(e) => handleIt()}
+          onClick={(e) => handleIt('week')}
    
         >
           WEEK

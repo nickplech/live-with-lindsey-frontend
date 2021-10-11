@@ -22,13 +22,14 @@ const Grid = styled.div`
     margin: 0;
    
 
-   
+   position: relative;
     height: 100%;
  
     width: 100%;
     display: flex;
     flex-flow: column;
     border-radius: 20px;
+    z-index: 999;
     background: rgba(255, 255, 255, 0.25);
    
 
@@ -68,9 +69,11 @@ const Grid = styled.div`
     cursor: pointer;
  bottom: 8px;
  right: 8px;
+ z-index: 99999;
     margin: 5px;
     position: absolute;
     transition: 0.2s;
+    user-select: none;
     &:hover {
       transform:   scale(1.08);
     }

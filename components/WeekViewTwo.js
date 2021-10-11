@@ -11,15 +11,15 @@ import { format } from 'date-fns'
 
 const Container = styled.div`
   width: 100%;
-  margin: 0px auto;
-     position: relative;
+
+     position: absolute;
 z-index: 100;
   display: flex;
   height: 100%;
   z-index: 200;
    list-style: none;
   overflow-y: scroll;
- 
+       margin-bottom: 20px;
   overscroll-behavior: contain;
   &::-webkit-scrollbar {
     display: none; // Safari and Chrome
@@ -31,37 +31,39 @@ const ClassList = styled.ul`
   /* transition: 0.2s; */
   display: flex;
   flex-flow: column;
+  margin: 10px auto 0;
+  width: 95%;
 
-  width: 100%;
-  padding-bottom: 15px;
-  margin: 0 auto;
+ height: 100%;
   list-style: none;
   background: transparent;
 
-  position: relative;
+
+    
+  position: absolute;
   overscroll-behavior: contain;
   &::-webkit-scrollbar {
     display: none; // Safari and Chrome
   }
   @media (max-width: 992px) {
     padding: 0;
+    margin-bottom: 25px;
   }
 `
+ 
 const Course = styled.li`
   display: flex;
   background: #fff;
-  border-radius: 10px;
-  border: ${(props) =>
-    props.isToday ? 'none' : '1px solid rgba(20, 20, 20, 0.05)'};
+  border-radius:10px 10px 10px 10px;
+  
   box-shadow: 0 10px 10px -5px rgba(0, 0, 0, 0.2);
   position: relative;
-  z-index: 20000;
+  z-index: 200;
   margin: 5px auto;
-  width: 95%;
-  max-width: 600px;
+  width: 100%;
+  /* max-width: 600px; */
   height: 65px;
   transition: 0.3s;
- 
   &:before {
     display: ${props => props.showTodayMarker ? 'flex' : 'none'};
     content: 'Today';
@@ -75,13 +77,13 @@ const Course = styled.li`
  line-height: 15px;
 border-radius: 3px;
 text-align: center;
-transform: translate(-40px, 23px) rotate(-90deg);
+transform: translate(-35px, 23px) rotate(-90deg);
 position: absolute;
 background: ${props => props.isLive ? 'red' : props.theme.third};
-
   }
+ 
   @media (min-width: 992px) {
-    margin: 5px 20px;
+    margin: 5px 0px;
   }
   h1 {
     line-height: 24px;
@@ -90,7 +92,7 @@ background: ${props => props.isLive ? 'red' : props.theme.third};
     font-family: 'Bison';
     margin: 0;
     transform: translateY(2px);
-    color: ${(props) => props.theme.third};
+ 
   }
   .course h6 {
     opacity: 0.8;
@@ -119,7 +121,7 @@ background: ${props => props.isLive ? 'red' : props.theme.third};
     display: flex;
     flex-flow: column;
     align-items: flex-start;
-    border-radius: 10px 0 0 10px;
+    border-radius:  10px 0 0  10px;
     background: linear-gradient(
       90deg,
       rgba(248, 176, 176, 0.8057598039215687) 8%,
@@ -264,18 +266,34 @@ function WeekView({ id, today, items }) {
   const Today = format(today, 'EEEE')
   const variants = {
     varientA: { opacity: 1, rotateX: 0 },
-    varientB: { opacity: 0, rotateX: 180 },
+    varientB: { opacity: 0, rotateX: 180 },   
   }
   const flipVarients = {
     varientA: { opacity: 0, rotateX: 180 },
     varientB: { opacity: 1, rotateX: 0 },
   }
 
+  const hasPassedList =  items.filter((item) => {
+     const now = Date.now()
+  const expiry = new Date(item.date).getTime()
+ 
+const isComplete = item.status === 'COMPLETE'
+    return now >= expiry && isComplete
+  })
+ 
+  const upcomingList =  items.filter((item) => {
+    const now = Date.now()
+ const expiry = new Date(item.date).getTime()
+ const notComplete = item.status !== 'COMPLETE'
+   return now <=  expiry && notComplete
+ })
+ 
 
   return (
- 
+ <Container>
  
         <AnimateSharedLayout>
+        
         
           <ClassList>
             {items.map((item, i) => {
@@ -299,7 +317,7 @@ function WeekView({ id, today, items }) {
                 >
                   <Course isLive={item.status === 'LIVE'} showTodayMarker={date === today ? true : false}>
                     <div className="course-preview">
-                      <h1>{format(new Date(item.date), 'EEEE')}</h1>
+                      <h1>{ format(new Date(item.date), 'EEEE')}</h1>
                       <h2>
                         {format(new Date(item.date), 'MMM dd')} |{' '}
                         {format(new Date(item.date), 'h:mm aa')}
@@ -379,7 +397,7 @@ function WeekView({ id, today, items }) {
                 <motion.div
                   variants={flipVarients}
                   initial="varientA"
-                  animate={flipped === i ? 'varientB' : 'varientA'}
+                  animate={flipped === i  ? 'varientB' : 'varientA'}
                   layout
                   transition={{
                     type: 'spring',
@@ -387,7 +405,7 @@ function WeekView({ id, today, items }) {
                     mass: 0.75,
                     stiffness: 100,
                   }}
-                  key={'a' + i}
+                  key={i }
                   className="content"
                   style={{
                     transform: 'perspective(600px)',
@@ -399,8 +417,9 @@ function WeekView({ id, today, items }) {
                     <div className="course-info"></div>
                     <div
                       className="flipbox"
-                      onClick={() => setFlipped(flipped === i ? false : i)}
+                      onClick={() => setFlipped(flipped === i  ? false : i )}
                     >
+                  
                       <img
                         className="reload"
                         height="15"
@@ -411,10 +430,10 @@ function WeekView({ id, today, items }) {
                 </motion.div>
               )
             })}
-          </ClassList>{' '}
-        </AnimateSharedLayout>
-
+          </ClassList>
   
+        </AnimateSharedLayout>
+ </Container>
   )
 }
 

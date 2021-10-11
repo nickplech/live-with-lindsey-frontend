@@ -1,7 +1,6 @@
 import React, { useState, useContext, useEffect, useRef } from "react";
 
-// import * as classes from "./Options.module.css";
-// import { CopyToClipboard } from "react-copy-to-clipboard";
+
 import {usePeerSocket} from "./contexts/PrivatePeerSocket";
  import SickButton  from "./styles/SickButton";
  import { toast } from 'react-toastify'
@@ -53,19 +52,13 @@ text-align: center;
  `
 const Options = () => {
   const [idToCall, setIdToCall] = useState("");
-
   const [isModalVisible, setIsModalVisible] = useState(false);
 
   const {
-      peerSocket,
     call,
     callAccepted,
     otherClientId,
-    myVideo,
-    userVideo,
-    stream,
-    yourName,
-    setYourName,
+    readyToMakeTheCallFromAdmin,
     callEnded,
     me,
     callUser,
@@ -74,89 +67,51 @@ const Options = () => {
     otherUser,
     setOtherUser,
     leaveCall1,
-  } = usePeerSocket();
-
+  } = usePeerSocket()
 
   const handleCancel = () => {
-    setIsModalVisible(false);
-    leaveCall1();
-    window.location.reload();
-  };
+    setIsModalVisible(false)
+    leaveCall1()
+    window.location.reload()
+  }
   useEffect(() => {
-   
     if (call.isReceivingCall) {
            console.log('call it!')
-      setIsModalVisible(true);
-      setOtherUser(call.from);
+      setIsModalVisible(true)
+      setOtherUser(call.from)
   
-    } else setIsModalVisible(false);
-  }, [call.isReceivingCall]);
-
-
+    } else setIsModalVisible(false)
+  }, [call.isReceivingCall])
   return (
       <>
         {callAccepted && !callEnded ? (
        null
         ) : (
     <Wrap >
- 
- 
-           
-            {/* <WhatsappShareButton
-              url={`https://video-chat-mihir.vercel.app/`}
-              title={`Join this meeting with the given code "${me}"\n`}
-              separator="Link: "
-              className={classes.share_icon}
-            >
-              <WhatsappIcon size={26} round />
-            </WhatsappShareButton>
-            <FacebookShareButton
-              url={`https://video-chat-mihir.vercel.app/`}
-              title={`Join this meeting with the given code "${me}"\n`}
-              className={classes.share_icon}
-            >
-              <FacebookIcon size={26} round />
-            </FacebookShareButton>
-            <TwitterShareButton
-              url={`https://video-chat-mihir.vercel.app/`}
-              title={`Join this meeting with the given code  "${me}"\n`}
-              className={classes.share_icon}
-            >
-              <TwitterIcon size={26} round className={classes.share_border} />
-            </TwitterShareButton> */}
-      
-   
-       
-
-      
+          
             <>
-            <p style={{fontSize: '22px ', lineHeight: '22px '}}>{otherClientId ? 'Both Parties Have Arrived, You May Begin Your Video Chat!' : 'Please Wait for The Other Party to Enter the Studio'}</p>
+            <p style={{fontSize: '22px ', lineHeight: '22px '}}>{readyToMakeTheCallFromAdmin ? 'Both Parties Have Arrived, You May Begin Your Video Chat!' : 'Please Wait for The Other Party to Enter the Studio'}</p>
           <SickButton
             type="primary"
-            disabled={!otherClientId}
+            disabled={!readyToMakeTheCallFromAdmin}
             onClick={() => {
-        callUser(otherClientId && otherClientId);
-           
+        callUser(readyToMakeTheCallFromAdmin && readyToMakeTheCallFromAdmin)
             }}
-       
             tabIndex="0"
           >
             Send Chat Invite
           </SickButton>
           </>
-        
      </Wrap>)}
-
        {callAccepted && !callEnded && 
        <EndIt>
             <button
               onClick={leaveCall}
             >
-               
               &nbsp; End Session
             </button></EndIt>} 
    </>
   )
 }
 
-export default Options;
+export default Options

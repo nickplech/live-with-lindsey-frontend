@@ -19,6 +19,7 @@ const Loadz = styled.div`
     height: 100%;
     left: 0;
     top: 0;
+  
   }
 
   .loading-text {
@@ -31,7 +32,7 @@ const Loadz = styled.div`
     height: 30px;
     margin: ${(props) => (props.name ? '-7px 0 0 48px' : '-7px 0 0 -34px')};
     line-height: 12px;
-    font-family: 'Comfortaa';
+ 
     text-align: center;
     font-size: 14px;
   }
@@ -40,7 +41,7 @@ const Loadz = styled.div`
     display: block;
     position: absolute;
     left: 50%;
-    top: 50%;
+    top: 50%;  z-index:999999;
     width: 170px;
     height: 170px;
     margin: -85px 0 0 -85px;

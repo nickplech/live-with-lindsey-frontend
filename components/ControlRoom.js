@@ -175,6 +175,7 @@ function ControlRoom({ adminId }) {
         updateStatus={updateStatus}
           id={adminId}  
           status={item.status}
+          theName={item.reason.name}
         />
        
         

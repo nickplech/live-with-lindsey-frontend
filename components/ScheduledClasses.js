@@ -5,17 +5,14 @@ import styled from 'styled-components'
 import { useQuery } from '@apollo/client'
 import {useUser} from './User'
 import ProductSlider from './ProductSlider'
+
  const STREAMS_QUERY = gql`
   query STREAMS_QUERY($date: DateTime) {
-    allItems(where: {  AND: [{ private_is_null: true }, { date_gte: $date }]}, orderBy: "date") {
+    allItems(where: {  AND: [{ private_not: true }, { date_gte: $date }]}, orderBy: "date") {
       id
       price
       date
-      private {
-        
-          id
-        
-      }
+      private 
       user {
         id
       }
@@ -32,7 +29,7 @@ const Schedule = styled.div`
   text-transform: uppercase;
   z-index: 900;
  
-  grid-column: 1/3;
+   
   width: 100%;
   position: relative;
   h1 {
@@ -41,27 +38,88 @@ const Schedule = styled.div`
   }
   .subTight {
    
-    color: white;
+    color: slategrey;
     font-family: 'Bison';
     margin: 0;
-    transform: translate(30px, -10px);
+    transform: translate(30px, 0px);
     letter-spacing: 2px;
+  }
+`
+const Div = styled.div`
+  width: 100%;
+
+  height: 350px;
+  margin: 0 auto;
+  display: flex;
+  flex-flow: column;
+  justify-content: center;
+  text-align: center;
+  align-items: center;
+margin-top: 20px;
+  font-family: 'Bison';
+  padding-top: 0px;
+
+  @media (min-width: 992px) {
+    width: 100%;
+
+    height: 350px;
+    margin: 0 auto;
+    display: flex;
+    flex-flow: column;
+    justify-content: center;
+    text-align: center;
+    align-items: center;
+  margin-top: 20px;
+    font-family: 'Bison';
+    padding-top: 0px;
+  
+  }
+  .smaller {
+    margin: 5px auto;
+    text-align: center;
+    justify-self: center;
+    display: flex;
+    max-width: 500px;
+    line-height: 26px;
+    font-size: 32px;
+    color: ${(props) => props.theme.second};
+    letter-spacing: 4px;
+    font-size: 28px;
+    transform: translateY(10px);
+  }
+`
+const P = styled.p`
+  color: slategray;
+  margin: 5px auto;
+  text-align: center;
+  justify-self: center;
+  display: flex;
+  max-width: 500px;
+  line-height: 26px;
+  font-size: 32px;
+  color: ${(props) => props.theme.second};
+  letter-spacing: 4px;
+  &:nth-of-type(2) {
+    max-width: 400px;
+    font-size: 18px;
+    color: slategray;
+    letter-spacing: 3px;
   }
 `
 const Title = styled.div`
   display: flex;
   margin: 20px 0px 0px 25px;
-  width: 100%;
+  width: 95%;
   border-bottom: 3px solid rgba(20, 20, 20, 0.2);
   font-family: 'Felix';
   font-size: 32px;
   color: ${(props) => props.theme.second};
   margin: ${(props) =>
-    props.items.length === 0 ? ' -90px 0px 0px 25px' : '20px 0px 0px 25px'};
+    props.items.length === 0 ? ' 0px 0px 0px 25px' : '0px 0px 0px 25px'};
   @media (max-width: 992) {
     font-size: 22px;
     margin: ${(props) =>
-      props.items.length === 0 ? ' -70px 0px 0px 25px' : '20px 0px 0px 25px'};
+      props.items.length === 0 ? ' 0px 0px 0px 0px' : '0px 0px 0px 0px'};
   }
 `
 function ScheduledClasses( ) {
@@ -81,10 +139,7 @@ const isonow = formatISO(new Date(today))
     })
     return theUsers
   })
-  const count = me && me.cart.reduce(
-    (tally, cartItem) => tally + cartItem.quantity,
-    0,
-  )
+  
 
   const inCart = me && me.cart.map((cartItem) => {
     const cartItemIdArray = cartItem && cartItem.item.id
@@ -93,9 +148,7 @@ const isonow = formatISO(new Date(today))
  return (
       <Schedule >
        <Title items={items}>  Scheduled Live Workouts  </Title>
-            <p className="subTight">
-              Explore this week's Live Workouts below!
-            </p>
+
 
  {!items.length ?
       <Div>

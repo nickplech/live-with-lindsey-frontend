@@ -15,7 +15,7 @@ import ScheduledClasses from './ScheduledClasses'
  @media(min-width: 768px) {
 
      grid-template-columns: 1fr 1fr;
- grid-template-rows:  300px   ;
+ grid-template-rows:  1fr   ;
  }
  `
  const  DashGrid = (props) => {

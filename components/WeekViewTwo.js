@@ -12,13 +12,24 @@ import { format } from 'date-fns'
 const Container = styled.div`
   width: 100%;
 
-     position: absolute;
-z-index: 100;
+     position: relative;
+ 
   display: flex;
-  height: 100%;
+  height: 98%;
   z-index: 200;
    list-style: none;
-  overflow-y: scroll;
+   display: flex;
+  background: #fff;
+  /* border-radius:10px 10px 10px 10px;
+   */
+  /* box-shadow: 0 2px 1px rgba(0, 0, 0, 0.09), 0 4px 2px rgba(0, 0, 0, 0.09),
+      0 8px 4px rgba(0, 0, 0, 0.09), 0 -2px 1px rgba(0, 0, 0, 0.09);
+  */
+  z-index: 200;
+  margin: 5px auto 10px;
+  width: 100%;
+
+
        margin-bottom: 20px;
   overscroll-behavior: contain;
   &::-webkit-scrollbar {
@@ -31,23 +42,23 @@ const ClassList = styled.ul`
   /* transition: 0.2s; */
   display: flex;
   flex-flow: column;
-  margin: 10px auto 0;
-  width: 95%;
+  margin: 5px auto ;
+  width: 98%;
 
  height: 100%;
   list-style: none;
   background: transparent;
-
+   
 
     
-  position: absolute;
-  overscroll-behavior: contain;
+  position: relative;
+ 
   &::-webkit-scrollbar {
     display: none; // Safari and Chrome
   }
   @media (max-width: 992px) {
     padding: 0;
-    margin-bottom: 25px;
+ 
   }
 `
  
@@ -57,10 +68,10 @@ const Course = styled.li`
   border-radius:10px 10px 10px 10px;
   
   box-shadow: 0 10px 10px -5px rgba(0, 0, 0, 0.2);
-  position: relative;
+ position: relative;
   z-index: 200;
   margin: 5px auto;
-  width: 100%;
+  width: 97%;
   /* max-width: 600px; */
   height: 65px;
   transition: 0.3s;
@@ -389,7 +400,10 @@ const isComplete = item.status === 'COMPLETE'
               )
             })}
           </ClassList>
-          <ClassList>
+          <ClassList    style={{
+                  
+                    position: 'absolute',
+                  }}>
             {items.map((item, i) => {
                             const today = format(new Date(), 'M/dd')
                             const date = format(new Date(item.date), 'M/dd')

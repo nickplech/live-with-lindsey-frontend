@@ -5,6 +5,7 @@ import styled from 'styled-components'
 import ClickToCopyId from './ClickToCopyId'
 import { useQuery } from '@apollo/client'
 import gql from 'graphql-tag'
+import PieChartComponent  from './PieChart'
 import Error from './ErrorMessage'
 import ControlDots from './ControlDots'
 import { format } from 'date-fns'
@@ -166,7 +167,7 @@ function ControlRoom({ adminId }) {
   const userCountPerLive = item.user.filter((u) => {
     return u.subscription === 'PAYPERLIVE'
   })
-
+const theData = [{name: 'total subscribed', value: userCount}, {name: 'total all access', value: userCountAllAccess}, {name: 'total pay per live', value: userCountPerLive}]
   return (
     <Wrapper>
       <TheData style={{ marginLeft: ' 0px' }}>
@@ -180,10 +181,8 @@ function ControlRoom({ adminId }) {
        
         
         <RegChart>
-          <div className="thediv"><p className="one">{userCount.length}</p><p>Total Registered</p></div>
-          <div className="thediv"><p className="two"> {userCountAllAccess.length}</p><p>All Access</p></div>
-          <div className="thediv"><p className="three">{userCountPerLive.length}</p><p>Pay PerLive</p></div>
-          
+          <PieChartComponent total={userCount} allAccess={userCountAllAccess} perLive={userCountPerLive} theData={theData} />
+  
         </RegChart>
       </TheData>
 

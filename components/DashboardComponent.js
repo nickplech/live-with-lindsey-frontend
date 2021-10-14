@@ -59,14 +59,7 @@ const Pad = styled.div`
  
 `
 
-const Switcher = styled.div`
-
- height: 100%;
- z-index: 100;
-  width: 100%;
-  position: relative;
-   
-`
+ 
 
 
 const Div = styled.div`
@@ -166,7 +159,7 @@ const SubText = styled.p`
 const ClassList = styled.div`
   transition: 0.2s;
  
-margin-top: 10px;
+margin: 10px 0 15px;
   position: relative;
   z-index: 500;
 
@@ -477,7 +470,7 @@ function DashboardComponent() {
 
       <Pad>
       
-            <>
+           
               <motion.div
                 variants={slideOut}
                 initial="in"
@@ -504,7 +497,7 @@ function DashboardComponent() {
                 id={me.id}
               />
               </motion.div>
-            </>
+           
         
       </Pad>
 

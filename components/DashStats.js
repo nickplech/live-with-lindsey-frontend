@@ -6,6 +6,7 @@ import { useToast } from './contexts/LocalState'
 import {format} from 'date-fns'
 import styled from 'styled-components'
 import Error from './ErrorMessage'
+import ChartStats from './ChartStats';
 
  
 const  PUBLIC_UPDATE_QUERY = gql`
@@ -33,7 +34,7 @@ width: 90%;
 height: 100%;
 display: flex;
  
-overflow-x:hidden;
+overflow:hidden;
 `
 const Stats = styled.div`
 grid-column: 2;
@@ -48,11 +49,11 @@ overflow-y: visible;
 row-gap: 10px;
 column-gap: 10px;
 grid-template-columns: 1fr 1fr;
-grid-template-rows:80px 200px;
+grid-template-rows:40% 60%;
 .top-stats {
     grid-row: 1;
     display: flex;
-  background: slategrey;
+  background: transparent;
   border-radius: 10px;
  
  
@@ -64,13 +65,13 @@ padding: 5px 8px;
  
   transition: 0.3s;
   &:nth-of-type(1) {
-    background: slategrey;
+    background: transparent;
   }
   &:nth-of-type(2) {
-    background: slategrey;
+    background: transparent;
 }
 &:nth-of-type(3) {
-    background: slategrey;
+    background: transparent;
 }
 }
 `
@@ -81,7 +82,7 @@ height: 100%;
 width: 100%;  
 padding: 15px;
 margin: 0 auto;  border-radius:15px;
-background: slategrey; 
+background: transparent; 
  
   `
    const Updates = styled.div`
@@ -93,6 +94,15 @@ background: slategrey;
  transform: translate(0, 10px);
  background: ${props => props.theme.primary};
  border-radius: 10px;
+ `
+ const UpdateImg = styled.div`
+ background: url('../static/img/updateimage.png') center center;
+ background-size: cover;
+ width: 90%;
+ height: auto;
+position: relative;
+border-radius: 15px;
+
  `
 export default function DashStats() {
   const {isToday} = useToast()
@@ -106,9 +116,9 @@ if (!data) return null
       {isToday === 'today' ? <Updates>
        {allPublicUpdates.map(update => {
          return(
-           <div>{update.textContent}    
+           <UpdateImg>{update.textContent}    
   
-  <p>{format(new Date(update.createdAt), 'dd mmm eee')}</p></div>
+  <p>{format(new Date(update.createdAt), 'dd mmm eee')}</p></UpdateImg>
          )
        })}
 
@@ -122,7 +132,7 @@ if (!data) return null
             <div className="top-stats">Week Total:</div>
             <div className="top-stats">hi</div>
            
-             <Chart>hey</Chart>
+             <Chart><ChartStats/></Chart>
         </Stats>
 }
 </StatContainer>

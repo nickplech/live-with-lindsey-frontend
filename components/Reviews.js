@@ -124,7 +124,7 @@ const Wind = styled(motion.div)`
   display: flex;
   align-self: center;
   justify-self: center;
-  position: absolute;
+  position: absolute;  user-select: none;
   justify-content: center;
   align-items: center;
   flex-flow: column;
@@ -153,10 +153,11 @@ const Wind = styled(motion.div)`
     z-index: 12000;
     margin: 0;
     color: white;
+    user-select: none;
   }
 `
-const Button = styled(motion.button)`
-  border-radius: 50%;
+const Button = styled(motion.img)`
+
   height: 40px;
   width: 40px;
   margin: 10px;
@@ -167,11 +168,14 @@ const Button = styled(motion.button)`
   z-index: 12000;
   top: 0;
   border: none;
+  opacity: .6;
   font-size: 22px;
-  box-shadow: 0px 3px 4px -2px rgba(20, 20, 20, 0.2);
-  background: ${(props) => props.theme.white};
-  color: ${(props) => props.theme.second};
-  font-family: 'Comfortaa';
+ user-select: none;
+  transition: .3s;
+
+  &:hover {
+    opacity: 1;
+  }
 `
 const FeedBackGraphic = styled.img`
   width: 450px;
@@ -241,7 +245,7 @@ export default function Reviews() {
                     >
                       &#10077;
                     </div>
-                    <Button onClick={() => setSelectedId(null)}>x</Button>
+                    <Button onClick={() => setSelectedId(null)} src="../static/img/sydneyx.svg" />
                     <motion.p>{item.content}</motion.p>
                     <motion.h2>&mdash;{item.name}</motion.h2>
                   </Wind>

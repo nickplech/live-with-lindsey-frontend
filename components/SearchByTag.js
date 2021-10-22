@@ -86,19 +86,30 @@ function SearchByTag({ tags }) {
     0,
     open ? 0.1 : 0.6,
   ])
+  const handleSet = (open) => {
+    console.log(open)
+    if(open === false) {
+      set(true)
+    }
+    return
+  }
   console.log(selectedTags)
   return (
     <Wrapper>
       <Container
         style={{ ...rest, width: size, height: size }}
-        onClick={() => set((open) => !open)}
+        onClick={() => handleSet(open)}
       >
         {transition((style, item) => (
           <Item
             onClick={() =>
               setSelectedTags((selectedTags) => [...selectedTags, item])
             }
-            style={{ ...style, background: '#6b996b' }}
+            selectedTags={selectedTags}
+            name={item.name}
+            style={{ ...style, background: `${selectedTags.some(taggy => {
+              return taggy.name === item.name
+            }) ?  '#f8b0b0' : '#6b996b'}` }}
           >
             {item.name}
           </Item>

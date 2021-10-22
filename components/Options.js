@@ -76,7 +76,7 @@ const Options = () => {
   }
   useEffect(() => {
     if (call.isReceivingCall) {
-           console.log('call it!')
+       
       setIsModalVisible(true)
       setOtherUser(call.from)
   

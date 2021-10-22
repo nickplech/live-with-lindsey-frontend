@@ -122,7 +122,7 @@ text-align: center;
   position: relative;
 `
 function Recommended({ tags, id }) {
-  const tagArr = tags.map((tag) => {
+  const tagArr = tags && tags.map((tag) => {
     return tag.name
   })
 

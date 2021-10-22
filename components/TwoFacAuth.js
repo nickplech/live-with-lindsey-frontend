@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import Link from 'next/link'
+import {toast} from 'react-toastify'
 import OtpInput from 'react-otp-input'
 import styled from 'styled-components'
 import gql from 'graphql-tag'

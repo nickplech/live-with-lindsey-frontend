@@ -27,7 +27,7 @@ letter-spacing: 2px;
     margin: 0;  
     line-height: 30px;
     user-select: none; 
-    cursor: default; font-size: 40px;
+    cursor: default; font-size: 37px;
     &:hover {
       transition: 0s;
       color: rgba(255,215,212,.5);
@@ -54,7 +54,7 @@ const Row = styled(motion.div)`
     width: 100%;
  left: -12%;
     display: flex;
-    padding: 10px 0;
+    padding: 9px 0;
     white-space: nowrap;   
        
     transform: rotate(-30deg) ;

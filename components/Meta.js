@@ -10,7 +10,7 @@ const Meta = () => (
     <title>Live with Lindsey</title>
     <meta
       name="description"
-      content="Lindsey Harrod's Invigorating Live Stream Workouts and On-Demand fitness library"
+      content="Lindsey Harrod's Live Stream Workouts + On-Demand fitness library"
     ></meta>
     {/* <script src="https://cdn.attn.tv/lindseyharrod/dtag.js"></script> */}
   </Head>

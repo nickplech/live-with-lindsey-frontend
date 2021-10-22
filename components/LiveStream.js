@@ -26,7 +26,7 @@ width: 100%;
 position: fixed;
 z-index: 0;
 
-opacity: 0.4;
+opacity: 0.3;
 background: -webkit-linear-gradient(to bottom, #ffedbc, #ed4264);
 background: linear-gradient(to bottom, #ffedbc, #ed4264);
 `

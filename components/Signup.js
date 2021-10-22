@@ -100,18 +100,14 @@ function Signup() {
   const isCompletedCellPhone = phoneValue.length > 13
   const isCompletedDisplayName =
     inputs.businessName && inputs.businessName.length
-  console.log(
-    isCompleted,
-    isCompletedLastName,
-    isCompletedCellPhone,
-    isCompletedDisplayName,
-  )
+
   function isComplete(isCompleted, isCompletedLastName, isCompletedCellPhone, isCompletedDisplayName) {
     if(isCompleted === true && isCompletedLastName === true && isCompletedCellPhone === true && isCompletedDisplayName === true) {
       return true
     }
     return false
   }
+
   return (
     <>
       <StyledSignUpStepper>

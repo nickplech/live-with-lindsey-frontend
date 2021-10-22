@@ -4,10 +4,12 @@ import useForm from '../lib/useForm'
 import gql from 'graphql-tag'
 import Slider, {createSliderWithTooltip, SliderTooltip} from 'rc-slider';
 import 'rc-slider/assets/index.css';
-import { format, formatISO } from 'date-fns'
+import "react-datepicker/dist/react-datepicker.css";
+import { startOfWeek, formatISO, format } from 'date-fns'
 import { useMutation, useQuery } from '@apollo/client'
 import SickButton from './styles/SickButton'
 import Error from './ErrorMessage'
+import DatePicker from 'react-datepicker'
 import { STREAMS_ADMIN_QUERY } from './AdminCalendarAlt'
 import { STREAMS_QUERY } from './DashboardComponent'
 import { REASONS_QUERY } from './UpdateScheduleSettings'
@@ -103,8 +105,8 @@ const Mode = styled.div`
   font-family: 'Bison';
   letter-spacing: 2px;
   font-size: 17px;
-  min-width: 600px;
-
+width:60vw;
+  min-width: 380px;
   border-radius: 15px;
   margin: 0 auto;
   background: white;
@@ -152,7 +154,7 @@ font-size: 28px;
     padding: 2px 2px;
     border: none;
     line-height: 20px;
-    left: 10px;
+    right: 10px;
     top: 10px;
     height: 30px;
     width: 30px;
@@ -179,7 +181,7 @@ const Pricing = styled.div`
   color: white;
  
 `
-const ShowPrice = styled.button`
+const ShowDate = styled.h4`
   display: flex;
   justify-content: center;
 text-align: center;
@@ -190,20 +192,36 @@ text-align: center;
   margin: 5px;
   cursor: pointer;
   letter-spacing: 3px;
-  color: white;
+  color: slategrey;
   user-select: none;
   padding: 0;
   border: none;
-  background:  rgba(20, 120, 20, 1) ;
-  border-radius: 5px;
-  height: 40px;
-  width: 40px;
+  
+ 
   transition: .3s;
-  font-size: 18px;
+  font-size: 28px;
   font-family: 'Bison';
   &:hover {
     opacity: .8;
   }
+`
+
+const CenterDate = styled.div`
+ 
+width: 100%;
+ 
+  .react-datepicker-wrapper,
+.react-datepicker__input-container,
+.react-datepicker__input-container input {
+  display: block;
+  width: 100%;
+
+}
+`
+const CalendarContainer = styled.div`
+width: 400px;
+display: flex;
+
 `
 const SliderWithTooltip = createSliderWithTooltip(Slider);
 const { Handle } = SliderWithTooltip;
@@ -229,29 +247,46 @@ function percentFormatter(v) {
  
 const wrapperStyle = { width:'90%', margin: '50px auto'};
 function ModalFrame() {
-  
+  const [startDate, setStartDate] = useState(new Date())
   const [equipmentId, setEquipmentSearch] = useState('')
-  const [isSelected, setIsSelected] = useState('')
+  const [selectedDate, setSelectedDate] = useState('')
   const [tagsId, setTagsSearch] = useState('')
   const [selectedEquipment, setSelectedEquipment] = useState([])
   const [selectedTags, setSelectedTags] = useState([])
   const [priceState, setPriceState] = useState('1000')
   const [selectedOption, setSelectedOption] = useState('')
-  const [sliderValue, setSliderValue] = useState(10)
-
-
+  const [sliderValue, setSliderValue] = useState(15)
+console.log(startDate)
+  const handleChangeDate = (date) => {
+    console.log(date)
+    setSelectedDate(date)
+  }
+ 
+const handleDate = (date) => {
+ 
+  setStartDate(date)
+}
   const onSliderChange = v => {
-  console.log(v)
+
     setSliderValue(v)
   };
-  const onSliderAfterChange = v => {
-    console.log(v)
-    const thePrice = v + '00'
-    setPriceState(thePrice)
-    setIsSelected('$' + v)
-  }
-  const submitEquipment = selectedEquipment.map((str, i) => ({ id: str }))
+  // const onSliderAfterChange = v => {
 
+  //   const thePrice = v + '00'
+  //   setPriceState(thePrice)
+  //   setIsSelected('$' + v)
+  // }
+  const submitEquipment = selectedEquipment.map((str, i) => ({ id: str }))
+  const MyContainer = ({ className, children }) => {
+    return (
+ 
+        <CalendarContainer >
+         
+          <div >{children}</div>
+        </CalendarContainer>
+ 
+    );
+  };
   function handleSelectedOption(e) {
     setSelectedOption(e)
   }
@@ -283,12 +318,16 @@ function ModalFrame() {
     date: new Date(),
     reason: '',
   })
-console.log(inputs.date)
+  const weekStarts = startOfWeek(new Date(), {
+    weekStartsOn: 0,
+  })
+
+ 
   const [createNewClass, { loading, error }] = useMutation(
     CREATE_CLASS_MUTATION,
     {
       variables: {
-        date: formatISO(new Date(inputs.date)),
+        date: selectedDate.length > 2 && formatISO(new Date(selectedDate)),
         reason: selectedOption && selectedOption.value,
         price: parseInt(priceState),
         name: selectedOption && selectedOption.label,
@@ -302,7 +341,8 @@ console.log(inputs.date)
         },
         {
           query: STREAMS_ADMIN_QUERY,
-          variables: { date: formatISO(new Date()) },
+          variables: {  
+            date: formatISO(weekStarts)},
         },
       ],
     },
@@ -359,18 +399,23 @@ console.log(inputs.date)
                     <Error error={error} />
                     <label htmlFor="date">
                       SELECT DATE &amp; TIME
-                      <input
-                        id="date"
-                        name="date"
-                        type="datetime-local"
-                        required
-                        defaultValue={inputs.date}
-                        onChange={handleChange}
-                      />
+                      <CenterDate>
+             
+                      <DatePicker
+required
+calendarContainer={MyContainer}
+calendarClassName="kali"
+      showTimeSelect
+
+      selected={startDate}
+      onChange={(date) => handleDate(date)}
+      onSelect={date => handleChangeDate(date)}
+      dateFormat="MMMM d, yyyy h:mm aa"
+    /><ShowDate>{startDate && format(new Date(startDate), 'MMMM d, yyyy h:mm aa')}</ShowDate></CenterDate>
                     </label>
                     <p
                       style={{
-                        borderTop: '2px solid lightgrey',
+                       
                         paddingTop: '35px',
                         transform: 'translateY(10px)',
                       }}
@@ -385,6 +430,7 @@ console.log(inputs.date)
                       isClearable={true}
                       required
                       onChange={(e) => handleSelectedOption(e)}
+                      
                       isSearchable={true}
                       name="reason"
                       options={optionList}
@@ -437,20 +483,20 @@ console.log(inputs.date)
                       tipFormatter={percentFormatter}
                       min={0} max={20}
                       onChange={onSliderChange}
-                      onAfterChange={onSliderAfterChange}
+                    
                       tipProps={{ overlayClassName: 'foo'  }}
                       marks={{ 0:0, 1:1, 2:2, 3:3, 4:4, 5:5, 6:6, 7:7, 8:8, 9:9, 10:10, 11:11, 12:12, 13:13, 14:14, 15:15, 16:16, 17:17, 18:18, 19:19, 20:20 }}
         defaultValue={sliderValue}
-        trackStyle={{borderRadius: 0,  backgroundColor: 'green', height: 10 }}
+        trackStyle={{borderRadius: 0,   height: 5 }}
         handleStyle={{
-          borderColor: 'green',
-          height: 20,borderRadius: 0,
-          width: 10,
+          borderColor: 'grey',
+          height: 20,borderRadius: 15,
+          width: 5,
           marginLeft:0,
-          marginTop: -5,
-          backgroundColor: 'green',
+          marginTop:-5,
+          backgroundColor: 'grey',
         }}
-        railStyle={{ borderRadius: 0,backgroundColor: '#f8b0b0', height: 10 }}
+        railStyle={{ borderRadius: 0,backgroundColor: 'lightgrey', height: 5 }}
       />
                     </div>
  

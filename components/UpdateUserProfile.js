@@ -18,7 +18,7 @@ const UPDATE_USER_MUTATION = gql`
     $businessName: String
     $cellPhone: String
     $email: String
-    $receiveSms: Boolean
+ 
   ) {
     updateUser(
       id: $id

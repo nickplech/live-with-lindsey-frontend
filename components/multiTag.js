@@ -229,7 +229,7 @@ class MultiTag extends React.Component {
   itemToString = (item) => item ? item.name : ''
 
   onChange = debounce(async (e, client) => {
-    console.log('Searching...')
+
     this.setState({ loading: true })
     const res = await client.query({
       query: ALL_TAGS_SEARCH_QUERY,

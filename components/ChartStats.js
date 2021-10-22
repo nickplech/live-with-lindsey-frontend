@@ -67,7 +67,7 @@ const data = [
           
             <Tooltip />
        
-            <Bar dataKey="lastweek" fill="#ffd7d4" />
+            <Bar dataKey="lastweek" fill="#ffd7d4"  />
             <Bar dataKey="currentweek" fill="#f8b0b0" />
           </BarChart>
         </ResponsiveContainer>

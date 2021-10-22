@@ -157,7 +157,7 @@ function AddToCart({id, inCart, ownsItem, theIndex}) {
     return () => clearTimeout(timer)
 
   }
-  const [addToCart, { loading, error, data }] = useMutation(ADD_TO_CART_MUTATION, {
+  const [addToCart, { loading, error }] = useMutation(ADD_TO_CART_MUTATION, {
     variables: { id: id },
     refetchQueries: [
       {

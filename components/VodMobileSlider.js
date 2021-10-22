@@ -5,15 +5,9 @@ import { ALL_ITEMS_QUERY } from './Items'
 import { motion } from 'framer-motion'
 import VanillaTilt from 'vanilla-tilt'
 import Loader from './Loader'
-import {
-  CarouselProvider,
-  Slider,
-  Slide,
-  ButtonBack,
-  ButtonNext,
-} from 'pure-react-carousel'
+ 
 import { useQuery } from '@apollo/client'
-import Item from './Item'
+ 
 
 
 const Wrap = styled.div`
@@ -235,57 +229,6 @@ const Wrap = styled.div`
     height: 300px;
   }
 `
-const Tags = styled.div`
-  width: 90%;
-  position: relative;
-  z-index: 2280;
-  margin: 0 auto;
-  text-transform: uppercase;
-  display: flex;
-  transform: translateY(-25px);
-  flex-flow: row wrap;
-
-  span {
-    margin: 3px 3px;
-    background: ${(props) => props.theme.third};
-    color: white;
-    max-height: 24px;
-    border-radius: 2px;
-    padding: 0px 5px;
-    letter-spacing: 3px;
-    line-height: 16px;
-    font-family: 'Bison';
-    opacity: 0.8;
-  }
-  h2 {
-    margin: 0;
-    border-left: 3px solid #f8b0b0;
-    padding-left: 5px;
-    padding-bottom: 3px;
-    line-height: 22px;
-    transform: translateY(-20px);
-    display: flex;
-    font-size: 22px;
-    /* transform: translateY(-30px); */
-    color: ${(props) => props.theme.third};
-    font-family: 'Bison';
-    letter-spacing: 2px;
-  }
-  .the_date {
-    margin-left: 7px;
-    font-family: 'Bison';
-    letter-spacing: 2px;
-    font-size: 16px;
-
-    border-radius: 8px;
-    padding: 0 6px;
-    line-height: 18px;
-    transform: translateY(1px);
-  }
-  /* span {
-    background: ${(props) => props.theme.primary};
-  } */
-`
 const ScrollWrapper = styled.div`
   width: 300px;
   height: 550px;
@@ -454,46 +397,42 @@ const Tite = styled.h1`
   line-height: 30px;
 `
 
-function MenuItem( {videoOnDemand, subscription} ){
-   const tiltRef = useRef()
+// function MenuItem( {videoOnDemand, subscription} ){
+//    const tiltRef = useRef()
 
-  useEffect(() => {
-    const tiltNode = tiltRef.current
-    const options = {
-    max: 3,
-    scale: 1.01,
-    speed: 100,
-    glare: true,
-    transition: true,
-    'max-glare': 0.4,
-  }
-    VanillaTilt.init(tiltNode, options)
-    return () => tiltNode.vanillaTilt.destroy()
-  }, [])
+//   useEffect(() => {
+//     const tiltNode = tiltRef.current
+//     const options = {
+//     max: 3,
+//     scale: 1.01,
+//     speed: 100,
+//     glare: true,
+//     transition: true,
+//     'max-glare': 0.4,
+//   }
+//     VanillaTilt.init(tiltNode, options)
+//     return () => tiltNode.vanillaTilt.destroy()
+//   }, [])
 
-  return (
+//   return (
   
-    <>  <div
-      style={{
-        transformStyle: 'preserve-3d',
-        transform: 'perspective(1000px)',
-      }}
-      ref={tiltRef}
+//     <>  <div
+//       style={{
+//         transformStyle: 'preserve-3d',
+//         transform: 'perspective(1000px)',
+//       }}
+//       ref={tiltRef}
     
-    >
+//     >
 
-      <Item subscription={subscription} videoOnDemand={videoOnDemand}></Item>
+//       <Item subscription={subscription} videoOnDemand={videoOnDemand}></Item>
 
      
-      {/* <p className="the_date">Live on: <span>{format(new Date(videoOnDemand.date), 'MMM dd, yyyy')}</span></p> */}
+//       {/* <p className="the_date">Live on: <span>{format(new Date(videoOnDemand.date), 'MMM dd, yyyy')}</span></p> */}
    
-    </div> <Tags>
-        {videoOnDemand.tags.map((tag, i) => {
-          return <span key={tag.name}>{tag.name}</span>
-        })}
-      </Tags> </>
+//     </div> 
 
- ) } 
+//  ) } 
 
 
 function  VodListSlider({id, user}) {
@@ -520,86 +459,50 @@ function  VodListSlider({id, user}) {
         </Tite>
       </Link>
       <Wrap>
-        <div className="mobile-layout">
-          <CarouselProvider
-            naturalSlideWidth={350}
-            naturalSlideHeight={300}
-            orientation="horizontal"
-            isIntrinsicHeight="yes"
-            infinite="yes"
-            visibleSlides={1}
-            totalSlides={data.allVideoOnDemands.length}
-          >
-            <ButtonBack>&lsaquo;</ButtonBack> <ButtonNext>&rsaquo;</ButtonNext>
-            <Slider>
-              {data.allVideoOnDemands &&
-                data.allVideoOnDemands.map((item, i) => {
-                  // const isInCart = itemsInCart.some(item.id)
-                  return (
-                    <Slide key={item.id} index={i}>
-                      <MenuItem
-                        next={i}
-                        theIndex={i}
-                        videoOnDemand={item}
-                        subscription={user ? user.subscription : null}
-                      />
-                    </Slide>
-                  )
-                })}
-            </Slider>
-          </CarouselProvider>
-        </div>
-        <div className="desktop-layout">
-          <CarouselProvider
-            naturalSlideWidth={350}
-            naturalSlideHeight={300}
-            orientation="horizontal"
-            isIntrinsicHeight="yes"
-            infinite="yes"
-            visibleSlides={3}
-            totalSlides={data.allVideoOnDemands.length}
-          >
-            <ButtonBack>&lsaquo;</ButtonBack> <ButtonNext>&rsaquo;</ButtonNext>
-            <Slider>
-            <ScrollWrapper>
+
+     
+
+         
+            <ScrollWrapper totalSlides={data.allVideoOnDemands.length}
+>
 <div className="scroll-filler"></div>
 <div className="scroll">
     <div className="scroll-inner">
-       
-    <Link
+       {data.allVideoOnDemands.map((vod, i) => {
+           return(
+                  <MenuItem
+                  key={item.id + 'desktop'} index={i}
+                      next={i}
+                      theIndex={i}
+                      videoOnDemand={item}
+                      subscription={user ? user.subscription : null}
+                    >
+                <Link
             href={{
               pathname: '/item',
-              query: { id: videoOnDemand.id },
+              query: { id: vod.id },
             }}
           >
         <a className="scroll-item">
-            <h2>I made a slider</h2>
-            <span className="scroll-item-date">5 Jun 2020</span>
+            <h2>{vod.name}</h2>
+            <span className="scroll-item-date">{vod.date}</span>
         </a>
-      </Link>
+      </Link> 
+      </MenuItem>  
+           )
+       })}
+
         <div className="scroll-item ghost">
             <h2>Browse Entire Selection</h2>
             <span className="scroll-item-date">let's go!</span>
         </div>
     </div>
 </div>
+  <ButtonBack>&lsaquo;</ButtonBack> <ButtonNext>&rsaquo;</ButtonNext>
 </ScrollWrapper>
 
-              {data.allVideoOnDemands.map((item, i) => {
-                return (
-                  <Slide key={item.id + 'desktop'} index={i}>
-                    <MenuItem
-                      next={i}
-                      theIndex={i}
-                      videoOnDemand={item}
-                      subscription={user ? user.subscription : null}
-                    />
-                  </Slide>
-                )
-              })}
-            </Slider>
-          </CarouselProvider>
-        </div>
+ 
+  
       </Wrap>
     </>
   )

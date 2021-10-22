@@ -60,7 +60,7 @@ justify-self: center;
   margin-top: 2px;
   height:22px;
   text-align: left;
-  padding-left: 30px;
+  padding-left: 20px;
   padding-right: 8px;
   line-height: 22px;
   color: #242424;
@@ -88,7 +88,7 @@ function ShareButtons({classId}) {
     <div className="share-button-primary">
     <TwitterShareButton
               url={`https://lindseyharrod.com/class?${classId}/`}
-              title={`Join this meeting with the given code `}
+              title={`Share this class on Twitter!`}
               className='share_icon'
             >
               <TwitterIcon size={26} round className='share_border' />
@@ -105,7 +105,7 @@ function ShareButtons({classId}) {
     <div className="share-button-primary">
     <FacebookShareButton
               url={`https://lindseyharrod.com/class?${classId}/`}
-              title={`Join this meeting with the given code `}
+              title={`Share this class on Facebook!`}
               className='share_icon'
             >
               <FacebookIcon size={26} round />

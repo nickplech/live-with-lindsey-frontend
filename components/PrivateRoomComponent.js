@@ -21,7 +21,7 @@ position: relative;
 display: flex;
  overflow: hidden;
  height: calc(100vh - 60px);
- width: 100vw;
+ width: 100%;
    .video-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, 300px);
@@ -162,8 +162,15 @@ if (!data === null) return null
       
        {stream &&
            
-           <motion.video   drag   dragConstraints={{ top: 0, right: 0, bottom: 0, left: 0 }}      dragTransition={{ bounceStiffness: 600, bounceDamping: 20 }}
-           dragElastic={0.5}
+           <motion.video   drag             whileHover={{ opacity: 1 }}
+           whileTap={{
+               opacity: 1,
+               scale: 1.05,
+               boxShadow: "0px 5px 8px rgba(20,20,20,.6)",
+           }}
+           whileDrag={{ scale: 1.1, boxShadow: "0px 10px 16px rgba(20,20,20,.6)" }}
+           transition={{ duration: 0.6 }}  dragConstraints={{ top: 0, right: 500, bottom: 600, left: 0 }}      dragTransition={{ bounceStiffness: 600, bounceDamping: 20 }}
+           dragElastic={0.3}
            whileTap={{ cursor: "grabbing" }} playsInline muted ref={myVideo} autoPlay className="user_other" />
        }        
       

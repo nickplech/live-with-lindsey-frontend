@@ -48,7 +48,7 @@ position: absolute;
 overflow-y: visible;
 row-gap: 10px;
 column-gap: 10px;
-grid-template-columns: 1fr 1fr;
+grid-template-columns: 1fr 1fr 1fr;
 grid-template-rows:40% 60%;
 .top-stats {
     grid-row: 1;
@@ -56,7 +56,8 @@ grid-template-rows:40% 60%;
   background: transparent;
   border-radius: 10px;
  
- 
+ justify-content: center;
+ text-align: center;
   position: relative;
   z-index:200;
   margin: 10px auto 0;
@@ -77,7 +78,7 @@ padding: 5px 8px;
 `
 const Chart = styled.div`
 grid-row: 2;
-grid-column: 1/3;
+grid-column: 1/4;
 height: 100%;
 width: 100%;  
 padding: 15px;
@@ -90,9 +91,9 @@ background: transparent;
  width: 100%;
  height: 90%;
  position: relative;
- z-index: 9900;
+ z-index: 900;
  transform: translate(0, 10px);
- background: ${props => props.theme.primary};
+
  border-radius: 10px;
  `
  const UpdateImg = styled.div`
@@ -114,13 +115,13 @@ if (!data) return null
     return (
       <StatContainer>
       {isToday === 'today' ? <Updates>
-       {allPublicUpdates.map(update => {
+       {/* {allPublicUpdates.map(update => {
          return(
            <UpdateImg>{update.textContent}    
   
   <p>{format(new Date(update.createdAt), 'dd mmm eee')}</p></UpdateImg>
          )
-       })}
+       })} */}
 
  
           
@@ -131,7 +132,7 @@ if (!data) return null
         <Stats>
             <div className="top-stats">Week Total:</div>
             <div className="top-stats">hi</div>
-           
+            <div className="top-stats">ho</div>
              <Chart><ChartStats/></Chart>
         </Stats>
 }

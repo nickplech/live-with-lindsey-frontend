@@ -42,7 +42,7 @@ const ClassList = styled.ul`
   /* transition: 0.2s; */
   display: flex;
   flex-flow: column;
-  margin: 5px auto ;
+  margin: 5px 0 ;
   width: 98%;
 
  height: 100%;
@@ -65,30 +65,29 @@ const ClassList = styled.ul`
 const Course = styled.li`
   display: flex;
   background: #fff;
-  border-radius:10px 10px 10px 10px;
+  border-radius: ${props => props.showTodayMarker === true ?  '0 10px 10px 0' : '10px 10px 10px 10px'};
   
   box-shadow: 0 10px 10px -5px rgba(0, 0, 0, 0.2);
  position: relative;
   z-index: 200;
-  margin: 5px auto;
+  margin: 5px 0;
   width: 97%;
   /* max-width: 600px; */
   height: 65px;
   transition: 0.3s;
   &:before {
     display: ${props => props.showTodayMarker ? 'flex' : 'none'};
-    content: 'Today';
-    /* transform: rotate(90deg); */
+    content: '${props => props.isLive === true ? 'Live' :  'Today'}';
  letter-spacing: 2px;
     color: white;
-  
+  width: 65px;
     justify-content: center;
     align-items: center;
  padding: 2px 8px;
  line-height: 15px;
-border-radius: 3px;
+border-radius: 3px 3px 0 0;
 text-align: center;
-transform: translate(-35px, 23px) rotate(-90deg);
+transform: translate(-42px, 23px) rotate(-90deg);
 position: absolute;
 background: ${props => props.isLive ? 'red' : props.theme.third};
   }
@@ -132,7 +131,7 @@ background: ${props => props.isLive ? 'red' : props.theme.third};
     display: flex;
     flex-flow: column;
     align-items: flex-start;
-    border-radius:  10px 0 0  10px;
+    border-radius: ${props => props.showTodayMarker === true ?  '0px 0 0  0px' : '10px 0 0 10px'};
     background: linear-gradient(
       90deg,
       rgba(248, 176, 176, 0.8057598039215687) 8%,

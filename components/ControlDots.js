@@ -11,6 +11,7 @@ const ControlledDotsStyle = styled.div`
   ul {
     list-style: none;
     margin: 0 auto;
+    z-index: 999;
     padding: 0;
     display: flex;
     justify-content: center;

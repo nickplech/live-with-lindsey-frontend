@@ -46,14 +46,14 @@ display: flex;
  position:absolute; user-select: none;
  bottom: 10px;
  .todayName {
- 
+ margin-left: 15px;
   padding: 0;
   position: relative;
  
   color: white;
 cursor: pointer;
    opacity: ${(props) => (props.isToday === 'today' ? 1 : 0.5)};
-  font-size:30px;
+  font-size:24px;
 
   z-index: 999;
   font-family: 'Felix';
@@ -63,9 +63,9 @@ cursor: pointer;
    
     padding: 0;
     position: relative;
- 
+    transform: translateY(2px);
     opacity: 1;
-    font-size:28px;
+    font-size:21px;
     margin-left: 3px;
     z-index: 999;
     font-family: 'Felix';
@@ -78,7 +78,7 @@ cursor: pointer;
   position: relative;
   
   opacity: ${(props) => (props.isToday === 'week' ? 1 : 0.5  )};
-    font-size: 30px;
+    font-size: 24px;
  
   z-index: 999;
   font-family: 'Felix';
@@ -112,6 +112,32 @@ const TodayButton = styled.div`
     font-family: 'Bison';
     transform: translate(0px, 5px);
   }
+`
+const EnvButton = styled.div`
+  color: white;
+ width: 60px;
+display: flex;
+ position:absolute; user-select: none;
+ bottom: 40px;
+ border-radius: 50%;
+ 
+ 
+  display: flex;
+ right: 0;
+  padding: 0;
+ 
+   transform: translateY(2px);
+  opacity: ${(props) => (props.newUpdate === true ? 1 : 0.5  )};
+  background: ${(props) => (props.newUpdate === true ? 'red' : 'white'  )};
+ cursor: pointer;
+  z-index: 999;
+  
+`
+const Envelope = styled.img`
+height: 25px;
+width: 25px;
+position: absolute;
+fill: white;
 `
 const CartPic = styled.a`
   height: 33px;
@@ -204,6 +230,7 @@ function TickerFeed({ count,  firstName, showPic, pic, today }) {
           WEEK
         </div>
    </SwithButtons>
+   <EnvButton isToday={isToday} ><Envelope src="../static/img/envelope.svg" alt="live with lindsey community updates icon" /></EnvButton>
     </Offline>
   )
 }

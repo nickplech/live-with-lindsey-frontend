@@ -2,12 +2,6 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { PieChart, Pie, Sector } from "recharts";
 
-const data = [
-  { name: "Group A", value: 400 },
-  { name: "Group B", value: 300 },
-  { name: "Group C", value: 300 },
-  { name: "Group D", value: 200 }
-];
 
 const renderActiveShape = (props) => {
   const RADIAN = Math.PI / 180;
@@ -68,7 +62,7 @@ const renderActiveShape = (props) => {
         y={ey}
         textAnchor={textAnchor}
         fill="#333"
-      >{`PV ${value}`}</text>
+      >{`Subscribed: ${value}`}</text>
       <text
         x={ex + (cos >= 0 ? 1 : -1) * 12}
         y={ey}
@@ -76,14 +70,14 @@ const renderActiveShape = (props) => {
         textAnchor={textAnchor}
         fill="#999"
       >
-        {`(Rate ${(percent * 100).toFixed(2)}%)`}
+        {` ${percent * 100}%`}
       </text>
     </g>
   );
 };
 
-export default function PieChartComponent({theData, total, allAccess, perLive}) {
-  const [activeIndex, setActiveIndex] = useState(2)
+export default function PieChartComponent({item, total, allAccess, perLive}) {
+  const [activeIndex, setActiveIndex] = useState(0)
   const [theDataState, setTheDataState] = useState([])
   const onPieEnter = useCallback(
     (_, index) => {
@@ -92,11 +86,16 @@ export default function PieChartComponent({theData, total, allAccess, perLive}) 
     [setActiveIndex]
   );
   useEffect(() => {
-    setTheDataState(theData)
-  }, [theData])
-  console.log(total, allAccess, perLive)
+ 
+   setTheDataState([{name: 'all access users', value: allAccess.length}, {name: 'pay per live users', value:  perLive.length}])
+ 
+},[item])
+
+   console.log(theDataState)
+ 
   return (
-    <PieChart width={400} height={400}>
+    <div style={{flexFlow: 'column', textAlign: 'center'}}>
+    <PieChart width={400} height={300}>
       <Pie
         activeIndex={activeIndex}
         activeShape={renderActiveShape}
@@ -110,5 +109,7 @@ export default function PieChartComponent({theData, total, allAccess, perLive}) 
         onMouseEnter={onPieEnter}
       />
     </PieChart>
+    <h3>Total Subscribed to Live: {total}</h3>
+    </div>
   );
 }

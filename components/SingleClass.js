@@ -6,7 +6,6 @@ import { CURRENT_USER_QUERY } from './User'
 import { format } from 'date-fns'
 import { useQuery } from '@apollo/client'
 import gql from 'graphql-tag'
-
 import { motion } from 'framer-motion'
 import Footer from './Footer'
 import ClassBackground from './ClassBackground'
@@ -105,24 +104,25 @@ const Equip = styled.div`
     box-shadow: rgba(0, 0, 0, 0.16) 0px 0px 3px;
   }
 `
-
-            
-const Background = styled.div`
-  background: #ed4264;
-  padding: 20px;
-  width: 100%;
-  position: relative;
-  z-index: 900;
-  opacity: 1;
-  background: -webkit-linear-gradient(to bottom, #f8b0b0, #ffd7d4);
-  background: linear-gradient(to bottom, #f8b0b0, #ffd7d4);
-  h1 {
+const InfoBar = styled.div`
+width: 100%;
+height: 50px;
+margin: 0;
+display: flex;
+flex-flow: row;
+position: relative;
+align-items: center;
+padding:  0px;
+h1 {
     color: white;
     z-index: 1000;
+    background: rgba(30,30,30,1);
     position: relative;
     font-family: 'Bison';
     letter-spacing: 4px;
-    font-size: 32px;
+    font-size: 22px;
+    padding: 5px ;
+    width: 100%;
     margin: 0;
     line-height: 25px;
   }
@@ -130,7 +130,7 @@ const Background = styled.div`
     width: 30px;
     align-self: center;
     fill: #ad7d52;
-    transform: translate(15px, 6px);
+    
   }
   .card__time {
     opacity: 0.8;
@@ -143,7 +143,7 @@ const Background = styled.div`
     letter-spacing: 1px;
     text-transform: uppercase;
     align-self: center;
-    transform: translate(15px, 0px);
+     
   }
   .card__clock-info {
     display: flex;
@@ -152,16 +152,29 @@ const Background = styled.div`
     line-height: 25px;
   }
   h2 {
-    color: white;
+    color: slategrey;
     opacity: 1;
     z-index: 20000;
     position: relative;
     font-family: 'Bison';
     margin: 0;
     letter-spacing: 4px;
-    border-bottom: 3px solid white;
+    border-bottom: 3px solid slategrey;
     font-size: 22px;
   }
+`
+            
+const Background = styled.div`
+  background: #ed4264;
+ padding: 0;
+ margin: 0;
+  width: 100%;
+  position: relative;
+  z-index: 900;
+  opacity: 1;
+  background: -webkit-linear-gradient(to bottom, white, #ffd7d4);
+  background: linear-gradient(to bottom, white, #ffd7d4);
+ 
   .live {
     color: white;
     background: rgba(240, 20, 20, 0.7);
@@ -176,9 +189,12 @@ const Background = styled.div`
     letter-spacing: 4px;
     transition: 0.2s;
   }
+  svg {
+    background: black;
+  }
 `
 const Description = styled.h4`
-  color: white;
+  color: slategrey;
   position: relative;
   z-index: 20000;
   margin: 0;
@@ -310,18 +326,20 @@ console.log(item.date)
       />
 
       <Background>
+        <InfoBar>
         <div className="card__clock-info">
           {' '}
-          <h1>{item.reason.name} -</h1>
-          <svg
+          <div><h1>{item.reason.name} -</h1>  <svg
             className="card__clock"
             style={{ fill: '#fff' }}
             viewBox="0 0 30 30"
           >
             <path d="M12,20A7,7 0 0,1 5,13A7,7 0 0,1 12,6A7,7 0 0,1 19,13A7,7 0 0,1 12,20M19.03,7.39L20.45,5.97C20,5.46 19.55,5 19.04,4.56L17.62,6C16.07,4.74 14.12,4 12,4A9,9 0 0,0 3,13A9,9 0 0,0 12,22C17,22 21,17.97 21,13C21,10.88 20.26,8.93 19.03,7.39M11,14H13V8H11M15,1H9V3H15V1Z" />
-          </svg>{' '}
-          <span className="card__time"> {item.reason.classLength}</span>
+          </svg> {' '}
+          <span className="card__time"> {item.reason.classLength}</span></div>
+         
         </div>
+        </InfoBar>
         <h2>
           <span className="live">LIVE</span>
           {format(new Date(item.date), 'eeee | MMMM dd') +
@@ -342,7 +360,7 @@ console.log(item.date)
         >
           {' '}
           <EquipmentList>
-            <p className="title-equip">Required Equipment:</p>
+            <p className="title-equip"> Equipment:</p>
             <ul>
               {item.equipment.map((equip) => {
                 return (

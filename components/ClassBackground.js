@@ -26,7 +26,6 @@ const Title = styled.img`
 `
 
 const BackgroundPic = styled.img`
- 
 //background: url('../static/img/classbackgrounds/backsplashfinal/${props => props.name}.jpg') center center no-repeat;
 object-fit: cover;
 object-position: bottom;
@@ -35,11 +34,10 @@ width: 100%;
 position: relative;
 `
 function ClassBackground(props) {
- 
   const cleanName = props.name.toLowerCase().replace(/\s/g, '')
   return (
     <Background>
-            <ShareButtons classId={props.classId}/>
+      <ShareButtons classId={props.classId}/>
       <VideoPlayer name={cleanName}  />
       <Title src="../static/img/countdown2live.svg" alt="countdown to live" />
       <CountDownTimer status={props.status} date={props.date} />
@@ -56,7 +54,6 @@ const Overlay = styled.div`
     height: 100%;
     width: 100%;
     display: flex;
-
     background: rgba(0, 0, 0, 0.6);
     position: absolute;
     z-index: 1000;
@@ -66,11 +63,7 @@ const Overlay = styled.div`
 
     return (
       <Overlay style={{ display: 'flex', width: '100%', height: '100%', position: 'relative' }}>
-        
           <BackgroundPic src={`../static/img/classbackgrounds/backsplashfinal/${name}.jpg`}></BackgroundPic>
-         
-      
-     
       </Overlay>
     )
   }

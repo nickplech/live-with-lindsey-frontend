@@ -45,7 +45,7 @@ const Wrap = styled.div`
     margin: 0 auto;
     background-color: lightgrey;
     cursor: pointer;
-    background: url(${(props) => props.thumbnail}) center center no-repeat;
+    background: ${props => props.thumbnail ? `url(${props.thumbnail}) center center no-repeat` : 'lightgrey'};
     background-size: cover;
     display: flex;
     justify-content: center;
@@ -58,11 +58,8 @@ const Wrap = styled.div`
     color: white;
     box-shadow: 0px 5px 5px -3px rgba(20, 20, 20, 0.5);
     transition: 0.3s;
-    border: ${(props) =>
-      props.thumbnail === null ? '2px dashed grey' : 'none'};
-    &:hover {
-      transform: scale(1.01);
-    }
+     
+  }
     .topper {
       width: 90%;
       border-top: ${(props) =>
@@ -71,26 +68,14 @@ const Wrap = styled.div`
       text-align: center;
       justify-content: center;
       margin-top: 10px;
-      padding-top: 10px;
+      padding-top: 10px;   
     }
-    .title {
-      font-family: 'Bison';
-      letter-spacing: 2px;
-      font-size: 26px;
-      margin: 0px;
-   
-    padding: 0 5px;
-      line-height: 26px;
-      color: white;
-      text-align: center;
-      background: ${(props) => props.theme.second};
-    }
-  }
+  
   p {
     text-align: center;
     margin: 2px;
     line-height: 18px;
-    margin-top: 5px;
+    margin-top: 5px;transform: skewX(-6deg);
     outline: none;
     color: rgba(30, 30, 30, 1);
     cursor: pointer;
@@ -106,11 +91,11 @@ const Wrap = styled.div`
 `
 const DateBlock = styled.div`
   display: flex;
-  flex-flow: row;
-  width: 100%;
+  flex-flow: column;
+ 
   font-family: 'Bison';
-  letter-spacing: 3px;
-  margin: 0 auto;
+  letter-spacing: 3px;      transform: rotate(-6deg) skew(-12deg);
+  margin: 15px auto 0;
   p {
     margin: 2px 0;
 
@@ -127,6 +112,18 @@ const DateBlock = styled.div`
     line-height: 22px;
     padding:  5px;
   }
+      .title {
+      font-family: 'Bison';
+      letter-spacing: 2px;
+      font-size: 26px;
+      margin: 0px auto 8px;
+
+    padding: 0 5px;
+      line-height: 26px;
+      color: white;
+      text-align: center;
+      background: ${(props) => props.theme.second};
+    }
 `
 const Mode = styled.div`
   box-shadow: 0px 10px 5px -3px rgba(20, 20, 20, 0.2);
@@ -425,8 +422,8 @@ const updateImage = () => {
               </>
             ) : null}
             <div className="topper">
-              <span className="title">{item.reason.name}</span>
-              <DateBlock>
+                 <DateBlock><div className="title">{item.reason.name}</div>
+           
                 <div className="day">
                   {format(new Date(item.date), 'EE M/dd @ h:mm aa')}
                 </div>

@@ -154,8 +154,8 @@ userId: $userId
       user {     
         id
         firstName
-         lastName
-         businessName
+        lastName
+        businessName
     }
       private 
     }
@@ -187,24 +187,15 @@ const nameOptions = [{value: '15 Minutes', label: '15 Minute Session'},{value: '
 function CreatePrivateClass() {
    const [nameState, setNameState] = useState('')
   const [priceState, setPriceState] = useState('')
-  const [usernameState, setUserNameState] = useState('')
-
   const [selectedOption, setSelectedOption] = useState('')
-
-
-
-
+  const [userNameState, setUserNameState] = useState('')
   function handleSelectedOption(e) {
     setSelectedOption(e)
     setUserNameState(e.label)
   }
   
- 
-
-
   const { inputs, handleChange } = useForm({
     date: new Date(),
-
   })
  
   const [createNewPrivate, { loading, error }] = useMutation(

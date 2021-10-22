@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useState, useEffect} from 'react'
 import GetChats from './ChatBox'
 import PhotoBoothModal from './PhotoBooth'
 import styled from 'styled-components'
@@ -59,10 +59,31 @@ const Wrapper = styled.div`
     width: 100%;
     max-width: 500px;
   }
+  .thetabs {
+    margin: 0 10px;
+  }
+  .tab {
+    height: 30px;
+    color: slategrey;
+    letter-spacing: 2px;
+    margin: 0 5px;
+    padding: 4px 8px;
+    cursor: pointer;
+    border-radius: 5px  ;
+    background: lightgrey;
+    &:active,:focus {
+      background: ${props => props.theme.second};
+
+    }
+  }
+  .isSelected {
+    background: ${props => props.theme.second};
+ 
+  }
   .chatframe {
     position: relative;
     width: 95%;
-    height: 93%;
+    height: 90%;
     transform: translateY(20px);
     grid-row: 1/3;
     margin: 0 auto;
@@ -94,55 +115,18 @@ const TheData = styled.div`
 `
 const RegChart = styled.div`
   display: flex;
-  width: 95%;
+  width: 90%;
+  height: 200px;
   justify-content: space-evenly;
   align-items: center;
   flex-flow: row;
   margin: 0 auto;
-  .thediv {
-    margin: 0 20px;
-    text-align: center;
-    
-  }
-  p {
-    margin: 0 auto;
-    letter-spacing: 2px;
-    line-height: 12px;
-    margin-bottom: 10px;
-
-  }
-  .one {
-    display: flex;
-    background: rgba(129,204,255, 1);
-    width: 70px;
-    height: 70px;
-    justify-content: center;
-    align-items: center;
-    margin: 10px auto;
-    font-size: 30px;
-  }
-  .two {
-    background: rgba(142,229,255, 1);
-    display: flex;
-    font-size: 30px;
-    width: 70px;
-    height: 70px;
-    justify-content: center;
-    align-items: center;
-    margin: 10px auto;
-  }
-  .three {
-    display: flex;
-    font-size: 30px;
-width: 70px;
-height: 70px;
-justify-content: center;
-align-items: center;
-margin: 10px auto;
-    background: rgba(148,242,255,1);
-  }
+ 
+ 
 `
+const listButtons = ['chat', 'currently viewing', 'subscribed']
 function ControlRoom({ adminId }) {
+  const [isActive, setIsActive] = useState('chat')
   const {
     imgSrc,
     triggerTime,
@@ -151,23 +135,25 @@ function ControlRoom({ adminId }) {
     setTriggerTime,
     handleClick
   } = useToast()
+
   const { data, loading, error } = useQuery(STREAM_QUERY, {
     variables: { id: adminId },
   })
+
+  
   if (loading) return <p>loading</p>
   if (error) return <Error error={error} />
   if (!data) return null
-  const item = data.Item
-
+  const item =   data.Item
   const thumbnail = item.image ? item.image.publicUrlTransformed : null
-  const userCount = item.user
+  const userCount = item.user.length
   const userCountAllAccess = item.user.filter((u) => {
     return u.subscription === 'ALLACCESS'
   })
   const userCountPerLive = item.user.filter((u) => {
     return u.subscription === 'PAYPERLIVE'
   })
-const theData = [{name: 'total subscribed', value: userCount}, {name: 'total all access', value: userCountAllAccess}, {name: 'total pay per live', value: userCountPerLive}]
+
   return (
     <Wrapper>
       <TheData style={{ marginLeft: ' 0px' }}>
@@ -181,7 +167,7 @@ const theData = [{name: 'total subscribed', value: userCount}, {name: 'total all
        
         
         <RegChart>
-          <PieChartComponent total={userCount} allAccess={userCountAllAccess} perLive={userCountPerLive} theData={theData} />
+          <PieChartComponent  item={item} total={userCount} allAccess={userCountAllAccess} perLive={userCountPerLive}  />
   
         </RegChart>
       </TheData>
@@ -199,8 +185,11 @@ const theData = [{name: 'total subscribed', value: userCount}, {name: 'total all
         />
       </div>
       <div className="chatframe">
-        <GetChats adminId={adminId} open={true} />
-      </div>
+              <GetChats adminId={adminId} open={true} />
+  
+      </div><div className="thetabs">{listButtons.map(butt => {
+        return <span onClick={() => setIsActive(butt)} key={butt} className={`${butt === isActive ? 'isSelected' : null} tab`}>{butt}</span> 
+      })}</div>
     </Wrapper>
   )
 }

@@ -156,15 +156,15 @@ const SingleItemStyles = styled.div`
 
 `
 
-const SINGLE_ITEM_QUERY = gql`
-  query SINGLE_ITEM_QUERY($id: ID!) {
-    VideoOnDemand(where: { id: $id }) {
+const VOD_AUTH_QUERY = gql`
+  query VOD_AUTH_QUERY($id: ID!) {
+    vodViewingAuth(  id: $id ) {
       id
       name
-      date
+       
       description
       url
-  
+      thumbnailUrl
         equipment {
           id
           description
@@ -184,7 +184,7 @@ const SINGLE_ITEM_QUERY = gql`
     }
   }
 `
-
+ 
 const GoBacks = styled.div`
   display: flex;
   grid-row: 1;
@@ -255,10 +255,10 @@ line-height: 16px;
 const EquipmentList = styled.div`
   display: flex;
 grid-column: 2;
-grid-row: 2;
+grid-row: 2; margin-left: 0px;
 position: relative;
 transform: translateY(250px);
-  flex-flow: column;
+  flex-flow: row;
   .noequip {
     font-size: 18px;
     color: slategray;
@@ -277,27 +277,40 @@ transform: translateY(250px);
     color: rgba(30, 30, 30, 0.8);
     font-size: 20px;
   }
-  ul {
-    padding: 0;
-   margin-left: 15px;
-  }
+ 
   
   p {
     margin: 3px;
   }
 `
-const PopUp = styled.li`
-  cursor: alias ;
-    margin: 0px;
+const PopUp = styled.span`
+  cursor: pointer ;
+    margin: 10px 10px ;
+ display: flex; 
+ flex-flow: row;
+ width: 100%;
+    justify-content: center;
+    align-items: center;
     line-height: 26px;
-    min-width: 100px;
-    max-width: 200px;
+ border-radius: 50%;
+ background: ${props => props.theme.second};
+ width: 40px;
+ height: 40px;
     font-size: 21px;
     font-family: 'Bison';
     list-style: none;
     color: white;
 
-    background: #f8b0b0;
+  -moz-box-shadow: 
+    1px 1px 5px rgba(0, 0, 0, 0.2), 
+    inset 1px 1px 15px rgba(100, 100, 100, 0.15);
+  -webkit-box-shadow: 
+    1px 1px 5px rgba(0, 0, 0, 0.2),
+    inset 1px 1px 15px rgba(100, 100, 100, 0.15);
+  box-shadow: 
+    1px 1px 5px rgba(0, 0, 0, 0.2),
+    inset 1px 1px 15px rgba(100, 100, 100, 0.15);
+  
     transition: 0.3s;
     &:hover,
     &:focus,
@@ -317,8 +330,7 @@ display: none;
   font-family: 'Bison';
   flex-flow: column;
   justify-content: center;
-  box-shadow: 0 2px 1px rgba(0, 0, 0, 0.09), 0 4px 2px rgba(0, 0, 0, 0.09),
-      0 8px 4px rgba(0, 0, 0, 0.09);
+border: 1px solid lightgray;
   h4 {
     margin: 0;
     font-size: 24px;  
@@ -373,12 +385,12 @@ function SingleItem({ id }) {
     {
       refetchQueries: [
         {
-          query: SINGLE_ITEM_QUERY,
+          query: VOD_AUTH_QUERY,
           variables: id,
         },
         {
           query: ALL_FAVORITES_QUERY,
-          variables: { id: me.id },
+          variables: { id: me && me.id },
         },
       ],
     },
@@ -390,42 +402,43 @@ function SingleItem({ id }) {
     {
       refetchQueries: [
         {
-          query: SINGLE_ITEM_QUERY,
+          query: VOD_AUTH_QUERY,
           variables: id,
         },
         {
           query: ALL_FAVORITES_QUERY,
-          variables: { id: me.id },
+          variables: { id: me && me.id },
         },
       ],
     },
   )
 
-  const { loading, error, data } = useQuery(SINGLE_ITEM_QUERY, {
+  const { loading, error, data } = useQuery(VOD_AUTH_QUERY, {
     variables: { id },
   })
 
-  useEffect(() => {
-    setFav(me.id)
-  }, [fav])
+
+useEffect(() => {
+    setFav(me && me.id)
+  }, [fav, me])
 
   const addToFav = debounce(addToFavoritesButChill, 500)
   function addToFavoritesButChill() {
     updateVideoOnDemandMake()
-    toast(`${VideoOnDemand.name} added to Favorites!`)
+    toast(`${data.vodViewingAuth.name} added to Favorites!`)
   }
 
   const removeFromFavoritesButChill = debounce(updateVideoOnDemandTake, 350)
 
   if (error) return <Error error={error} />
   if (loading) return <Loader />
-  if (!data.VideoOnDemand) return <p>No Item Found for {id}</p>
-  const { VideoOnDemand } = data
-  const url = VideoOnDemand.url
+  console.log(data)
+ 
+  const url = data.vodViewingAuth && data.vodViewingAuth.url
   const isAFav =
-    VideoOnDemand &&
-    VideoOnDemand.isFavorite.some((person) => {
-      const hasUser = person.id === me.id
+    data.vodViewingAuth &&
+    data.vodViewingAuth.isFavorite.some((person) => {
+      const hasUser = me && person.id === me.id
       if (hasUser) {
         return true
       }
@@ -434,7 +447,7 @@ function SingleItem({ id }) {
   return (
     <>
       <Head>
-        <title>Live with Lindsey | {VideoOnDemand.name}</title>
+        <title>Live with Lindsey | {data.vodViewingAuth && data.vodViewingAuth.name}</title>
       </Head>{' '}
       <Wrap>
         <Background />
@@ -479,28 +492,26 @@ function SingleItem({ id }) {
   
         </SingleItemStyles>
         <Tags>   <div>TAGS:</div> 
-            {VideoOnDemand.tags &&
-              VideoOnDemand.tags.map((tag) => {
+            {data.vodViewingAuth &&
+              data.vodViewingAuth.tags.map((tag) => {
                 return <span key={tag.name}>{tag.name}</span>
               })}
           </Tags>
 
         
         </div>
-        <Recommended id={VideoOnDemand.id} tags={VideoOnDemand.tags} />
-        <Details removeFromFavoritesButChill={removeFromFavoritesButChill} addToFav={addToFav} isAFav={isAFav} fav={fav} me={me} videoOnDemand={VideoOnDemand}>
+        <Recommended id={data.vodViewingAuth && data.vodViewingAuth.id} tags={data.vodViewingAuth && data.vodViewingAuth.tags} />
+        <Details removeFromFavoritesButChill={removeFromFavoritesButChill} addToFav={addToFav} isAFav={isAFav} fav={fav} me={me} vodViewingAuth={data.vodViewingAuth && data.vodViewingAuth}>
          
         </Details>
         <EquipmentList>
-            <p className="title-equip">Required Equipment:</p>
-           
-            <ul>
-              { VideoOnDemand.equipment.length === 0 ? <p className="noequip">No Equipment For this Workout</p> : 
-              VideoOnDemand.equipment.map((equip) => {
+            
+              {data.vodViewingAuth &&  data.vodViewingAuth.equipment.length === 0 ? <p className="noequip">No Equipment For this Workout</p> : 
+              data.vodViewingAuth && data.vodViewingAuth.equipment.map((equip) => {
                   
                 return (
                   <PopUp key={equip.name}>
-                <p>{equip.name}</p>
+             <img style={{borderRadius: '50%',    boxShadow: '0 2px 1px rgba(0, 0, 0, 0.09)',  border: '2px solid lightgray', height: '45px', width: '45px'  }} src={equip.image.publicUrlTransformed} alt={equip.name} /> 
                       <Bubble>
                         <div style={{ display: 'inline-flex' }}>
                           {' '}
@@ -514,7 +525,7 @@ function SingleItem({ id }) {
                  
                 )
               })}
-            </ul>
+           
           </EquipmentList>
       </Wrap>
     </>
@@ -522,4 +533,4 @@ function SingleItem({ id }) {
 }
 
 export default SingleItem
-export { SINGLE_ITEM_QUERY, VOD_MUTATION, REMOVE_MUTATION }
+export { VOD_AUTH_QUERY, VOD_MUTATION, REMOVE_MUTATION }

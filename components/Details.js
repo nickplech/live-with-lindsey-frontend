@@ -82,7 +82,7 @@ const Grid = styled.div`
     }
   
  `
-function Details( { addToFav, removeFromFavoritesButChill, isAFav, videoOnDemand, me} ){
+function Details( { addToFav, removeFromFavoritesButChill, isAFav, vodViewingAuth, me} ){
     const tiltRef = useRef()
  
    useEffect(() => {
@@ -110,15 +110,15 @@ function Details( { addToFav, removeFromFavoritesButChill, isAFav, videoOnDemand
      
      >
     <Grid>
- <h2>{videoOnDemand.name}</h2> 
+ <h2>{vodViewingAuth && vodViewingAuth.name}</h2> 
            
-         {videoOnDemand.date && (
+         {/* {vodViewingAuth && (
          <p className="datecolorchange">
-               Aired On{' '}{format(new Date(videoOnDemand.date), 'MMM dd, yyyy')}
+               Aired On{' '}{format(new Date(vodViewingAuth && vodViewingAuth.date), 'MMM dd, yyyy')}
               </p> 
               )
-         }
-           <p className="datecolorchange">{videoOnDemand.description}</p>
+         } */}
+           <p className="datecolorchange">{vodViewingAuth && vodViewingAuth.description}</p>
                {!me ? null : (
                     <div className="extras">  
             <Heart 

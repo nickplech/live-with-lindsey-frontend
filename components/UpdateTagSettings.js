@@ -101,11 +101,12 @@ function UpdateTagSettings() {
           await clearForm()
         }}
       >
+   
+        <fieldset disabled={loading} aria-busy={loading}>
         <Error error={error} />
         {!error && !loading && called && (
           <Submitted>New Tag Created SuccessFully!</Submitted>
         )}
-        <fieldset disabled={loading} aria-busy={loading}>
           <>
             <Flex>
               <Types> Searchable Tags</Types>

@@ -2,8 +2,8 @@ import React, {useState} from 'react'
 import gql from 'graphql-tag'
 import Router from 'next/router'
 import { useMutation } from '@apollo/client'
-
-import { CURRENT_USER_QUERY, useUser } from './User'
+import {useUser} from './User'
+import { CURRENT_USER_QUERY } from './User'
 
 import styled, { keyframes } from 'styled-components'
 const loader = keyframes`
@@ -59,7 +59,7 @@ margin-left: -3px;
 
 `
 const Pic = styled.div`
- z-index: 9000;
+ z-index: 2000;
   position: absolute;
   max-width: 600px;
   width: 90%;
@@ -145,8 +145,8 @@ img {
 
 `
 
-function AddToCart({id, inCart, ownsItem, theIndex}) {
-  const me = useUser()
+function AddToCart({id,item}) {
+const me = useUser()
   const [spin, setSpin] = useState(false)
   const handleSetSpin = () => {
       setSpin(true)
@@ -175,19 +175,18 @@ const proceedToCheckout = async () => {
 
     handleSetSpin()
     await addToCart()
-    // await openToast()
+
   }
-
-const itemInCart = inCart.includes(id)
-const itemIsOwned = ownsItem.map(user => {
-  if(me) {
-   return user && user.id === me.id ? true : false 
-
-}
-  return null
-})
-
-  if(itemIsOwned[theIndex] === true) return (
+  const itemOwned = item.user.find((theUser) => {
+    return theUser.id === me.id
+  })
+  const cart = me && me.cart.map((cartItem) => {
+             
+    return cartItem && cartItem.item.id 
+   })
+const itemInCart = cart.includes(id)
+ 
+ if (itemOwned) return (
    <Pic pic="../static/img/check.svg">
             <div  className="ribbon ribbon-top-left" ><span>Enrolled</span></div>
           </Pic>

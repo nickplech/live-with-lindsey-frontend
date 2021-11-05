@@ -5,18 +5,19 @@ import gql from 'graphql-tag'
 import Slider, {createSliderWithTooltip, SliderTooltip} from 'rc-slider';
 import 'rc-slider/assets/index.css';
 import "react-datepicker/dist/react-datepicker.css";
-import { startOfWeek, formatISO, format } from 'date-fns'
+import { startOfWeek, formatISO, format,eachDayOfInterval, endOfWeek } from 'date-fns'
 import { useMutation, useQuery } from '@apollo/client'
 import SickButton from './styles/SickButton'
 import Error from './ErrorMessage'
-import DatePicker from 'react-datepicker'
+ 
+ 
 import { STREAMS_ADMIN_QUERY } from './AdminCalendarAlt'
 import { STREAMS_QUERY } from './DashboardComponent'
 import { REASONS_QUERY } from './UpdateScheduleSettings'
 import MultiSelectEquipment from './MultiSelectEquipment'
 import MultiTag from './MultiTag'
 import Select from 'react-select'
-import Popup from 'reactjs-popup'
+ 
 import styled from 'styled-components'
 
 const CREATE_CLASS_MUTATION = gql`
@@ -43,83 +44,31 @@ const CREATE_CLASS_MUTATION = gql`
   }
 `
 
-const Background = styled.div`
-  background: rgba(20, 20, 20, 0.8);
-  height: 100%;
-  top: 0;
-  left: 0;
-
-  width: 100%;
-  position: fixed;
-  z-index: 10000;
-`
-const Wrap = styled.div`
-  display: flex;
-  position: relative;
-  margin: 10px;
-  .shell {
-    width: 100%;
-    cursor: pointer;
-    background: ${(props) => props.theme.second};
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-flow: column;
-    margin: 0px;
-    padding: 20px;
-    border-radius: 5px;
-    color: white;
-    box-shadow: 0px 5px 5px -3px rgba(20, 20, 20, 0.5);
-    transition: 0.3s;
-    &:hover {
-      transform: scale(1.01);
-    }
-  }
-  p {
-    text-align: center;
-    margin: 2px;
-    line-height: 18px;
-    margin-top: 5px;
-    outline: none;
-    cursor: pointer;
-    font-family: 'Bison';
-    letter-spacing: 3px;
-    font-size: 20px;
-  }
-  img {
-    color: white;
-    height: 30px;
-    width: 30px;
-  }
-`
+ 
+ 
 
 const Mode = styled.div`
   box-shadow: 0px 10px 5px -3px rgba(20, 20, 20, 0.2);
   z-index: 13000;
   position: relative;
   font-size: 12px;
-  display: flex;
 
-  height: 500px;
+grid-column: 1/3;
+  height: 100%;
   padding: 10px;
   font-family: 'Bison';
   letter-spacing: 2px;
   font-size: 17px;
-width:60vw;
+width:100%;
+max-width: 1200px;
+
+  display: flex;
   min-width: 380px;
   border-radius: 15px;
   margin: 0 auto;
   background: white;
 
-  .scroller {
-    position: absolute;
-    transform: translateY(5px);
-    height: 90%;
-    width: 98%;
-    overflow-x: hidden;
-    overflow-y: scroll;
-    margin: 0 auto;
-  }
+ 
   .header {
     width: 100%;
     position: relative;
@@ -134,34 +83,7 @@ width:60vw;
 
     position: relative;
   }
-.foo {
-  z-index: 99000;
- color: white;
-font-size: 28px;
-}
-  .actions {
-    width: 100%;
-    padding: 10px 5px;
-    margin: auto;
-    text-align: center;
-  }
-  .close {
-    cursor: pointer;
-    position: fixed;
-    z-index: 999999;
-    display: block;
-    outline: none;
-    padding: 2px 2px;
-    border: none;
-    line-height: 20px;
-    right: 10px;
-    top: 10px;
-    height: 30px;
-    width: 30px;
-    font-size: 24px;
-    background: #f8b0b0;
-    border-radius: 50%;
-  }
+ 
 `
 const SignUpTitle = styled.h3`
   font-family: 'Bison';
@@ -170,17 +92,7 @@ const SignUpTitle = styled.h3`
   margin: 0 0 26px 0px;
   color: ${(props) => props.theme.second};
 `
-const Pricing = styled.div`
-  display: flex; 
-  flex-flow: row wrap;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-  margin: 0 auto;
-  width: 100%;
-  color: white;
  
-`
 const ShowDate = styled.h4`
   display: flex;
   justify-content: center;
@@ -218,10 +130,52 @@ width: 100%;
 
 }
 `
-const CalendarContainer = styled.div`
-width: 400px;
+const Schedule = styled.div`
+ 
+/* transform: translate(190px, 560px); */
+text-transform: uppercase;
+z-index: 0;
 display: flex;
-
+justify-content: center;
+width: 100%;
+position: relative;
+ 
+ 
+ .dateBox {
+   border: 2px solid #f8b0b0;
+   color: #fff;
+   height: 65px;
+   width: 70px;
+   border-radius: 8px;
+   justify-content: space-between;
+   align-items: center;
+   text-align: center;
+ }
+ ul {
+   transition: .1s;
+   list-style: none;display: flex;flex-flow: column;padding: 0; margin: 0 10px;
+   &:hover {
+     transform: scale(1.02);
+   }
+ }
+ li {
+   margin: 0 auto;
+   padding: 0;
+   line-height: 16px; color: #f8b0b0;
+   &:nth-of-type(1) {
+margin-bottom: 3px;
+font-size: 18px;color: white;
+background: #f8b0b0;border-radius: 5px 5px 0 0 ;
+width: 100%;
+padding: 2px 0;
+   }
+   &:nth-of-type(2) {
+margin-bottom: 2px;
+   }
+   &:nth-of-type(3) {
+margin-bottom: 2px;
+   }
+ }
 `
 const SliderWithTooltip = createSliderWithTooltip(Slider);
 const { Handle } = SliderWithTooltip;
@@ -246,8 +200,9 @@ function percentFormatter(v) {
 }
  
 const wrapperStyle = { width:'90%', margin: '50px auto'};
-function ModalFrame() {
-  const [startDate, setStartDate] = useState(new Date())
+function ClassScheduler() {
+ 
+  const [sliderValue, setSliderValue] = React.useState('1000')
   const [equipmentId, setEquipmentSearch] = useState('')
   const [selectedDate, setSelectedDate] = useState('')
   const [tagsId, setTagsSearch] = useState('')
@@ -255,38 +210,33 @@ function ModalFrame() {
   const [selectedTags, setSelectedTags] = useState([])
   const [priceState, setPriceState] = useState('1000')
   const [selectedOption, setSelectedOption] = useState('')
-  const [sliderValue, setSliderValue] = useState(15)
-console.log(startDate)
+  const [theWeekList, setTheWeekList] = useState([])
+  const weekStarts = startOfWeek(new Date(), {
+    weekStartsOn: 0,
+  })
+
+  const weekEnds = endOfWeek(new Date())
+  const weekStart = startOfWeek(new Date(), {weekStartsOn: 1})
+  const IsoWeek = formatISO(weekStart)
+  const arrayOfDays = eachDayOfInterval({
+    start: new Date(weekStarts),
+    end: new Date(weekEnds)
+  })
+  
+console.log(arrayOfDays)
   const handleChangeDate = (date) => {
     console.log(date)
     setSelectedDate(date)
   }
  
-const handleDate = (date) => {
  
-  setStartDate(date)
-}
   const onSliderChange = v => {
 
     setSliderValue(v)
   };
-  // const onSliderAfterChange = v => {
 
-  //   const thePrice = v + '00'
-  //   setPriceState(thePrice)
-  //   setIsSelected('$' + v)
-  // }
   const submitEquipment = selectedEquipment.map((str, i) => ({ id: str }))
-  const MyContainer = ({ className, children }) => {
-    return (
- 
-        <CalendarContainer >
-         
-          <div >{children}</div>
-        </CalendarContainer>
- 
-    );
-  };
+
   function handleSelectedOption(e) {
     setSelectedOption(e)
   }
@@ -318,16 +268,14 @@ const handleDate = (date) => {
     date: new Date(),
     reason: '',
   })
-  const weekStarts = startOfWeek(new Date(), {
-    weekStartsOn: 0,
-  })
+  
 
  
   const [createNewClass, { loading, error }] = useMutation(
     CREATE_CLASS_MUTATION,
     {
       variables: {
-        date: selectedDate.length > 2 && formatISO(new Date(selectedDate)),
+        date: selectedDate && formatISO(new Date(selectedDate)),
         reason: selectedOption && selectedOption.value,
         price: parseInt(priceState),
         name: selectedOption && selectedOption.label,
@@ -347,7 +295,7 @@ const handleDate = (date) => {
       ],
     },
   )
-
+ 
   const { data } = useQuery(REASONS_QUERY)
   if (!data) return null
   const optionList = data.allReasons.map((reason, i) => {
@@ -360,32 +308,19 @@ const handleDate = (date) => {
   const needsDateTime = inputs.date && inputs.date !== null
   const tooManyTags = selectedTags.length > 10
   return (
-    <Wrap>
-      <Popup
-        trigger={
-          <div className="shell">
-            {' '}
-            <img src="../static/img/plus.svg" />
-            <p>schedule livestream</p>
-          </div>
-        }
-        modal
-        nested
-      >
-        {(close) => (
-          <>
-            <Background />
+ 
+         
+   
             <Mode>
-              {' '}
-              <button className="close" onClick={close}>
-                &times;
-              </button>
-              <div className="scroller">
-                <div className="header">
-                  <SignUpTitle> Class Scheduler</SignUpTitle>
-                </div>
+            
+           
+               
 
                 <div className="content">
+
+                <div className="header">
+                  <SignUpTitle> Live Stream Scheduler</SignUpTitle>
+                </div>
                   <form
                
                     onSubmit={async (e) => {
@@ -398,20 +333,42 @@ const handleDate = (date) => {
                   >
                     <Error error={error} />
                     <label htmlFor="date">
-                      SELECT DATE &amp; TIME
-                      <CenterDate>
-             
-                      <DatePicker
-required
-calendarContainer={MyContainer}
-calendarClassName="kali"
-      showTimeSelect
+                    <p style={{  margin: '0 auto',
+ 
 
-      selected={startDate}
-      onChange={(date) => handleDate(date)}
-      onSelect={date => handleChangeDate(date)}
-      dateFormat="MMMM d, yyyy h:mm aa"
-    /><ShowDate>{startDate && format(new Date(startDate), 'MMMM d, yyyy h:mm aa')}</ShowDate></CenterDate>
+ fontSize: '26px',
+ background: '#f8b0b0', padding: '5px 0', lineHeight: '18px', textAlign: 'center',color: 'white', marginBottom: '10px'}}>
+          
+             {`${
+               format(weekStarts, 'M/dd') +
+               ' ' +
+               '-' +
+               ' ' +
+               format(weekEnds, 'M/dd')
+             }`}
+           </p>
+                      
+  
+    <div
+      style={{
+       
+       
+        display: "flex",
+     flexFlow: 'column',
+     alignItems: 'center'
+       
+      }}
+    >
+       <Schedule>
+         {arrayOfDays.map(day => {
+           return <ul className="dateBox"><li>{format(day, 'eee')}</li><li> {format(day, 'MMM')}</li> <li> {format(day, 'dd')}</li></ul>
+         })}
+            
+          </Schedule>  
+    </div>
+
+    {/* <ShowDate>{selectedDate && format(new Date(selectedDate), 'MMMM d, yyyy h:mm aa')}</ShowDate></CenterDate> */}
+
                     </label>
                     <p
                       style={{
@@ -512,14 +469,11 @@ calendarClassName="kali"
                     </SickButton>
                   </form>
                 </div>
-              </div>
+          
             </Mode>
-          </>
-        )}
-      </Popup>
-    </Wrap>
+  
   )
 }
 
-export default ModalFrame
+export default ClassScheduler
 export { CREATE_CLASS_MUTATION }

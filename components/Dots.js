@@ -7,6 +7,7 @@ const Wrap = styled(motion.div)`
   flex-flow: row;
   width: 100%;
   position: relative;
+  transform: translate(25px, 25px);
   div {
     margin-top: 10px;
     background: ${(props) => props.theme.fourth};

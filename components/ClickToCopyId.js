@@ -27,7 +27,7 @@ export default function ClickToCopyId({ id }) {
   }, [copyText])
 
   return (
-     <div style={{display: 'flex', width: '100%', justifyContent: 'center', margin: ' 0px auto 0px auto', transform: 'translateY(-25px)'}}>
+     <div style={{display: 'flex',  background: 'white', borderRadius: '10px',justifyContent: 'center', margin: ' 0px auto 0px auto', transform: 'translateY(15px)', lineHeight: '18px', padding: '3px'}}>
       <div
         style={{
           display: 'inline-flex',
@@ -39,14 +39,14 @@ export default function ClickToCopyId({ id }) {
         }}
       >
         <HelpModal />{' '}
-        <span style={{marginLeft:'6px', marginRight: '5px'}} >
+        <span style={{marginLeft:'6px', marginRight: '5px', lineHeight: '18px'}} >
           {' '}
           StreamId:
         </span>
      
       <span
         style={{
-        transform: 'translateY(-3px)',
+ 
           cursor: 'pointer',
           color: 'grey',
           fontSize: '22px',

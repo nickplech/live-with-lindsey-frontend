@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { useMutation, useQuery } from '@apollo/client'
 import Form3 from './styles/Form3'
 import gql from 'graphql-tag'
-import chroma from 'chroma-js'
+ 
 import Select from 'react-select'
 import Error from './ErrorMessage'
 import styled from 'styled-components'
@@ -15,7 +15,7 @@ const REASONS_QUERY = gql`
     allReasons {
       id
       name
-      color
+    
       classDescription
       classLength
     }
@@ -25,21 +25,21 @@ const CREATE_REASON_MUTATION = gql`
   mutation CREATE_REASON_MUTATION(
     $name: String!
     $classDescription: String
-    $color: String!
+    
     $classLength: String!
   ) {
     createReason(
       data: {
         name: $name
         classDescription: $classDescription
-        color: $color
+       
         classLength: $classLength
       }
     ) {
       id
       classDescription
       name
-      color
+ 
       classLength
     }
   }
@@ -91,19 +91,7 @@ const Submitted = styled.p`
   padding: 15px 15px;
   border-left: 5px solid green;
 `
-const colourOptions = [
-  { value: 'blue', label: 'Blue', color: '#0052CC' },
-  { value: 'ocean', label: 'Ocean', color: '#00B8D9' },
-  { value: 'purple', label: 'Purple', color: '#5243AA' },
-  { value: 'red', label: 'Red', color: '#FF5630' },
-  { value: 'orange', label: 'Orange', color: '#FF8B00' },
-  { value: 'yellow', label: 'Yellow', color: '#FFC400' },
-  { value: 'green', label: 'Green', color: '#36B37E' },
-  { value: 'forest', label: 'Forest', color: '#00875A' },
-  { value: 'slate', label: 'Slate', color: '#253858' },
-  { value: 'silver', label: 'Silver', color: '#666666' },
-  { value: 'black', label: 'Black', color: '#000000' },
-]
+ 
 const optionsList = [
   { value: '15 min', label: '15 min' },
   { value: '30 min', label: '30 min' },
@@ -111,49 +99,8 @@ const optionsList = [
   { value: '60 min', label: '60 min' },
 ]
 
-const dot = (color = '#ccc') => ({
-  alignItems: 'center',
-  display: 'flex',
-
-  ':before': {
-    backgroundColor: color,
-    borderRadius: 10,
-    content: '" "',
-    display: 'block',
-    marginRight: 8,
-    height: 10,
-    width: 10,
-  },
-})
-const colourStyles = {
-  control: (styles) => ({
-    ...styles,
-    backgroundColor: 'white',
-  }),
-  option: (styles, { data, isDisabled, isFocused, isSelected }) => {
-    const color = chroma(data.color)
-    return {
-      ...styles,
-      backgroundColor: isDisabled
-        ? null
-        : isSelected
-        ? data.color
-        : isFocused
-        ? color.alpha(0.1).css()
-        : null,
-      color: isDisabled
-        ? '#ccc'
-        : isSelected
-        ? chroma.contrast(color, 'white') > 2
-          ? 'white'
-          : 'black'
-        : data.color,
-    }
-  },
-  input: (styles) => ({ ...styles, ...dot() }),
-  placeholder: (styles) => ({ ...styles, ...dot() }),
-  singleValue: (styles, { data }) => ({ ...styles, ...dot(data.color) }),
-}
+ 
+ 
 
 function UpdateScheduleSettings() {
   const [selectedOption, setSelectedOption] = useState('')
@@ -164,17 +111,14 @@ function UpdateScheduleSettings() {
     setSelectedLength(e)
   }
 
-  const handleSelectedOption = (e) => {
-    console.log(e)
-    setSelectedOption(e)
-  }
+ 
 
   const { inputs, handleChange, clearForm } = useForm({
     name: '',
     classDescription: '',
   })
 
-  const needsColor = selectedOption.length < 1
+  const needsColor = inputs.name.length < 1
 
   const { data, loading } = useQuery(REASONS_QUERY)
 
@@ -184,7 +128,7 @@ function UpdateScheduleSettings() {
       variables: {
         ...inputs,
         classLength: selectedLength.value,
-        color: selectedOption.color,
+  
       },
       refetchQueries: [
         {
@@ -203,11 +147,12 @@ function UpdateScheduleSettings() {
           await clearForm()
         }}
       >
-        <Error error={error} />
+
+        <fieldset disabled={loading} aria-busy={loading}>
+                  <Error error={error} />
         {!error && !loading && called && (
           <Submitted>New Class Type Created SuccessFully!</Submitted>
         )}
-        <fieldset disabled={loading} aria-busy={loading}>
           <>
             <Flex>
               <Types>Existing Class Types:</Types>
@@ -233,20 +178,7 @@ function UpdateScheduleSettings() {
                 onChange={handleChange}
               />
             </label>{' '}
-            <label>
-              Select Color to Identify Class Type
-              <Select
-                className="color"
-                type="select"
-                id="color"
-                name="color"
-                required={true}
-                styles={colourStyles}
-                value={selectedOption}
-                onChange={(e) => handleSelectedOption(e)}
-                options={colourOptions}
-              />
-            </label>
+ 
             <label style={{ marginTop: '25px' }}>
               Length of Class
               <Select

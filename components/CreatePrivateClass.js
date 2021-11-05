@@ -2,9 +2,8 @@ import Router from 'next/router'
 import React, { useState } from 'react'
 import useForm from '../lib/useForm'
 import gql from 'graphql-tag'
- import {formatISO} from 'date-fns'
-import 'rc-slider/assets/index.css';
-import { format } from 'date-fns'
+ import {formatISO, startOfWeek} from 'date-fns'
+import 'rc-slider/assets/index.css'
 import { useMutation, useQuery } from '@apollo/client'
 import SickButton from './styles/SickButton'
 import Error from './ErrorMessage'
@@ -197,7 +196,9 @@ function CreatePrivateClass() {
   const { inputs, handleChange } = useForm({
     date: new Date(),
   })
- 
+  const weekStarts = startOfWeek(new Date(), {
+    weekStartsOn: 0,
+  })
   const [createNewPrivate, { loading, error }] = useMutation(
     CREATE_PRIVATE_CLASS_MUTATION,
     {
@@ -211,7 +212,7 @@ function CreatePrivateClass() {
   
         {
           query: STREAMS_ADMIN_QUERY,
-          variables: { date: format(new Date(), 'yyyy-MM-dd') },
+          variables: { date: formatISO(weekStarts) },
         },
       ],
     },
@@ -265,18 +266,7 @@ function CreatePrivateClass() {
                       options={optionList}
                     />
             </label>
-                    <label htmlFor="date">
-                      SELECT DATE &amp; TIME
-                      <input
-                        id="date"
-                        name="date"
-                        type="datetime-local"
-                        required
-                        defaultValue={inputs.date}
-                        onChange={handleChange}
-                      />
-                    </label>
-                      <label htmlFor="classlength">
+                         <label htmlFor="classlength">
                       SELECT SESSION LENGTH
                    
                     <Select
@@ -294,6 +284,19 @@ function CreatePrivateClass() {
                     />
    </label>
           
+                    <label htmlFor="date">
+                      SELECT DATE &amp; TIME
+                      <input
+                        id="date"
+                        name="date"
+                        type="datetime-local"
+                        step="900"
+                        required
+                        defaultValue={inputs.date}
+                        onChange={handleChange}
+                      />
+                    </label>
+         
                   
  
                     

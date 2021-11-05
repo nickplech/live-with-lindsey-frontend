@@ -52,11 +52,13 @@ const Width = styled.div`
     padding: 0px;
     font-size: 22px;
     line-height: 28px;
-    cursor: pointer;
+    cursor: ${props => props.loading ? 'not-allowed' : 'pointer'};
    
     height: 36px;
     border-radius: 5px;
     background-color: #f8b0b0;
+    opacity: ${props => props.loading ? .5 : 1};
+    
     cursor: pointer;
     color: white;
     transition: .3s;
@@ -65,6 +67,14 @@ const Width = styled.div`
   box-shadow: 0 8px 7px -3px rgba(0,0,0,.2);
 }
 }
+.button-disable {
+
+&[disabled] {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+
 `
 const Img = styled.div`
   background: url(${(props) => props.pic}) center center;
@@ -128,7 +138,7 @@ function Account() {
        toast('New avatar image saved successfully.', {
           appearance: 'success',
           autoDismiss: true,
-        });
+        })
       })
       .catch(error => {
         // eslint-disable-next-line no-console
@@ -148,7 +158,7 @@ function Account() {
   const defaultPic = '../static/img/profpic.svg'
  
   return (
-    <Width>
+    <Width loading={loading}>
       <form
  
       >
@@ -173,7 +183,7 @@ function Account() {
             name="image"
             placeholder="Upload an image"
             required
-        
+        className="button-disable"
           />
         </label>
       

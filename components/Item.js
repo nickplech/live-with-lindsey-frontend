@@ -86,7 +86,7 @@ const ItemStyle = styled(motion.div)`
     background-size: cover;
   }
   .shade {
-    background: linear-gradient(180deg, transparent 0%, rgba(0, 0, 0, 1) 100%);
+ 
     user-select: none;
     align-self: flex-end;
     margin: 0;
@@ -99,22 +99,22 @@ const ItemStyle = styled(motion.div)`
     font-family: 'Bison';
     letter-spacing: 2px;
     font-size: 22px;
-    z-index: 2000;
+    z-index: 100;
     background: linear-gradient(180deg, transparent 0%, rgba(0, 0, 0, 1) 100%);
     opacity: 0.7;
   }
   .classTitle {
     position: relative;
-    transform: translateZ(200px);
+    transform: translateZ(300px);
     border-radius: 0 0 10px 10px;
-    padding: 5px 25px;
+    padding: 5px 5px;
     width: 100%;
     color: white;
     font-family: 'Bison';
     letter-spacing: 2px;
     font-size: 28px;
     margin-bottom: 0;
-    z-index: 2180;
+    z-index: 3180;
     border: none;
     align-self: flex-end;
     user-select: none;
@@ -162,10 +162,12 @@ opacity: 1;
 `
 const Lock = styled.img`
   display: ${(props) =>
-    props.subscription === 'ALLACCESS' ? 'none' : 'inline-block'};
-  position: relative;
+    props.subscription === 'ALLACCESS' ? 'none' : 'block'};
+  position: absolute;
   height: 20px;
   width: 20px;
+  top: 10px;
+  left: 10px;
   z-index: 999999;
   opacity: 0.8;
   transform: translate(0px, 0px);
@@ -194,33 +196,34 @@ export default function Item({ videoOnDemand, subscription }) {
             }}
           >
       
-              <Play src="../static/img/playme.svg"  style={{ transform: 'translateZ(40px)' }}
+              <Play src="../static/img/playme.svg"  style={{ transform: 'translateZ(80px)' }}
               className="image1"
               title="play video"/>
     
           </Link>
         </div>{' '}
-        <div className="shade"></div>
+        <div className="shade">
         <div
           style={{
             height: '100%',
             width: '100%',
             display: 'flex',
-            transform: 'translateZ(40px)',
+ 
             position: 'absolute',
             justifyContent: 'flex-end',
             alignItems: 'flex-end',
           }}
         >
-          <h2 style={{ transform: 'skew(-10deg)' }} className="classTitle">
-            <Lock
+          <h2 style={{ transform: 'skew(-10deg), translateZ(140px)' }} className="classTitle">
+       
+            {videoOnDemand.name.toUpperCase()} {' '}    
+          
+          </h2></div>
+        </div>  <Lock
               subscription={subscription}
               src="../static/img/lock2.svg"
               alt="locked out"
-            />{' '}
-            {videoOnDemand.name.toUpperCase()}
-          </h2>
-        </div>
+            />
       </ItemStyle>
      
   

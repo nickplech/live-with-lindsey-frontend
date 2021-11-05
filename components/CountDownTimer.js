@@ -16,7 +16,7 @@ const Wrap = styled.div`
   user-select: none;
   font-family: 'comfortaa';
   letter-spacing: 3px;
-  text-align: left;
+  text-align: left;transform: translate(0px, 55px);
   align-items: center;
   z-index: 9001;
   @media (max-width: 768px) {
@@ -95,13 +95,13 @@ function CountDownTimer(props) {
         <span
           style={{
             textTransform: 'uppercase',
-            borderBottom: '1px solid white',
+          
           }}
         >
           {props.status === 'LIVE'
             ? 'Currently In Session'
             : props.status === 'COMPLETE'
-            ? 'Live Has Concluded'
+            ? 'Livestream Ended'
             : 'On Standby'}
         </span>
       )}

@@ -12,12 +12,12 @@ import {
   format,
   formatISO,
   formatDistanceToNow,
-  subMinutes,
+
   isAfter,
   startOfWeek,
 } from 'date-fns'
 import Emoji from './Emoji'
-import LiveWithLindseyVideoText from './LiveWithLindseyVideoText'
+
 import { useToast } from './contexts/LocalState'
 
 import { usePeerSocket } from './contexts/PrivatePeerSocket'

@@ -43,7 +43,7 @@ export  function usePeerSocket() {
       console.log('peer sockeeeeeeee')
       return () => {
        
-        leaveCall()
+        // leaveCall()
         newPeerSocket.close()
       }
     }, [classId, userId ])
@@ -106,7 +106,7 @@ console.log(otherClientId)
 console.log(readyToMakeTheCallFromAdmin)
   const answerCall = () => {
     setCallAccepted(true)
-    setOtherUser(call.from)
+    setOtherUser(call && call.from)
     const peer = new Peer({ initiator: false, trickle: false, stream })
 
     peer.on("signal", (data) => {

@@ -89,6 +89,8 @@ border-radius: 3px 3px 0 0;
 text-align: center;
 transform: translate(-42px, 23px) rotate(-90deg);
 position: absolute;
+
+box-shadow: 0 10px 10px 0px rgba(0, 0, 0, 0.2);
 background: ${props => props.isLive ? 'red' : props.theme.third};
   }
  
@@ -178,6 +180,7 @@ justify-content: center; */
     display: flex;
     justify-content: center;
     align-items: center;
+    transform: translate(0, -3px);
   }
   .flipbox {
     display: flex;
@@ -209,7 +212,7 @@ const Dot = styled.div`
   display: flex;
   margin: 0 10px;
   border-radius: 50%;
-  margin-bottom: 5px;
+
   padding: 3px;
   opacity: ${(props) => (props.status === props.name ? 1 : 0.5)};
   background: ${(props) =>
@@ -225,7 +228,7 @@ const Dot = styled.div`
 const Bubble = styled.div`
 display: none;
 background: white;
-  max-width: 300px;
+  max-width: 400px;
   border-radius: 10px;
   padding: 0 10px;
   color: slategrey;
@@ -255,6 +258,8 @@ background: white;
     background: transparent;
   }
   h4 {
+    width: 70px;
+    text-align: center;
     margin: 0;
     font-size: 14px;
     letter-spacing: 2px;

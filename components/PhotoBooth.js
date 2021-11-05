@@ -8,6 +8,7 @@ import React, {
 import Dictaphones from './Dictaphones'
 import gql from 'graphql-tag'
 import Popup from 'reactjs-popup'
+import ControlDots from './ControlDots'
 
 import { useMutation, useQuery } from '@apollo/client'
 import { format } from 'date-fns'
@@ -37,14 +38,14 @@ const Background = styled.div`
 `
 const Wrap = styled.div`
   display: flex;
-  position: relative;
+  
   margin: 20px;
   justify-content: center;
-  .shell {
+  .shell {position: relative;
     width: 100%;
     margin: 0 auto;
     background-color: lightgrey;
-    cursor: pointer;
+ user-select: none;
     background: ${props => props.thumbnail ? `url(${props.thumbnail}) center center no-repeat` : 'lightgrey'};
     background-size: cover;
     display: flex;
@@ -83,19 +84,15 @@ const Wrap = styled.div`
     letter-spacing: 3px;
     font-size: 20px;
   }
-  img {
-    color: white;
-    height: 30px;
-    width: 30px;
-  }
+  
 `
 const DateBlock = styled.div`
   display: flex;
   flex-flow: column;
  
   font-family: 'Bison';
-  letter-spacing: 3px;      transform: rotate(-6deg) skew(-12deg);
-  margin: 15px auto 0;
+  letter-spacing: 3px;      transform: translateY(-7px) rotate(-5deg) skew(-10deg);
+  margin: 0px auto 0;
   p {
     margin: 2px 0;
 
@@ -124,6 +121,7 @@ const DateBlock = styled.div`
       text-align: center;
       background: ${(props) => props.theme.second};
     }
+   
 `
 const Mode = styled.div`
   box-shadow: 0px 10px 5px -3px rgba(20, 20, 20, 0.2);
@@ -207,11 +205,11 @@ const Mode = styled.div`
     margin: 0 auto;
     position: absolute;
   }
- 
+ `
 
-`
+
 const Counter = styled.div`
-  position: absolute;
+  position: fixed;
   display: flex;
   justify-content: center;
   top: 20%;
@@ -225,7 +223,7 @@ const Counter = styled.div`
 `
 const TakeIt = styled.button`
   justify-content: center;
-  width: 200px;
+  width: 200px;  position: fixed;
   margin: 10px auto;
   align-items: center;
   background: #f8b0b0;
@@ -237,16 +235,14 @@ const TakeIt = styled.button`
   letter-spacing: 2px;
   padding: 5px 10px;
   z-index: 10000;
-  position: absolute;
+ 
   cursor: pointer;
   transition: 0.3s;
   &:hover {
-    opacity: 0.8;
-    transform: scale(1.05);
+ 
   }
   &:active {
-    opacity: 0.8;
-    transform: scale(0.98);
+ 
   }
   &[disabled] {
     opacity: 0.5;
@@ -256,6 +252,8 @@ const TakeIt = styled.button`
  const SubImage = styled.div`
      width:  100%;
      max-width: 300px;
+     position: relative;
+     bottom: 40px;
  margin: 0 20px;  display: flex;
     justify-content: center;
     align-items: center;
@@ -264,7 +262,7 @@ const TakeIt = styled.button`
     background: url(${props => props.theSrc});
     background-size: cover;
     height: 180px;
-  
+ 
     border: 10px   solid lightgrey;
     border-bottom: 20px solid lightgrey;
    
@@ -324,11 +322,64 @@ transform: translate(0, -17px);
     }
   }
  `
- 
-export default function PhotoBoothModal({
-  id,
+ const ClickCam = styled.img`
+ display: flex;
+ justify-self: flex-start;
+ position: absolute;
+ background: white;
+ border-radius: 50%;
+ transform: translate(-180px,20px);
+  padding: 5px;
+ height: 45px;
+ cursor: pointer;
+ width: 45px;
+ `
+export default function Shell({  id,
   thumbnail,
   item,
+  handleClick,
+  updateStatus,
+  imgSrc,
+  triggerTime,
+  setTriggerTime,
+  setImgSrc}) {
+    return(
+      <Wrap thumbnail={thumbnail ? thumbnail : null}>
+     <div className="shell">
+      
+        
+                
+           
+            <div className="topper">
+                 <DateBlock><div className="title">{item.reason.name}</div>
+           
+                <div className="day">
+                  {format(new Date(item.date), 'EE M/dd @ h:mm aa')}
+                </div>
+              </DateBlock>
+              <ControlDots
+        updateStatus={updateStatus}
+          id={id}  
+          status={item.status}
+          theName={item.reason.name}
+        />  
+            </div>
+          </div>
+      <PhotoBoothModal           imgSrc={imgSrc}
+          triggerTime={triggerTime}
+          setImgSrc={setImgSrc}
+          setTriggerTime={setTriggerTime}
+          handleClick={handleClick}
+          thumbnail={thumbnail}
+          item={item}
+          id={id} />
+      </Wrap>
+    )
+  }
+
+ function PhotoBoothModal({
+  id,
+
   handleClick,
   imgSrc,
   triggerTime,
@@ -340,7 +391,7 @@ export default function PhotoBoothModal({
   const [selectedImage, setSelectedImage] = useState(null)
 const [selectedIndex, setSelectedIndex] = useState(null)
   const [audio] = useState(false)
-  const [time, setTime] = useState(5)
+  const [time, setTime] = useState(6)
  
   const videoConstraints = {
     height: 1080,
@@ -355,7 +406,7 @@ const [selectedIndex, setSelectedIndex] = useState(null)
   const clearOut = (close) => {
     clearInterval(intervalRef.current)
 
-    setTime(5)
+    setTime(6)
     close()
   }
 
@@ -389,7 +440,7 @@ const [selectedIndex, setSelectedIndex] = useState(null)
     if (time <= 0) {
       capture()
       setTriggerTime(false)
-      setTime(5)
+      setTime(6)
     }
     intervalRef.current = setInterval(decreaseTime, 1000)
 
@@ -411,26 +462,15 @@ const updateImage = () => {
   setSelectedIndex(null)
 }
   return (
-    <Wrap thumbnail={thumbnail ? thumbnail : null}>
+   
+      
       <Popup
         trigger={
-          <div className="shell">
-            {thumbnail === null ? (
-              <>
-                <img src="../static/img/camera.svg" />
-                <p>Click to Add Thumbnail for On-Demand</p>{' '}
-              </>
-            ) : null}
-            <div className="topper">
-                 <DateBlock><div className="title">{item.reason.name}</div>
+      
+              <ClickCam src="../static/img/camera.svg" />
+            
+          }
            
-                <div className="day">
-                  {format(new Date(item.date), 'EE M/dd @ h:mm aa')}
-                </div>
-              </DateBlock>
-            </div>
-          </div>
-        }
         modal
         nested
       >
@@ -447,11 +487,11 @@ const updateImage = () => {
                   width={'100%'}
                   screenshotFormat="image/jpeg"
                 />
-                <Counter>
+                {time === 6 ? null : <Counter>
                   <p>{time && time}</p>
-                </Counter>
+                </Counter>}
 
-                {selectedImage === null && time === 5 ? (
+                {selectedImage === null && time === 6 ? (
                   <TakeIt disable={triggerTime} onClick={handleClick}>
                     Take Photo
                   </TakeIt>
@@ -459,7 +499,7 @@ const updateImage = () => {
 
                 <div
                   className="strip"
-                  style={{ zIndex: 9000, position: 'absolute' }}
+                  style={{ zIndex: 9000, position: 'fixed' }}
                 >
                   {imgSrc.length > 0 &&
                     imgSrc.map((image, i) => {
@@ -512,6 +552,6 @@ const updateImage = () => {
           </Background>
         )}
       </Popup>
-    </Wrap>
+   
   )
 }

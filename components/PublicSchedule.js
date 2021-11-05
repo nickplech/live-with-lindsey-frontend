@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import Link from 'next/link'
 import DaySelector from './DaySelector'
 import gql from 'graphql-tag'
-import { format, startOfWeek, addDays, formatISO } from 'date-fns'
+import { format, startOfWeek, addDays, weekStart, endOfWeek, formatISO } from 'date-fns'
 import { useQuery } from '@apollo/client'
 import {
   CarouselProvider,
@@ -42,13 +42,13 @@ const Wrap = styled.div`
       display: none;
     }
   }
-  background: rgba(240, 240, 240, 0.8);
+ 
   user-select: none;
   outline: none;
   width: 100%;
   margin-bottom: 0px;
   margin-top: 0px;
-  border-top: 10px solid #f7b0b0;
+  /* border-top: 10px solid #f7b0b0; */
   .buttonBack___1mlaL,
   .buttonNext___2mOCa,
   .buttonNext___3Lm3s {
@@ -331,7 +331,7 @@ const MenItem = styled.div`
 
     position: relative;
     font-family: 'Bison';
-    opacity: 0.5;
+ 
     align-self: flex-start;
     line-height: 20px;
   }
@@ -386,9 +386,90 @@ const Div = styled.div`
     }
   }
 `
+const Schedule = styled.div`
+  font-family: 'Felix';
+  /* transform: translate(190px, 560px); */
+  text-transform: uppercase;
+  z-index: 0;
+ 
 
-const MenuItem = ({ id, name, date, classLength }) => {
-  const cleanName = name &&  name.toLowerCase().replace(/\s/g, '')
+  position: relative;
+  h1 {
+    margin: 2px;
+    font-size: 36px;
+  }
+  p {
+    margin: 2px;
+    transform: translate(-15px, 60px);
+    font-family: 'Bison thickoutline';
+    font-size: 36px;
+    color: ${(props) => props.theme.fourth};
+    width: 500px;
+  }
+  img {
+    transform: translate(5px, 0px);
+  }
+`
+const DateBlock = styled.a`
+  display: flex;
+  flex-flow: column;
+ position: absolute;
+  font-family: 'Bison';
+  z-index: 7000;
+  letter-spacing: 3px;      
+  transform: translateY(-45px) rotate(-5deg) skew(-10deg);
+  margin: 15px auto 0;
+ justify-content: center;
+ align-items: center;
+ opacity: .9;
+ cursor: pointer;
+ transition: .3s;
+  .day {
+    text-align: center;
+    justify-content: center;
+    background: ${(props) => props.theme.second};
+    margin: 0 auto 5px;  
+  
+    font-size: 28px;
+    line-height: 28px;
+    position: relative;
+    color: white;
+    padding:  5px;  box-shadow: 0 2px 1px rgba(0, 0, 0, 0.09), 0 4px 2px rgba(0, 0, 0, 0.09),
+      0 8px 4px rgba(0, 0, 0, 0.09), 0 16px 8px rgba(0, 0, 0, 0.04),
+      0 32px 16px rgba(0, 0, 0, 0.04);
+  }
+      .title {
+      font-family: 'Bison';
+      letter-spacing: 2px;
+      font-size: 46px;
+      margin: 0px auto 8px;
+      box-shadow: 0 2px 1px rgba(0, 0, 0, 0.09), 0 4px 2px rgba(0, 0, 0, 0.09),
+      0 8px 4px rgba(0, 0, 0, 0.09), 0 16px 8px rgba(0, 0, 0, 0.04),
+      0 32px 16px rgba(0, 0, 0, 0.04);
+    padding: 0 5px;  
+    position: relative;
+      line-height: 46px;
+      color: white;
+      text-align: center;
+      background: ${(props) => props.theme.second};
+    }
+     
+  .clock {
+    width: 22px;
+    vertical-align: middle;
+
+
+  }
+  .clocktime {
+  
+
+    vertical-align: middle;
+    
+  }
+ 
+`
+const MenuItem = ({ id, item, classLength }) => {
+  const cleanName = item.reason.name &&  item.reason.name.toLowerCase().replace(/\s/g, '')
  
   return (
     <MenItem
@@ -396,18 +477,18 @@ const MenuItem = ({ id, name, date, classLength }) => {
       className="menu-item-wrapper"
     >
       <Link href={{ pathname: '/class', query: { id: id } }}>
-        <a>
-          <div className="theDiv">
-            <h1>{name && name}</h1>
-            <p>{format(new Date(date), 'eeee - MMM dd | h:mm aa')}</p>
-            <div className="card__clock-info">
-              <svg className="card__clock" viewBox="0 0 24 24">
-                <path d="M12,20A7,7 0 0,1 5,13A7,7 0 0,1 12,6A7,7 0 0,1 19,13A7,7 0 0,1 12,20M19.03,7.39L20.45,5.97C20,5.46 19.55,5 19.04,4.56L17.62,6C16.07,4.74 14.12,4 12,4A9,9 0 0,0 3,13A9,9 0 0,0 12,22C17,22 21,17.97 21,13C21,10.88 20.26,8.93 19.03,7.39M11,14H13V8H11M15,1H9V3H15V1Z" />
-              </svg>{' '}
-              <span className="card__time">{classLength && classLength}</span>
-            </div>
-          </div>
-        </a>
+ 
+         
+          <DateBlock> <h1 className="title">{item.reason.name}</h1>
+              <p className="day">{format(new Date(item.date), 'eeee MMM dd | h:mm aa ')}</p>
+              {/* <p className="day">       
+                <svg className="clock" viewBox="0 0 24 24">
+                  <path style={{fill: 'white'}} d="M12,20A7,7 0 0,1 5,13A7,7 0 0,1 12,6A7,7 0 0,1 19,13A7,7 0 0,1 12,20M19.03,7.39L20.45,5.97C20,5.46 19.55,5 19.04,4.56L17.62,6C16.07,4.74 14.12,4 12,4A9,9 0 0,0 3,13A9,9 0 0,0 12,22C17,22 21,17.97 21,13C21,10.88 20.26,8.93 19.03,7.39M11,14H13V8H11M15,1H9V3H15V1Z" />
+                </svg>{' '}
+                <span className="clocktime">{classLength}</span>
+              </p> */}
+              
+              </DateBlock>
       </Link>
     </MenItem>
   )
@@ -418,7 +499,10 @@ export function ProductSlider() {
   const IsoWeek = formatISO(weekStart)
   const [isSelected, setIsSelected] = useState(null)
   const [theWeekList, setTheWeekList] = useState([])
-
+  const weekStarts = startOfWeek(new Date(), {
+    weekStartsOn: 0,
+  })
+  const weekEnds = endOfWeek(new Date())
   const { error, loading, data } = useQuery(STREAMS_QUERY, {
     variables: { date: isSelected ? formatISO(new Date(isSelected)) : weekStart },
   })
@@ -437,8 +521,20 @@ export function ProductSlider() {
   if (error) return <Error error={error} />
 
   return (
-    <Wrap>
-      {/* <Line/> */}
+    <>
+          <Schedule>
+            <p>
+              Live Schedule:{' '}
+              {`${
+                format(weekStarts, 'M/dd') +
+                ' ' +
+                '-' +
+                ' ' +
+                format(weekEnds, 'M/dd')
+              }`}
+            </p>
+          </Schedule>
+          <Wrap>
       <div className="mobile-layout">
         <CarouselProvider
           naturalSlideWidth={350}
@@ -463,12 +559,12 @@ export function ProductSlider() {
                     <Slide key={item.id} index={i}>
                       <MenuItem
                         next={i}
-                        name={item.reason && item.reason.name}
+                     
                         id={item.id}
                         theIndex={i}
-                        date={item.date}
+                        item={item}
                         classLength={item.reason &&  item.reason.classLength}
-                        time={item.date}
+                        
                       />
                     </Slide>
                   )
@@ -510,12 +606,12 @@ export function ProductSlider() {
                     <Slide key={item.id} index={i}>
                       <MenuItem
                         next={i}
-                        name={item.reason && item.reason.name}
+                        item={item}
                         id={item.id}
                         theIndex={i}
-                        date={item.date}
+                  
                         classLength={item.reason && item.reason.classLength}
-                        time={item.date}
+                     
                       />
                     </Slide>
                   )
@@ -535,6 +631,7 @@ export function ProductSlider() {
       </div>
       <DaySelector isSelected={isSelected} addTheDays={addTheDays} />
     </Wrap>
+    </>
   )
 }
 

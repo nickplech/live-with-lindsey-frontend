@@ -23,12 +23,83 @@ const MOST_RECENT_VIDEO_QUERY = gql`
     }
   }
 `
+const Wrap = styled.div`
+  width: 100%;
+  max-width: 1200px;
+  margin: 80px auto 0 auto;
+  
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: 1fr 1fr;
+  margin-bottom: 0px;
+  font-family: 'Bison';
+
+  @media (min-width: 768px) {
+    grid-template-columns: 50% 50%;
+    grid-template-rows: 1fr;
+    margin-bottom: 155px;
+  }
+  .left {
+    width: 95%;
+    grid-row: 2;
+    grid-column: 1;
+    margin: 0 auto;text-align: right;
+    letter-spacing: 0px;
+    @media (min-width: 768px) {
+      grid-column: 1;
+      grid-row: 1;
+    }
+  }
+
+  .right {
+    width: 95%;
+    grid-row: 2;
+    grid-column: 1;
+    margin: 0 auto;
+    letter-spacing: 0px; 
+    @media (min-width: 768px) {
+      grid-column: 2;
+      grid-row: 1;
+    }
+  }
+  h2 {
+    margin: 30px auto;
+    margin-top: 60px;
+    font-size: 32px;
+    border-right: 4px solid ${(props) => props.theme.second};
+    padding: 0;
+    z-index: 80000;
+    position: relative;
+    line-height: 34px;
+    padding-right: 5px;
+  }
+  img {
+    display: inline-flex;
+    transform: translate(0px, 3.5px);
+ 
+  }
+  h3 {
+    font-size: 18px;
+    display: inline-flex;
+    margin: 0 5px;
+  }
+  p {
+    margin: 0;
+    z-index: 80000;
+    font-size: 16px;
+    position: relative;
+    letter-spacing: 2px;
+    color: slategrey;
+    line-height: 26px;
+    margin-bottom: 10px;
+  }
+`
 
 const TheItem = styled.div`
   height: 320px;
-  width: 90%;
-  transform: rotate(-3deg);
-  border-radius: 2px;
+  width: 95%;
+ min-width: 400px;
+  border-radius: 15px;
   display: flex;
   align-items: flex-end;
   justify-content: center;
@@ -42,37 +113,31 @@ const TheItem = styled.div`
     0 8px 4px rgba(0, 0, 0, 0.09), 0 16px 8px rgba(0, 0, 0, 0.09),
     0 32px 16px rgba(0, 0, 0, 0.03);
   background: ${(props) => props.theme.primary};
-  
-  &:before {
-    position: absolute;
-    height: 320px;
-    width: 100%;
-    content: '';
-    grid-column: 1;
-    border-radius: 2px;
-    opacity: 1;
-    margin: 0 auto;
-    z-index: 40;
-    box-shadow: 0 8px 6px -5px rgba(0, 0, 0, 0.2);
-    transform: rotate(3.5deg);
-    background: url(${(props) => props.thumbnailUrl}) no-repeat center center;
+  background: url(${(props) => props.thumbnailUrl}) no-repeat center center;
     background-size: cover;
-    @media (min-width: 1100px) {
-      width: 100%;
-    }
-  }
+    
+      transform: perspective(1000px)
+    rotateX(4deg)
+    rotateY(-16deg)
+    rotateZ(4deg)
+    skew(2deg);
+  /* box-shadow: 24px 16px 64px 0 rgba(0, 0, 0, 0.08); */
+  border-radius: 15px;
+ 
+
   &:after {
     content: '';
-    transform: rotate(3.5deg) translate(0px, 0px);
+ 
     position: absolute;
     margin: 0;
     z-index: 9999;
     height: 100%;
-    border-radius: 0 0 5px 5px;
+    border-radius: 0 0 15px 15px;
     padding: 5px 15px;
     opacity: 0.5;
     width: 100%;
     background: linear-gradient(180deg, transparent 0%, rgba(0, 0, 0, 1) 100%);
+    
   }
   @media (min-width: 992px) {
     height: 320px;
@@ -81,7 +146,7 @@ const TheItem = styled.div`
   @media (min-width: 1100px) {
     height: 320px;
     width: 90%;
-  }
+  } 
   h3 {
     color: white;
     font-family: 'Bison';
@@ -99,7 +164,7 @@ const TheItem = styled.div`
     width: 210px;
     height: auto;
     z-index: 999999;
-    transform: translate(0px, -20px);
+    transform: translate(20px, -20px);
     position: absolute;
   left: 0;
   }
@@ -140,76 +205,6 @@ const Play = styled.img`
 opacity: 1;
   }
 `
-const Wrap = styled.div`
-  width: 100%;
-  max-width: 1200px;
-  margin: 30px auto 0 auto;
-  transform: translateY(50px);
-  display: grid;
-  grid-template-columns: 1fr;
-  grid-template-rows: 1fr 1fr;
-  margin-bottom: 0px;
-  font-family: 'Bison';
-
-  @media (min-width: 768px) {
-    grid-template-columns: 55% 45%;
-    grid-template-rows: 1fr;
-    margin-bottom: 155px;
-  }
-  .left {
-    grid-column: 1;
-    grid-row: 1;
-    display: flex;
-    justify-content: center;
-    @media (min-width: 768px) {
-      grid-column: 1;
-      grid-row: 1;
-    }
-  }
-
-  .right {
-    width: 90%;
-    grid-row: 2;
-    grid-column: 1;
-    margin: 0 auto;
-    letter-spacing: 0px;
-    @media (min-width: 768px) {
-      grid-column: 2;
-      grid-row: 1;
-    }
-  }
-  h2 {
-    margin: 30px auto;
-    margin-top: 60px;
-    font-size: 32px;
-    border-left: 4px solid ${(props) => props.theme.second};
-    padding: 0;
-    z-index: 80000;
-    position: relative;
-    line-height: 34px;
-    padding-left: 5px;
-  }
-  img {
-    display: inline-flex;
-    transform: translate(0px, 3.5px);
- 
-  }
-  h3 {
-    font-size: 18px;
-    display: inline-flex;
-    margin: 0 5px;
-  }
-  p {
-    margin: 0;
-    z-index: 80000;
-    font-size: 16px;
-    position: relative;
-    letter-spacing: 2px;
-    color: slategrey;
-    line-height: 26px;
-    margin-bottom: 10px;
-  }
-`
 
 const ParallaxImage = ({ src, ...style }) => {
   const [elementTop, setElementTop] = useState(0)
@@ -245,16 +240,7 @@ function MostRecentVideo(props) {
   return (
     <Wrap>
       <div className="right">
-        <h2>{mostRecentVod.name}</h2>
-       
-        <p>{mostRecentVod.description}</p>
-        <span><img src="../static/img/calendar.svg" height="20" width="20" alt="calendar graphic to represent date which video first aired live" />  <h3>aired on: {format(new Date(mostRecentVod.date), 'MMM dd, yyyy')}</h3></span>
-       
-        <span><img style={{   marginLeft: '15px' }} src="../static/img/clock.svg" height="20" width="20" alt="class length icon" />  <h3>60 mins</h3></span>
- 
-      </div>
-      <div className="left">
-        <TheItem
+      <TheItem
           isOpen={isOpen}
           thumbnailUrl={mostRecentVod.thumbnailUrl}
           videoOnDemand={mostRecentVod}    
@@ -275,6 +261,16 @@ function MostRecentVideo(props) {
           <img  className="ribbon" src="../static/img/mostrecent2.svg" />
         </TheItem>{' '}
         <ParallaxImage />
+      </div>
+      <div className="left">
+
+        <h2>{mostRecentVod.name}</h2>
+       
+       <p>{mostRecentVod.description}</p>
+       <span><img src="../static/img/calendar.svg" height="20" width="20" alt="calendar graphic to represent date which video first aired live" />  <h3>aired on: {format(new Date(mostRecentVod.date), 'MMM dd, yyyy')}</h3></span>
+      
+       <span><img style={{   marginLeft: '15px' }} src="../static/img/clock.svg" height="20" width="20" alt="class length icon" />  <h3>60 mins</h3></span>
+
       </div>
     </Wrap>
   )

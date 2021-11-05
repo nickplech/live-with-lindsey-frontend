@@ -1,5 +1,5 @@
 import React from 'react'
-import OwnsIt from '../components/SingleClass'
+import OwnsIt from '../components/SingleLiveClass'
  
 
 const ClassInfo = ({query}) => {

@@ -376,7 +376,7 @@ function VodFavoritesSlider({  user }) {
   return (
     <>
       <Tite style={{ marginTop: '70px', marginLeft: '30px' }}>
-      Your Favorites <img height="23px" src="../static/img/heart3.svg" />
+      Your Favorites <img style={{transform: "translateY(-2px)"}} height="19px" src="../static/img/heart4.svg" />
       </Tite>
 
       <Wrap>

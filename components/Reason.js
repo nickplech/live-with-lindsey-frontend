@@ -25,11 +25,11 @@ const Div = styled.div`
 const Reason = ({ reason }) => {
   return (
     <Div
-      color={reason.color}
+      color={"#f8b0b0"}
       style={{
         background: 'transparent',
         color: reason.color === '#F8F8FF' && 'black',
-        borderColor: `${reason.color}`,
+        borderColor: `#f8b0b0`,
       }}
     >
       {reason.name}

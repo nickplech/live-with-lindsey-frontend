@@ -22,7 +22,7 @@ const Box = styled.div`
     background-color: transparent;
     font-family: 'Bison';
     color: ${(props) => props.theme.second};
-    font-size: 18px;
+    font-size: 14px;
     letter-spacing: 3px;
     text-align: center;
     padding: 0 8px;
@@ -69,19 +69,19 @@ const NotLoggedIn = styled.div`
   color: white;
   z-index: 90000;
   font-family: 'Bison';
-  transform: translateY(130px);
+  transform: translateY(110px);
   .btn {
     border-radius: 5px;
     background-color: transparent;
     font-family: 'Bison';
     color: ${(props) => props.theme.second};
-    font-size: 18px;
+    font-size: 14px;
     letter-spacing: 3px;
     text-align: center;
-    padding: 0 8px;
+    padding: 0 6px;
     z-index: 90000;
     position: relative;
-    line-height: 33px;
+    line-height:26px;
     border: 2px solid ${(props) => props.theme.second};
     min-width: 130px;
     margin: 0 10px;
@@ -131,7 +131,7 @@ const VideoSignUp = ({ date, classId, owner }) => {
   return owner === false && !me ? (
     <NotLoggedIn>
       <a onClick={signUpOnClick} className="btn pay">
-        Click to Sign Up!
+        Signup for Free!
       </a>
       <a onClick={login} className="btn pay">
         Log In

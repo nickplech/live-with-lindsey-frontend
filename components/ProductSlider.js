@@ -1,6 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import Link from 'next/link'
+ 
 import AddToCart from './AddToCart'
 import { format } from 'date-fns'
 import {
@@ -321,24 +322,26 @@ const TotalClasses = styled.div`
   justify-content: center;
   align-items: center;
   color: rgba(20, 20, 20, 0.6);
-  transform: translateY(13px);
+  transform: translateY(29px);
   margin: 0 auto;
   flex-flow: row nowrap;
   display: flex;
   width: 450px;
 `
 
-const DateBlock = styled.div`
+const DateBlock = styled.a`
   display: flex;
   flex-flow: column;
- position: relative;
+ position: absolute;
   font-family: 'Bison';
+  z-index: 7000;
   letter-spacing: 3px;      
   transform: translateY(-45px) rotate(-5deg) skew(-10deg);
   margin: 15px auto 0;
  justify-content: center;
  align-items: center;
  opacity: .9;
+ cursor: pointer;
  transition: .3s;
  &:hover {
    opacity: 1;
@@ -390,16 +393,18 @@ const DateBlock = styled.div`
 const MenuItem = ({
   id,
   active,
-  name,
-  date,
+ item,
   theIndex,
   classLength,
-  inCart,
-  ownsItem,
-  itemOwned,
+
 }) => {
-  const cleanName = name && name.toLowerCase().replace(/\s/g, '')
+ 
+  const cleanName = item.reason.name && item.reason.name.toLowerCase().replace(/\s/g, '')
   const currentlyLive = active === id
+  console.log(currentlyLive)
+  console.log(active)
+ 
+
   return (
     <>
       <MenItem
@@ -407,41 +412,33 @@ const MenuItem = ({
         className="menu-item-wrapper"
       >
         <AddToCart
-          inCart={inCart}
+        item={item}
+       
           theIndex={theIndex}
-          ownsItem={ownsItem}
+ 
           id={id}
         />
-
         <Link href={{ pathname: '/class', query: { id: id } }}>
-          <a>
-            <DateBlock> <h1 className="title">{name}</h1>
-              <p className="day">{format(new Date(date), 'eeee MMM dd | h:mm aa ')}</p>
-              {/* <p className="day">       
-                <svg className="clock" viewBox="0 0 24 24">
+         
+            <DateBlock> 
+              <h1 className="title">{item.reason.name}</h1>
+              <p className="day">{format(new Date(item.date), 'eeee MMM dd | h:mm aa ')}</p>
+                    
+               {/* <svg className="clock" viewBox="0 0 24 24">
                   <path style={{fill: 'white'}} d="M12,20A7,7 0 0,1 5,13A7,7 0 0,1 12,6A7,7 0 0,1 19,13A7,7 0 0,1 12,20M19.03,7.39L20.45,5.97C20,5.46 19.55,5 19.04,4.56L17.62,6C16.07,4.74 14.12,4 12,4A9,9 0 0,0 3,13A9,9 0 0,0 12,22C17,22 21,17.97 21,13C21,10.88 20.26,8.93 19.03,7.39M11,14H13V8H11M15,1H9V3H15V1Z" />
                 </svg>{' '}
-                <span className="clocktime">{classLength}</span>
-              </p> */}
+                <span className="clocktime">{classLength}</span>*/}
               
+          
               </DateBlock>
-            
-              {currentlyLive ? (
-                <CurrentlyLive>
-                  {' '}
-                  Live<div className="circle"></div>
-                </CurrentlyLive>
-              ) : null}
-       
-      
-          </a>
         </Link>
       </MenItem>
     </>
   )
 }
+ 
+export function ProductSlider({ allItems, active }) {   
 
-export function ProductSlider({ allItems, active, inCart, ownsItem }) {
   return (
     <Wrap>
       <div className="mobile-layout">
@@ -458,19 +455,20 @@ export function ProductSlider({ allItems, active, inCart, ownsItem }) {
           <Slider>
             {allItems &&
               allItems.map((item, i) => {
-                // const isInCart = itemsInCart.some(item.id)
-
+            
+               
                 return (
                   <Slide key={item.id} index={i}>
                     <MenuItem
                       next={i}
-                      name={item.reason && item.reason.name}
-                      inCart={inCart}
+                     
+                     item={item}
                       id={item.id}
                       theIndex={i}
-                      ownsItem={ownsItem}
-                      // key={item.id}
-                      date={item.date}
+                    
+                      active={active}
+                  
+               
                       classLength={item.reason && item.reason.classLength}
                     />
                   </Slide>
@@ -493,21 +491,25 @@ export function ProductSlider({ allItems, active, inCart, ownsItem }) {
           <ButtonNext disabled={allItems.length === 3}>&rsaquo;</ButtonNext>
           <Slider>
             {allItems.map((item, i) => {
-              const itemOwned = ownsItem[i] !== undefined ? true : false
+           
+          
+     
+         
+     
               return (
                 <Slide key={item.id + 'desktop'} index={i}>
                   <MenuItem
                     active={active}
                     next={i}
-                    name={item.reason && item.reason.name}
-                    inCart={inCart}
+        
+                  
                     id={item.id}
                     theIndex={i}
-                    date={item.date}
+                    item={item}
                     classLength={item.reason && item.reason.classLength}
-                    time={item.date}
-                    ownsItem={ownsItem}
-                    itemOwned={itemOwned}
+                    
+            
+                    active={active}
                   />
                 </Slide>
               )
@@ -519,4 +521,4 @@ export function ProductSlider({ allItems, active, inCart, ownsItem }) {
   )
 }
 
-export default ProductSlider
+export default  ProductSlider 

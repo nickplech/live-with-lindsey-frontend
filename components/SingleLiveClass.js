@@ -4,37 +4,68 @@ import { useMutation, useQuery } from '@apollo/client'
 import styled from 'styled-components'
 import Head from 'next/head'
 import Error from './ErrorMessage'
-import { ALL_FAVORITES_QUERY } from './VodFavoritesSlider'
+import Footer from './Footer'
 import Details from './Details'
-import Recommended from './RecommendedVods'
+import ClassBackground from './ClassBackground'
 import Link from 'next/link'
 import Loader from './Loader'
-import { useUser } from './User'
-import debounce from 'lodash.debounce'
-import { toast } from 'react-toastify'
+ import ShareButtons from './ShareButtons'
+ 
 
-const VOD_MUTATION = gql`
-  mutation VOD_MUTATION($id: ID!, $isFavorite: ID!) {
-    updateVideoOnDemand(
-      id: $id
-      data: { isFavorite: { connect: { id: $isFavorite } } }
-    ) {
+const LIVE_STREAM_QUERY = gql`
+  query LIVE_STREAM_QUERY($id: ID!) {
+    Item(where: { id: $id }) {
       id
-      isFavorite {
+      date
+      status
+      tags {
         id
+        name
+      }
+      user {
+        id
+      }
+      equipment {
+        id
+        name
+        description
+        image {
+          publicUrlTransformed
+        }
+      }
+      reason {
+        id
+        name
+        classLength
+        classDescription
       }
     }
   }
 `
-const REMOVE_MUTATION = gql`
-  mutation REMOVE_MUTATION($id: ID!, $isFavorite: ID!) {
-    updateVideoOnDemand(
-      id: $id
-      data: { isFavorite: { disconnect: { id: $isFavorite } } }
-    ) {
+const VOD_AUTH_QUERY = gql`
+  query VOD_AUTH_QUERY($id: ID!) {
+    vodViewingAuth(  id: $id ) {
       id
+      name
+       date
+      description
+      url
+      thumbnailUrl
+        equipment {
+          id
+          description
+          name
+          image {
+            publicUrlTransformed
+          }
+        }
+     
       isFavorite {
         id
+      }
+      tags {
+        id
+        name
       }
     }
   }
@@ -116,22 +147,22 @@ const SingleItemStyles = styled.div`
   grid-column: 1;
   grid-row: 2;
   border-radius: 10px;
-  margin-top: 30px;
+  margin-top: 0px;
 
   @media (min-width: 768px) {
     grid-column: 1;
     grid-row: 2;
-    margin-top: 0px;
+    margin: 0 auto;
+    margin-top: 18px;
     border-radius: 10px;
     margin-bottom: 70px;
     position: relative;
     overflow: hidden;
-    padding-top: 56.25%;
-    transform: translate(20px, 15px)
-  }
-  iframe {
-    position: relative;
     width: 95%;
+  }
+  .theClass {
+    position: relative;
+
     height: 400px;
     border-radius: 10px;
     border: 0;
@@ -140,10 +171,9 @@ const SingleItemStyles = styled.div`
     @media (min-width: 768px) {
       width: 95%;
       height: 95%;
-      margin: 0;
-      top: 0;
+     
       background: grey;
-      left: 0;
+ 
       position: absolute; box-shadow: 0 2px 1px rgba(0, 0, 0, 0.09), 0 4px 2px rgba(0, 0, 0, 0.09),
       0 8px 4px rgba(0, 0, 0, 0.09), 0 16px 8px rgba(0, 0, 0, 0.09),
     }
@@ -156,34 +186,7 @@ const SingleItemStyles = styled.div`
 
 `
 
-const VOD_AUTH_QUERY = gql`
-  query VOD_AUTH_QUERY($id: ID!) {
-    vodViewingAuth(  id: $id ) {
-      id
-      name
-       date
-      description
-      url
-      thumbnailUrl
-        equipment {
-          id
-          description
-          name
-          image {
-            publicUrlTransformed
-          }
-        }
-     
-      isFavorite {
-        id
-      }
-      tags {
-        id
-        name
-      }
-    }
-  }
-`
+
  
 const GoBacks = styled.div`
   display: flex;
@@ -370,95 +373,51 @@ const P = styled.div`
  
   }
 `
+
 const Image = styled.img`
 ${P}:hover & {
 transform: translate(-5px, 5px);
 }
 `
-function SingleItem({ id }) {
-  const me = useUser()
-  const [fav, setFav] = useState('')
 
-  const [updateVideoOnDemandMake] = useMutation(
-    VOD_MUTATION,
-    { variables: { id: id, isFavorite:me && me.id } },
-    {
-      refetchQueries: [
-        {
-          query: VOD_AUTH_QUERY,
-          variables: id,
-        },
-        {
-          query: ALL_FAVORITES_QUERY,
-          variables: { id: me && me.id },
-        },
-      ],
-    },
-  )
+function OwnsIt({ id }) {
+  const { data, loading } = useQuery(CURRENT_USER_QUERY)
+  if (loading) return <p>loading</p>
+  if (!data.authenticatedUser) return <SingleLiveClass id={id} />
+  const me = data.authenticatedUser
 
-  const [updateVideoOnDemandTake] = useMutation(
-    REMOVE_MUTATION,
-    { variables: { id: id, isFavorite:me &&  me.id } },
-    {
-      refetchQueries: [
-        {
-          query: VOD_AUTH_QUERY,
-          variables: id,
-        },
-        {
-          query: ALL_FAVORITES_QUERY,
-          variables: { id: me && me.id },
-        },
-      ],
-    },
-  )
-
-  const { loading, error, data } = useQuery(VOD_AUTH_QUERY, {
-    variables: { id },
-  })
-
-
-useEffect(() => {
-    setFav(me && me.id)
-  }, [fav, me])
-
-  const addToFav = debounce(addToFavoritesButChill, 500)
-  function addToFavoritesButChill() {
-    updateVideoOnDemandMake()
-    toast(`${data.vodViewingAuth.name} added to Favorites!`)
-  }
-
-  const removeFromFavoritesButChill = debounce(updateVideoOnDemandTake, 350)
-
-  if (error) return <Error error={error} />
-  if (loading) return <Loader />
-  console.log(data)
+  return <SingleLiveClass id={id} userId={me.id} />
+}
+function SingleLiveClass({ id, userId }) {
  
-  const url = data.vodViewingAuth && data.vodViewingAuth.url
-  const isAFav =
-    data.vodViewingAuth &&
-    data.vodViewingAuth.isFavorite.some((person) => {
-      const hasUser = me && person.id === me.id
-      if (hasUser) {
-        return true
-      }
-    })
+  const { data, loading, error } = useQuery(LIVE_STREAM_QUERY, {
+    variables: { id: id },
+  })
+  if (!data) return null
+  if (loading) return <Loader />
+  const item = data.Item
+  const owner =
+    item &&
+    item.user.some((person) =>  person.id === userId)
 
+  // const { loading, error, data } = useQuery(VOD_AUTH_QUERY, {
+  //   variables: { id },
+  // })
   return (
     <>
       <Head>
-        <title>Live with Lindsey | {data.vodViewingAuth && data.vodViewingAuth.name}</title>
-      </Head>{' '}
+        <title>Live with Lindsey | {item.status}</title>
+      </Head>
       <Wrap>
         <Background />
-        <GoBacks> <Link href="/ondemand">
+        <GoBacks> <Link href={{ pathname: '/' }}>
             <a>
               
               <P><Image
                 style={{ marginRight: '7px' }}
                 src="../static/img/arrow-back-white.svg"
                 alt="back arrow"
-              />Go Back to <span>On-Demand</span> Home</P>
+              />Go Back to <span>{userId ? 'Dashboard' : 'Home '}</span>Page</P>
             </a>
           </Link> </GoBacks>
          
@@ -466,42 +425,33 @@ useEffect(() => {
           style={{
            
             width: '100%',
-            // bottom: 0,
+       
             gridColumn: 1,
             gridRow: 2,
             position: 'relative',
-            padding: '0 0px 0',
+            padding: '0',
    
           }}
         >
        
         <SingleItemStyles>
-      
-          <iframe
-            className="resp-iframe"
-            style={{ margin: '0 auto', gridRow: 1 }}
-            src={url}
-            width="100%"
-            height="100%"
-            frameBorder="0"
-            fullscreen
-            fullscreen="true"
-            allow="fullscreen"
-            allowFullScreen
-          ></iframe>
-  
+      <ClassBackground         
+      tags={item.tags}
+        status={item.status}
+        owner={owner}
+        date={item.date}
+        name={item.reason.name}
+        classId={item.id}     
+        className="theClass"
+            style={{ margin: '0 auto' }}
+    />
+     
         </SingleItemStyles>
-        <Tags>   <div>TAGS:</div> 
-            {data.vodViewingAuth &&
-              data.vodViewingAuth.tags.map((tag) => {
-                return <span key={tag.name}>{tag.name}</span>
-              })}
-          </Tags>
 
         
         </div>
-        <Recommended id={data.vodViewingAuth && data.vodViewingAuth.id} tags={data.vodViewingAuth && data.vodViewingAuth.tags} />
-        <Details removeFromFavoritesButChill={removeFromFavoritesButChill} addToFav={addToFav} isAFav={isAFav} fav={fav} me={me} vodViewingAuth={data.vodViewingAuth && data.vodViewingAuth}>
+       
+        <Details >
          
         </Details>
         <EquipmentList>
@@ -528,9 +478,11 @@ useEffect(() => {
            
           </EquipmentList>
       </Wrap>
+      <ShareButtons classId={id}/>
+      <Footer/>
     </>
   )
 }
 
-export default SingleItem
-export { VOD_AUTH_QUERY, VOD_MUTATION, REMOVE_MUTATION }
+export default SingleLiveClass
+export { VOD_AUTH_QUERY, LIVE_STREAM_QUERY }

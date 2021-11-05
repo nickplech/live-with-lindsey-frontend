@@ -68,11 +68,12 @@ const Pic = styled.div`
   background-position: center center;
   background-size: cover;
   height: 110px;
+  grid-column: 1;
   transition: 300ms;
   z-index: 1000;
   position: absolute;
   justify-content: center;
-
+display: flex;
   width: 110px;
   cursor: pointer;
   @media (max-width: 768px) {
@@ -86,8 +87,8 @@ const Pic = styled.div`
     z-index: 8888;
     position: absolute;
     height: 110px;
-    width: 110px;
-    display: flex;
+    width: 110px;  grid-column: 1;
+    
     user-select: none;
     align-items: center;
     justify-content: center;

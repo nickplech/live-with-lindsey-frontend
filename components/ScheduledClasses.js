@@ -1,9 +1,10 @@
+import React from 'react'
 import Loader from './Loader'
 import gql from 'graphql-tag'
 import {formatISO} from 'date-fns'
 import styled from 'styled-components'
 import { useQuery } from '@apollo/client'
-import {useUser} from './User'
+ 
 import ProductSlider from './ProductSlider'
 
  const STREAMS_QUERY = gql`
@@ -15,6 +16,9 @@ import ProductSlider from './ProductSlider'
       private 
       user {
         id
+        cart {
+          id
+        }
       }
       reason {
         id
@@ -123,7 +127,7 @@ const Title = styled.div`
   }
 `
 function ScheduledClasses( ) {
- const me = useUser()
+
 const today = new Date().toLocaleString();
 const isonow = formatISO(new Date(today)) 
  
@@ -133,18 +137,7 @@ const isonow = formatISO(new Date(today))
   if (loading) return <Loader />
   if (error) return <Error error={error} />
    const items = data.allItems
-  const ownsItem = items.map((item) => {
-    const theUsers = item.user.find((theUser) => {
-      return theUser.id === me.id
-    })
-    return theUsers
-  })
   
-
-  const inCart = me && me.cart.map((cartItem) => {
-    const cartItemIdArray = cartItem && cartItem.item.id
-    return cartItemIdArray
-  })
  return (
       <Schedule >
        <Title items={items}>  Scheduled Live Workouts  </Title>
@@ -161,8 +154,7 @@ const isonow = formatISO(new Date(today))
  
     <ProductSlider
     
-      inCart={inCart}
-      ownsItem={ownsItem}
+
       allItems={items}
     />
 }
@@ -170,4 +162,4 @@ const isonow = formatISO(new Date(today))
   )
 }
 
-export default ScheduledClasses
+export default React.memo(ScheduledClasses)

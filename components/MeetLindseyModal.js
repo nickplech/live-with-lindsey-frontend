@@ -14,7 +14,7 @@ const Background = styled.div`
 `
 const Wrap = styled.div`
   display: flex;
-  position: relative;
+  position: relative; text-align: right;
   .buttonio {
     width: 300px;
     cursor: pointer;

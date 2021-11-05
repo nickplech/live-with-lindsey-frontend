@@ -6,6 +6,8 @@ import Router from 'next/router'
  import gql from 'graphql-tag'
 import Loader from './Loader'
 import Error from './ErrorMessage'
+
+
 const UPLOAD_VOD_VIDEO = gql`
   mutation UPLOAD_VOD_VIDEO(
     $name: String

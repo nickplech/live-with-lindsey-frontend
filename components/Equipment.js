@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import DeleteEquipment from './DeleteEquipment'
 const Flexy = styled.div`
 display: flex;
-justify-content: center;
+justify-content: flex-start;
 margin: 0 auto;
 align-items: center;
  
@@ -14,25 +14,25 @@ const Div = styled.div`
   flex-flow: column;
   justify-content: center;
   align-items: center;
-  margin: 10px 10px;
+  margin: 10px 25px;
   font-family: 'Comfortaa';
-  border: 2px dashed rgba(10,10,10,.2);
+  font-size: 12px;
   background: transparent;
   color: ${(props) => props.color};
  padding: 5px;
- height: 135px;
- transform: translateY(-2.5px);
-  width:150px;
+ height: 80px;
+ 
+  width:100px;
   text-align: center;
-  cursor: pointer;
-  border-radius: 5px;
+ 
+ line-height: 12px;
   list-style: none;
   transition: 0.2s;
-  &:hover {
-  border: 2px dashed rgba(222, 0, 0, 0.1);
-  }
+ 
   img {
 margin-bottom: 10px;
+height: 50px;
+width: 50px;
   }
 `
 

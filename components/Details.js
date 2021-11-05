@@ -112,12 +112,12 @@ function Details( { addToFav, removeFromFavoritesButChill, isAFav, vodViewingAut
     <Grid>
  <h2>{vodViewingAuth && vodViewingAuth.name}</h2> 
            
-         {/* {vodViewingAuth && (
+         {vodViewingAuth && (
          <p className="datecolorchange">
-               Aired On{' '}{format(new Date(vodViewingAuth && vodViewingAuth.date), 'MMM dd, yyyy')}
+               Aired On{' '}{format(new Date(vodViewingAuth.date), 'MMM dd, yyyy')}
               </p> 
               )
-         } */}
+         }
            <p className="datecolorchange">{vodViewingAuth && vodViewingAuth.description}</p>
                {!me ? null : (
                     <div className="extras">  

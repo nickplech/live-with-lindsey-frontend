@@ -23,7 +23,7 @@ const Wrap = styled.div`
     justify-content: center;
     align-items: center;
     width: 25px;
- 
+ transform: translateY(-2px);
     justify-content: center;
  
     padding: 0;

@@ -14,6 +14,7 @@ const Offline = styled.div`
   padding: 0 10px;
   position: relative;
   display: flex;
+  grid-template-columns: 1fr ;
   @media (max-width: 768px) {
     height: 220px;
   }
@@ -42,6 +43,7 @@ const Offline = styled.div`
 const SwithButtons = styled.div`
   color: white;
  width: 300px;
+ grid-column: 1;
 display: flex;
  position:absolute; user-select: none;
  bottom: 10px;
@@ -115,29 +117,46 @@ const TodayButton = styled.div`
 `
 const EnvButton = styled.div`
   color: white;
- width: 60px;
+ width: 100%;
 display: flex;
- position:absolute; user-select: none;
- bottom: 40px;
+ position:absolute; 
+ user-select: none;
+ bottom: 10px;
  border-radius: 50%;
- 
- 
-  display: flex;
- right: 0;
+ grid-column: 2;
   padding: 0;
- 
-   transform: translateY(2px);
+ text-transform: uppercase;
+ transform: translateX(25px);
   opacity: ${(props) => (props.newUpdate === true ? 1 : 0.5  )};
-  background: ${(props) => (props.newUpdate === true ? 'red' : 'white'  )};
+ 
  cursor: pointer;
   z-index: 999;
-  
+ 
+  width: auto;
+  position: absolute;
+
+ 
+  display: flex;
+ 
+  z-index: 6000;
+ 
+  font-feature-settings: 'tnum';
+  font-variant-numeric: tabular-nums;
+ 
+     
+  color: white;
+cursor: pointer;
+   opacity: ${(props) => (props.isToday === 'today' ? 1 : 0.5)};
+  font-size:24px;
+  font-family: 'Felix';
 `
 const Envelope = styled.img`
-height: 25px;
-width: 25px;
+height: 20px;
+width: 20px;
+transform: translate(-30px, 25px);
 position: absolute;
 fill: white;
+user-select: none;
 `
 const CartPic = styled.a`
   height: 33px;
@@ -185,18 +204,22 @@ const OnDemandPic = styled.a`
     }
   }
 `
-
+const Both = styled.div`
+grid-column: 1/3;
+position: relative;
+width: 100%;
+`
 function TickerFeed({ count,  firstName, showPic, pic, today }) {
    const { isToday, handleIt, active } = useToast()
   // const userPic = me?.image ? me.image.publicUrlTransformed : '../static/img/profpic.svg'
   return (
     <Offline>
-      <span>
-        <h1>{firstName}'s Dashboard</h1>
-      </span>
-      {showPic && <span>
-        <ModalPicture image={pic && pic} />
-      </span>}
+ 
+        <h1>{firstName}'s Dashboard</h1>   
+        {showPic &&  
+        <ModalPicture image={pic && pic} />}
+   
+   
       <TodayButton>
         <img height="38px" src="../static/img/cal.svg" alt="users cart" />
         <span>{format(today, 'd')}</span>
@@ -230,7 +253,7 @@ function TickerFeed({ count,  firstName, showPic, pic, today }) {
           WEEK
         </div>
    </SwithButtons>
-   <EnvButton isToday={isToday} ><Envelope src="../static/img/envelope.svg" alt="live with lindsey community updates icon" /></EnvButton>
+   {/* <EnvButton isToday={isToday} ><Envelope src="../static/img/news.svg" alt="live with lindsey community updates icon" />Community Updates</EnvButton> */}
     </Offline>
   )
 }

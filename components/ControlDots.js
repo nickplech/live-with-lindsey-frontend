@@ -8,6 +8,7 @@ const ControlledDotsStyle = styled.div`
   justify-content: center;
   align-items: center;
   position: relative;
+  transform: translateY( 50px);
   ul {
     list-style: none;
     margin: 0 auto;
@@ -15,8 +16,8 @@ const ControlledDotsStyle = styled.div`
     padding: 0;
     display: flex;
     justify-content: center;
-
-    width: 90%;
+ 
+    width: 100%;
   }
   li {
     justify-content: center;
@@ -24,8 +25,9 @@ const ControlledDotsStyle = styled.div`
   }
   .item {
     display: flex;
-    width: 80px;
+    width: 100px;
     height: 30px;
+    color: white;
     border-radius: 5%;
     margin: 0 25px;
     position: relative;
@@ -44,13 +46,16 @@ const ControlledDotsStyle = styled.div`
   }
 `
 const P = styled.p`
-  font-size: 20px;
+display: flex;
+align-items: center;
+justify-content: center;
+  font-size: 14px;
   margin: 0 auto;
-  padding: 5px; line-height: 22px;
+  padding: 0px; line-height: 16px;
   color: white;
   text-align: center;
   background: ${(props) => props.color};
-  
+  width: 180px;
   cursor: pointer;
 `
 export default function ControlDots({ updateStatus, theName, id, status }) {
@@ -98,16 +103,18 @@ function Item({ id, color, theName, name, isSelected, changeActiveStatus }) {
       <li
         className="item"
         onClick={() => changeActiveStatus(id, theName, name)}
-        style={{ backgroundColor: color, opacity: `${isSelected ? 1 : 0.3}` }}
+        style={{ backgroundColor: color, opacity: `${isSelected ? 1 : 0.63}` }}
       >
         {isSelected && (
+          <>
           <motion.div
             layoutId="outline"
             className="outline"
             initial={false}
             animate={{ borderColor: color }}
             transition={spring}
-          ><P>{name}</P></motion.div>
+          ></motion.div><P style={{color: 'white'}}>{name}</P>
+          </>
         )}
       </li> 
  

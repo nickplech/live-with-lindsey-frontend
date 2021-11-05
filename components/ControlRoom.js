@@ -1,16 +1,15 @@
 import React, {useState, useEffect} from 'react'
 import GetChats from './ChatBox'
-import PhotoBoothModal from './PhotoBooth'
+import Shell from './PhotoBooth'
 import styled from 'styled-components'
-import ClickToCopyId from './ClickToCopyId'
 import { useQuery } from '@apollo/client'
 import gql from 'graphql-tag'
 import PieChartComponent  from './PieChart'
 import Error from './ErrorMessage'
-import ControlDots from './ControlDots'
-import { format } from 'date-fns'
-import { useToast } from './contexts/LocalState'
 
+import  ClickToCopyId from './ClickToCopyId'
+import { useToast } from './contexts/LocalState'
+ 
 const STREAM_QUERY = gql`
   query STREAM_QUERY($id: ID!) {
     Item(where: { id: $id }) {
@@ -83,7 +82,7 @@ const Wrapper = styled.div`
   .chatframe {
     position: relative;
     width: 95%;
-    height: 90%;
+    height: 95%;
     transform: translateY(20px);
     grid-row: 1/3;
     margin: 0 auto;
@@ -103,7 +102,11 @@ const TheData = styled.div`
   grid-column: 2;
   grid-row: 2;
   padding: 20px;
-  padding-top: 0;
+ 
+  display: flex;
+ 
+  flex-flow: column;
+  align-items: center;
   h4 {
     background: ${(props) => props.theme.primary};
     text-align: center;
@@ -115,9 +118,9 @@ const TheData = styled.div`
 `
 const RegChart = styled.div`
   display: flex;
-  width: 90%;
-  height: 200px;
-  justify-content: space-evenly;
+  width: 100%;
+  height: 250px;
+  justify-content: center;
   align-items: center;
   flex-flow: row;
   margin: 0 auto;
@@ -155,15 +158,13 @@ function ControlRoom({ adminId }) {
   })
 
   return (
-    <Wrapper>
+    <Wrapper> 
+    
       <TheData style={{ marginLeft: ' 0px' }}>
-         <ClickToCopyId id={adminId} />
-        <ControlDots
-        updateStatus={updateStatus}
-          id={adminId}  
-          status={item.status}
-          theName={item.reason.name}
-        />
+         <div className="thetabs">{listButtons.map(butt => {
+        return <span onClick={() => setIsActive(butt)} key={butt} className={`${butt === isActive ? 'isSelected' : null} tab`}>{butt}</span> 
+      })}</div>
+      
        
         
         <RegChart>
@@ -172,8 +173,8 @@ function ControlRoom({ adminId }) {
         </RegChart>
       </TheData>
 
-      <div className="photobooth">
-        <PhotoBoothModal
+      <div className="photobooth"> <ClickToCopyId id={adminId} />
+        <Shell
           imgSrc={imgSrc}
           triggerTime={triggerTime}
           setImgSrc={setImgSrc}
@@ -182,14 +183,15 @@ function ControlRoom({ adminId }) {
           thumbnail={thumbnail}
           item={item}
           id={adminId}
+          updateStatus={updateStatus}
         />
+          
+
       </div>
       <div className="chatframe">
               <GetChats adminId={adminId} open={true} />
   
-      </div><div className="thetabs">{listButtons.map(butt => {
-        return <span onClick={() => setIsActive(butt)} key={butt} className={`${butt === isActive ? 'isSelected' : null} tab`}>{butt}</span> 
-      })}</div>
+     </div>
     </Wrapper>
   )
 }

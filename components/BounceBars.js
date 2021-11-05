@@ -20,86 +20,55 @@ const StyleMePritay = styled.section`
   }
   .right {
     grid-column: 1/3;
-    justify-content: flex-start;
-    grid-row: 1;
-    height: 750px;
-    background: url('../static/img/phonewithvideotestfinal.png') -140px center;
-    background-repeat: no-repeat;
-    background-size: auto 750px;
 
-    z-index: 10;
-    position: relative;
-  }
-
-  .phones {
-    transform: translateX(-110px);
-  }
-.first-bulletpoint{
-  margin-left: 10px;
-    font-family: 'Bison';
-    color: #f8b0b0;
-    display: flex;
-    max-width: 600px;
-    line-height: 18px;
-    font-size: 16px;
-}
-  .bulletpoints {
-    margin-left: 10px;
-    font-family: 'Bison';
-    color: slategrey;
-    display: flex;
-    max-width: 600px;
-    line-height: 18px;
-    font-size: 16px;
-       &:before {
-      content: '+';
-      margin-right: 6px;
-      font-size: 26px;
-      font-family: 'Comfortaa';
-      line-height: 22px;
-      position: relative;
-      transform: translateY(3px);
-      color: ${(props) => props.theme.second};
-    }
-  }
-  .all_access {
-    color: ${(props) => props.theme.second};
-  }
-  h1 {
-    color: ${(props) => props.theme.second};
-    font-family: 'Felix';
-    line-height: 3.2rem;
-    font-size: 38px;
-    width: 600px;
-    position: absolute;
-    transform: translateY(200px);
-  }
-  ul {
-    list-style: none;
-    padding: none;
-    position: absolute;
-    display: flex;
-    flex-flow: column;
-  }
-  li {
-    margin: 0;
-    margin-bottom: 10px;
-    letter-spacing: 2px;
-    align-items: center;
-    transform: translateX(-13px);
  
-  }
-  h3 {
+  justify-content: flex-start;
+    grid-row: 1;
+    height: 720px;
+    background: url('../static/img/phonewithvideotestfinal2.png') -190px bottom;
+    background-repeat: no-repeat;
+    background-size: auto 720px;
+
+    z-index: 2150;
+    position: relative;
+ }
+ .main-text {
+   width: 100%;
+   height: 100%;
+   display: flex;
+   justify-content: center;  font-family: 'Comfortaa';
+   max-width: 550px;
+   font-size:18px;
+   line-height:20px;  
+   color: slategray;
+   flex-flow: column;
+   align-items: center;
+   transform: translate(0, -50px);
+ }
+  h2 {
     font-family: 'Bison';
+    color: ${props => props.theme.second};
     font-size: 26px;
     margin-bottom: 0px;
+  }
+  p {
+    max-width: 550px;
+  }
+  span {
+    font-family: 'Bison';
+    font-size: 22px;
+    letter-spacing: 2px;
+    -webkit-text-fill-color: transparent;
+  -webkit-background-clip: text;
+    background-image: linear-gradient(195deg, #f8b0b0, #ffd7d4,  #f8b0b0);
+    background-clip: text;
   }
 `
 const Video = styled.div`
   height: 455px;
   position: absolute;
   /* grid-column: 1; */
-  transform: translate(250px, -600px) rotate(45deg);
+  transform: translate(225px, -635px) rotate(23.5deg);
   border-radius: 25px;
   width: 220px;
   overflow: hidden;
@@ -134,58 +103,24 @@ const Schedule = styled.div`
   }
 `
 export default function BounceBars() {
-  const weekStarts = startOfWeek(new Date(), {
-    weekStartsOn: 0,
-  })
-  const weekEnds = endOfWeek(new Date())
+
   const iconColor = '#f8b0b0'
   return (
     <>
       <StyleMePritay className="white-plain py-5">
         <div className="left">
-          <ul className=" list-unstyled">
-            <h3>
-              {' '}
-              <img height="120" src="../static/img/aap.svg" />
-            </h3>
-            <li className="first-bulletpoint">The Perks of a Live with Lindsey All Access Pass</li>
-            <li className="bulletpoints">
-              Full Access to Daily Live Stream Workouts + Lindsey's Video
-              on-Demand Library of 50+ Workouts and Growing
-            </li>
-            <li className="bulletpoints">5 New Workouts Every Week</li>
-            <li className="bulletpoints">
-              Exclusive Mobility and Active Recovery Classes
-            </li>
-            <li className="bulletpoints">
-              Exclusive Challenges &amp; Programs
-            </li>{' '}
-            <li className="bulletpoints">
-              No More Expiration Dates! Retake Classes as Many Times as You Want
-            </li>
-            <li className="bulletpoints">
-              {' '}
-              Access to an Amazing Online Community of Women from Around the
-              World, United by Self Love + Movement
-            </li>
-            <li className="bulletpoints">
-              A variety of workouts ranging from strength, low impact, body
-              weight and cardio, catering to all fitness levels
-            </li>
-          </ul>
+         <div className="main-text">
+         <p><span>Get ready to have fun and work hard</span>&mdash;
+            my classes range from low impact, 
+            to strength training, to high intensity, 
+            and cater to all fitness levels. <br/><br/>
+            Be prepared to gain strength &amp; confidence, 
+            connect with like-minded women,
+             and leave every class feeling challenged, 
+             accomplished, and toned in all the right places.</p>
+<img width="400" style={{transform: 'translate(40px, 10px)'}} src="../static/img/readysetsweat.svg" />            
+             </div>
 
-          <Schedule>
-            <p>
-              Live Schedule:{' '}
-              {`${
-                format(weekStarts, 'M/dd') +
-                ' ' +
-                '-' +
-                ' ' +
-                format(weekEnds, 'M/dd')
-              }`}
-            </p>
-          </Schedule>
         </div>
 
         <div className="right phones"></div>

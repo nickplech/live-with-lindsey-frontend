@@ -34,7 +34,6 @@ width: 90%;
 height: 100%;
 display: flex;
  
-overflow:hidden;
 `
 const Stats = styled.div`
 grid-column: 2;
@@ -89,21 +88,53 @@ background: transparent;
    const Updates = styled.div`
    display: flex;
  width: 100%;
- height: 90%;
+ height: 110%;
  position: relative;
+ padding-top: 20px;
  z-index: 900;
  transform: translate(0, 10px);
-
+flex-flow: column; 
  border-radius: 10px;
  `
  const UpdateImg = styled.div`
- background: url('../static/img/updateimage.png') center center;
+ display: grid;
+ grid-template-columns: 60px 1fr 50px;
+ grid-template-rows:   1fr ;
+ /* border: 1px solid lightgray; */
+ border-radius: 10px 0 0 10px;
+ border-right:5px solid ${props => props.colorType};
+  align-items: center;
  background-size: cover;
- width: 90%;
- height: auto;
+ width: 100%;
+ height: auto;        
 position: relative;
-border-radius: 15px;
-
+margin-bottom: 30px;
+padding-left: 10px;
+.icon-box {
+  grid-column: 1;
+   background-image: linear-gradient(195deg,  #f8b0b0 ,#ffd7d4, #f8b0b0);
+  height: 60px;
+  width: 60px;
+  border-radius: 10px;
+  color: white;
+}
+.title {
+  color: slategray;
+  font-size: 16px;
+  text-align: center;
+  letter-spacing: 2px;
+  line-height: 16px;
+  padding-left: 15px; grid-column: 2;grid-row: 1;
+}
+.content {
+  color: slategray;
+  font-size: 14px;
+  line-height: 15px;
+}
+.sinceTime {
+  grid-column: 2;grid-row: 1;
+  position: absolute;align-self: flex-end;
+}
  `
 export default function DashStats() {
   const {isToday} = useToast()
@@ -115,13 +146,20 @@ if (!data) return null
     return (
       <StatContainer>
       {isToday === 'today' ? <Updates>
-       {/* {allPublicUpdates.map(update => {
+       {allPublicUpdates.map(update => {
+         const lowerCased = update.iconImg.toLowerCase()
          return(
-           <UpdateImg>{update.textContent}    
-  
-  <p>{format(new Date(update.createdAt), 'dd mmm eee')}</p></UpdateImg>
+           <UpdateImg colorType={'#f8b0b0'}>
+             <div className="icon-box" >
+               <img height="45" src={`../static/img/${lowerCased}.png`} alt={lowerCased} />
+           </div> 
+           <p className="title">
+              {update.title}    
+</p>
+ 
+  <p className="sinceTime">{format(new Date(update.createdAt), 'eee')} </p></UpdateImg>
          )
-       })} */}
+       })}
 
  
           

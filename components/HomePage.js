@@ -1,4 +1,4 @@
-import Hero from './Hero'
+import HomePageHero from './HomePageHero'
 import PublicSchedule from './PublicSchedule'
 import Reviews from './Reviews'
 import MeetLindsey from './MeetLindsey'
@@ -7,37 +7,24 @@ import Footer from './Footer'
 import BounceBars from './BounceBars'
 import MainText from './MainText'
 import Accordian from './Accordian'
-import MobileReviews from './MobileReviews'
+import Instagram from './Instagram'
 import styled from 'styled-components'
 
-const Desktop = styled.div`
-  display: block;
-  @media (max-width: 992px) {
-    display: none;
-  }
-`
-const Mobile = styled.div`
-  display: none;
-  @media (max-width: 992px) {
-    display: block;
-  }
-`
+ 
 function HomePage() {
   return (
     <>
-      <Hero />
-      <MainText />
+      <HomePageHero />
+       <BounceBars />
       <MeetLindsey />
-      <BounceBars />
-      <PublicSchedule />
-      <Desktop>
-        <Reviews />
-      </Desktop>
-      <Mobile>
-        <MobileReviews />
-      </Mobile>
 
-      <Accordian />
+      <PublicSchedule />
+  
+        <Reviews />
+      
+  
+
+      <Instagram />
       <CallToAction />
       <Footer />
     </>

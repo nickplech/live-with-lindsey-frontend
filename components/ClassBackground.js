@@ -18,8 +18,8 @@ const Title = styled.img`
   z-index: 15000;
   margin: 0 auto;
   transform: translateY(-50px);
-  width: 340px;
-  @media (max-width: 768px) {
+  width: 270px;
+  @media (max-width: 992px) {
     width: 190px;
     transform: translateY(-40px);
   }
@@ -37,7 +37,7 @@ function ClassBackground(props) {
   const cleanName = props.name.toLowerCase().replace(/\s/g, '')
   return (
     <Background>
-      <ShareButtons classId={props.classId}/>
+    
       <VideoPlayer name={cleanName}  />
       <Title src="../static/img/countdown2live.svg" alt="countdown to live" />
       <CountDownTimer status={props.status} date={props.date} />

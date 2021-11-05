@@ -63,7 +63,7 @@ const StyledHeader = styled.header`
   .bar {
     /* position: fixed; */
     display: grid;
-
+position: relative;
     justify-content: space-between;
     background: rgb(30, 30, 30);
     width: 100%;

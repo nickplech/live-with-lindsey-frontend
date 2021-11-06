@@ -16,7 +16,7 @@ function HomePage() {
     <>
       <HomePageHero />
        <BounceBars />
-      <MeetLindsey />
+      {/* <MeetLindsey /> */}
 
       <PublicSchedule />
   

@@ -134,7 +134,7 @@ const CREATE_PRIVATE_CLASS_MUTATION = gql`
   mutation CREATE_PRIVATE_CLASS_MUTATION(
 
     $price: Int
-    $date: DateTime!
+    $date: [DateTime!]
     $name: String
    
     $userId: ID!
@@ -188,14 +188,14 @@ function CreatePrivateClass() {
   const [priceState, setPriceState] = useState('')
   const [selectedOption, setSelectedOption] = useState('')
   const [userNameState, setUserNameState] = useState('')
+  const [date, setDate] = useState(new Date())
+  const [selectedDates, setSelectedDates] = useState([])
   function handleSelectedOption(e) {
     setSelectedOption(e)
     setUserNameState(e.label)
   }
   
-  const { inputs, handleChange } = useForm({
-    date: new Date(),
-  })
+ 
   const weekStarts = startOfWeek(new Date(), {
     weekStartsOn: 0,
   })
@@ -203,7 +203,7 @@ function CreatePrivateClass() {
     CREATE_PRIVATE_CLASS_MUTATION,
     {
       variables: {
-        date: formatISO(new Date(inputs.date)),
+        date: selectedDates,
         name: nameState.label,
         price: parseInt(priceState),
         userId: selectedOption && selectedOption.value
@@ -217,6 +217,15 @@ function CreatePrivateClass() {
       ],
     },
   )
+  function handleChange(e) {
+    let { value, name, type } = e.target
+ 
+ 
+    setSelectedDates(
+      [...selectedDates,
+      value]
+    )
+  }
 
   const { data } = useQuery(ALL_USERS_QUERY)
   if (!data) return null
@@ -225,10 +234,10 @@ function CreatePrivateClass() {
     const label = `${user.lastName + ',' + ' ' + user.firstName +  ' ' + '(' + user.businessName + ')'}`
     return { value, label }
   })
-  
-
+  console.log(date)
+console.log(selectedDates)
   const needsClass = selectedOption && selectedOption.length
-  const needsDateTime = inputs.date && inputs.date !== null
+  const needsDateTime = date && date !== null
 
   return (
     <Inner>
@@ -292,9 +301,10 @@ function CreatePrivateClass() {
                         type="datetime-local"
                         step="900"
                         required
-                        defaultValue={inputs.date}
-                        onChange={handleChange}
+                        defaultValue={date}
+                        onChange={setDate}
                       />
+                      <button onClick={(e) => handleChange(e)}>Add Another Date</button>
                     </label>
          
                   

@@ -42,12 +42,12 @@ const StyleMePritay = styled.section`
    line-height:20px;  
    color: slategray;
    flex-flow: column;
-   align-items: center;
+   align-items: flex-start;
    transform: translate(0, -50px);
  }
   h2 {
     font-family: 'Bison';
-    color: ${props => props.theme.second};
+    color: slategray;
     font-size: 26px;
     margin-bottom: 0px;
   }
@@ -110,15 +110,16 @@ export default function BounceBars() {
       <StyleMePritay className="white-plain py-5">
         <div className="left">
          <div className="main-text">
-         <p><span>Get ready to have fun and work hard</span>&mdash;
-            my classes range from low impact, 
+           <h2>Get ready to have fun and work hard</h2>
+         <p> 
+            My classes range from low impact, 
             to strength training, to high intensity, 
             and cater to all fitness levels. <br/><br/>
             Be prepared to gain strength &amp; confidence, 
             connect with like-minded women,
              and leave every class feeling challenged, 
              accomplished, and toned in all the right places.</p>
-<img width="400" style={{transform: 'translate(40px, 10px)'}} src="../static/img/readysetsweat.svg" />            
+<img width="400" style={{transform: 'translate(50px, 10px)'}} src="../static/img/readysetsweat.svg" />            
              </div>
 
         </div>

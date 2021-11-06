@@ -115,7 +115,7 @@ export function NavMenu({ isOpen, toggle, me, addy }) {
           }}
         >
           <Link href="/ondemand">
-            <a>On-Demand Workouts</a>
+            <a>On-Demand</a>
           </Link>
         </NavLink>
         {addy && <NavLink

@@ -114,6 +114,9 @@ padding-left: 10px;
   grid-column: 1;
    background-image: linear-gradient(195deg,  #f8b0b0 ,#ffd7d4, #f8b0b0);
   height: 60px;
+  align-items: center;
+  justify-content: center;
+  display: flex;
   width: 60px;
   border-radius: 10px;
   color: white;
@@ -151,7 +154,7 @@ if (!data) return null
          return(
            <UpdateImg colorType={'#f8b0b0'}>
              <div className="icon-box" >
-               <img height="45" src={`../static/img/${lowerCased}.png`} alt={lowerCased} />
+               <img style={{transform: 'translateY(4px)'}} height="45" src={`../static/img/${lowerCased}.png`} alt={lowerCased} />
            </div> 
            <p className="title">
               {update.title}    

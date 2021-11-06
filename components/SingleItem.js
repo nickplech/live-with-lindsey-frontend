@@ -285,7 +285,7 @@ transform: translateY(250px);
 `
 const PopUp = styled.span`
   cursor: pointer ;
-    margin: 10px 10px ;
+    margin: 15px 15px ;
  display: flex; 
  flex-flow: row;
  width: 100%;
@@ -316,6 +316,12 @@ const PopUp = styled.span`
     &:focus,
     &:active {
       background: ${(props) => props.theme.primary};
+    }
+    .theequipment {
+      box-shadow: 
+ 
+    0 2px 1px rgba(0, 0, 0, 0.09), 0 4px 2px rgba(0, 0, 0, 0.09),
+      0 8px 4px rgba(0, 0, 0, 0.09), 0 16px 8px rgba(0, 0, 0, 0.09);
     }
 `
 const Bubble = styled.div`
@@ -511,7 +517,7 @@ useEffect(() => {
                   
                 return (
                   <PopUp key={equip.name}>
-             <img style={{borderRadius: '50%',    boxShadow: '0 2px 1px rgba(0, 0, 0, 0.09)',  border: '2px solid lightgray', height: '45px', width: '45px'  }} src={equip.image.publicUrlTransformed} alt={equip.name} /> 
+             <img className="theequipment" style={{borderRadius: '50%',  height: '45px', width: '45px'  }} src={equip.image.publicUrlTransformed} alt={equip.name} /> 
                       <Bubble>
                         <div style={{ display: 'inline-flex' }}>
                           {' '}

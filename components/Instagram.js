@@ -26,11 +26,12 @@ import React, {useState, useEffect} from 'react'
 }
 
 .number-slide1 {
-  background: rgb(64, 175, 255);
+    background: rgb(255, 64, 156);
   background: linear-gradient(
     128deg,
-    rgba(64, 175, 255, 1) 0%,
-    rgba(63, 97, 255, 1) 100%
+    rgba(255, 64, 156, 1) 0%,
+    rgba(255, 154, 63, 1) 30%,
+    rgba(255, 63, 63, 1) 100%
   );
 }
 
@@ -88,7 +89,8 @@ import React, {useState, useEffect} from 'react'
  const InstagramContainer = styled.div`
  display: flex;
  margin: 0 auto;
- height: 600px;
+ z-index: 100;
+ height: 700px;
  overflow: hidden;
  position: relative;
  justify-content: center;
@@ -101,7 +103,7 @@ import React, {useState, useEffect} from 'react'
       width: 100%;
       background: lightgray;
   }
-  img {
+  .img {
     height: 100%;
       width: 100%;
   }
@@ -132,9 +134,10 @@ export default function Instagram(props){
           <Wrap ref={sliderRef} className="keen-slider">
             {gramz.map(gram => (
 
-      <a key={gram.id} href={gram.url} className="keen-slider__slide number-slide1"><img key={gram.id} src={gram.thumbnail} alt={gram.caption} /></a>
+      <a key={gram.id} href={gram.url} className="keen-slider__slide number-slide1"><img className="img" key={gram.id} src={gram.thumbnail} alt={gram.caption} /></a>
      
         ))}   </Wrap>
+        {/* <img height="300" width="auto" style={{right: '15%', zIndex: 30, position: 'absolute', transform: 'translateY(-160px) rotate(-4deg)'}} src="../static/img/lindsey-harrod-instagram.svg" alt="lindsey harrod instagram" /> */}
         </InstagramContainer>
   )
 }

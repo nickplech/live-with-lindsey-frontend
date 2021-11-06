@@ -105,6 +105,32 @@ display: flex;
       0 8px 4px rgba(0, 0, 0, 0.09), 0 16px 8px rgba(0, 0, 0, 0.09),
       0 32px 16px rgba(0, 0, 0, 0.09);
  `
+ const OnDemandScreen = styled(motion.div)`
+ background-image: linear-gradient(195deg,  #f8b0b0 ,#ffd7d4);
+    justify-content: center;
+       align-items: center;    display: flex;
+ border-radius: 5px;
+ overflow: hidden;
+ background: url('../static/img/lindseyharrodondemand.jpg') center center no-repeat;
+ background-size: cover;
+ box-shadow: 0 2px 1px rgba(0, 0, 0, 0.09), 0 4px 2px rgba(0, 0, 0, 0.09),
+     0 8px 4px rgba(0, 0, 0, 0.09), 0 16px 8px rgba(0, 0, 0, 0.09) 
+     ;
+     .playbutton {
+      box-shadow: 0 2px 1px rgba(0, 0, 0, 0.09), 0 4px 2px rgba(0, 0, 0, 0.09),
+     0 8px 4px rgba(0, 0, 0, 0.09), 0 16px 8px rgba(0, 0, 0, 0.09) 
+     ;
+     opacity: .8;
+   border-radius: 50%;
+       margin: 0 auto;
+       height: 60px;
+       width: 60px;
+       transition: .3s;
+       &:hover {
+         transform: scale(1.1);
+       }
+     }
+`
  const SignMeUp = styled.a`
 
  color: white;
@@ -139,6 +165,40 @@ display: flex;
     );
    
 `
+const MailingListInput = styled.input`
+ border: none;
+height: 50px;
+width: 450px;
+box-shadow: 0 2px 15px -4px rgba(0, 0, 0, 0.09),
+      0 20px 50px rgba(0, 0, 0, 0.09)  ;
+border-radius: 25px;
+padding: 0 30px ;
+font-size: 12px;
+font-family: 'Comfortaa';
+text-transform: uppercase;
+margin: 0 auto;
+transform: translate(-3px, 0);
+&:focus {
+  outline: none;
+}
+&::-webkit-input-placeholder {
+      
+     opacity: 0.5; /*Change the opacity between 0 and 1*/
+}
+ `
+const SubmitButton = styled.button`
+  background:   #f8b0b0  ;
+  color: white;
+  font-family: 'Bison';
+  position: absolute;
+  font-size: 16px;
+  transform: translate(-108px, 7px);
+  border: none;
+  border-radius: 25px;cursor: pointer;
+  width: 100px;
+  height: 36px;box-shadow: 0 -2px 15px -4px rgba(0, 0, 0, 0.09),
+      0 2px  13px rgba(0, 0, 0, 0.15)  ;
+`
 const HomePageHero = () => {
   const x = useMotionValue(195);
   const y = useMotionValue(100);
@@ -155,29 +215,30 @@ return(
             by <span  >Lindsey Harrod </span>  </h1>
             <div className="main-text">
       
-           <p>Get ready to have fun and work hard&mdash;
-            my classes range from low impact, 
-            to strength training, to high intensity, 
-            and cater to all fitness levels. <br/><br/>
+           <p>Always be up-to-date with the Lindsey Harrod Fitness community&mdash;be the first to know about 
+             fitness challenges &amp; upcoming community events, Just enter your email below! <br/><br/>
              </p>
+               <MailingListInput placeholder="enter your email for updates"/>
+             <SubmitButton className="submit-email">Submit to Join</SubmitButton>
              </div>
-          <Link href={{ pathname: '/signup' }}>
+           
+          {/* <Link href={{ pathname: '/signup' }}>
             <SignMeUp>Sign Up for Free </SignMeUp>
-          </Link>
+          </Link> */}
     </Title>
         <Lindsey style={{
                  
                 perspective: 800
             }}>
       <img src='../static/img/lindsey-harrod-fitness-header.png' alt='Lindsey Harrod Fitness' />
-        <motion.div
+        <OnDemandScreen
                 style={{
-                    width: 280,
+                    width: 240,
                     height: 160,
                     borderRadius: 10,
-                    border: '4px solid #f8b0b0',
+              
                     backgroundColor: '#f8b0b0',
-                    opacity: ".6",
+                    opacity: ".75",
                     left: -305,
                     top: 400,
                     position: "relative",
@@ -189,7 +250,7 @@ return(
                
               
                 whileTap={{ cursor: "grabbing" }}
-            ><div className="circle"/></motion.div>
+            ><img src="../static/img/playbutton.svg" className="playbutton"/></OnDemandScreen>
              <LiveScreen
                 style={{
                     width: 180,
@@ -199,14 +260,14 @@ return(
 
                   
                  
-                    opacity: ".8",
+                    opacity: ".65",
                     left: -270,
                     top: 300,
                     position: "absolute",
                     x: x,
                     y: y,
                   
-                    cursor: "grab"
+                   
                 }}
                
               

@@ -98,7 +98,7 @@ export default function Page({ children }) {
         toast(` ${theName} is now ${status}!`)
       }
       if (status === 'COMPLETE') {
-        toast(`${theName} is no longer live streaming & will shortly be added to on-demand library`)
+        toast(`${theName} is no longer live. A recording will be available On-Demand momentarily`)
       }
       updateStatus(classId, status)
     

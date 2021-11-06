@@ -304,21 +304,20 @@ const PopUp = styled.span`
     list-style: none;
     color: white;
 
-  -moz-box-shadow: 
-    1px 1px 5px rgba(0, 0, 0, 0.2), 
-    inset 1px 1px 15px rgba(100, 100, 100, 0.15);
-  -webkit-box-shadow: 
-    1px 1px 5px rgba(0, 0, 0, 0.2),
-    inset 1px 1px 15px rgba(100, 100, 100, 0.15);
-  box-shadow: 
-    1px 1px 5px rgba(0, 0, 0, 0.2),
-    inset 1px 1px 15px rgba(100, 100, 100, 0.15);
+ 
   
     transition: 0.3s;
     &:hover,
     &:focus,
     &:active {
       background: ${(props) => props.theme.primary};
+    }
+    .theequipment {
+      box-shadow: 
+ 
+    0 2px 1px rgba(0, 0, 0, 0.09), 0 4px 2px rgba(0, 0, 0, 0.09),
+      0 8px 4px rgba(0, 0, 0, 0.09), 0 16px 8px rgba(0, 0, 0, 0.09),
+      0 32px 16px rgba(0, 0, 0, 0.09);
     }
 `
 const Bubble = styled.div`
@@ -333,7 +332,11 @@ display: none;
   font-family: 'Bison';
   flex-flow: column;
   justify-content: center;
-border: 1px solid lightgray;
+  box-shadow: 
+ 
+ 0 2px 1px rgba(0, 0, 0, 0.09), 0 4px 2px rgba(0, 0, 0, 0.09),
+   0 8px 4px rgba(0, 0, 0, 0.09), 0 16px 8px rgba(0, 0, 0, 0.09),
+   0 32px 16px rgba(0, 0, 0, 0.09);
   h4 {
     margin: 0;
     font-size: 24px;  
@@ -461,7 +464,7 @@ function SingleLiveClass({ id, userId }) {
                   
                 return (
                   <PopUp key={equip.name}>
-             <img style={{borderRadius: '50%',    boxShadow: '0 2px 1px rgba(0, 0, 0, 0.09)',  border: '2px solid lightgray', height: '45px', width: '45px'  }} src={equip.image.publicUrlTransformed} alt={equip.name} /> 
+             <img className="theequipment" style={{borderRadius: '50%',  height: '45px', width: '45px'  }} src={equip.image.publicUrlTransformed} alt={equip.name} /> 
                       <Bubble>
                         <div style={{ display: 'inline-flex' }}>
                           {' '}

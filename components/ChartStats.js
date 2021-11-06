@@ -60,7 +60,7 @@ export default class ChartStats extends PureComponent {
             data={data}
             margin={{
               top: 10,
-              right: 30,
+              right: 0,
               left: 0,
               bottom: 0,
             }}
@@ -71,9 +71,9 @@ export default class ChartStats extends PureComponent {
       <stop offset="95%" stopColor="#f8b0b0" stopOpacity={0}/>
     </linearGradient>
     </defs>
-            <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="name" />
-            <YAxis />
+            
+            {/* <XAxis dataKey="name" /> */}
+     
             <Tooltip />
             <Area type="monotone" dataKey="currentweek" stroke="#f8b0b0" fillOpacity={1} fill="url(#colorUv)" />
           </AreaChart>

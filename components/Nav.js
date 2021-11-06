@@ -28,6 +28,12 @@ function Nav({ isOpen, toggle }) {
         <NavStyles>
                   {!me && !addyTrue && (
             <>
+             <Link href="/about">
+                <a>about</a>
+              </Link>
+              <Link href="/ondemand">
+                <a>on-demand</a>
+              </Link>
               <Link href="/login">
                 <a>Login</a>
               </Link>

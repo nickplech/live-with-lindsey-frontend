@@ -49,7 +49,7 @@ const CREATE_CLASS_MUTATION = gql`
 
 const Mode = styled.div`
   box-shadow: 0px 10px 5px -3px rgba(20, 20, 20, 0.2);
-  z-index: 13000;
+  z-index: 100;
   position: relative;
   font-size: 12px;
 
@@ -153,6 +153,7 @@ position: relative;
  }
  ul {
    transition: .1s;
+   cursor: pointer;
    list-style: none;display: flex;flex-flow: column;padding: 0; margin: 0 10px;
    &:hover {
      transform: scale(1.02);

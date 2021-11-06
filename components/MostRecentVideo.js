@@ -97,9 +97,8 @@ const Wrap = styled.div`
 
 const TheItem = styled.div`
   height: 320px;
-  width: 95%;
- min-width: 400px;
-  border-radius: 15px;
+  width: 100%;
+ 
   display: flex;
   align-items: flex-end;
   justify-content: center;
@@ -108,24 +107,44 @@ const TheItem = styled.div`
   transition: 0.2s;
   position: relative;
   z-index: 1000;
+  border: none;
   user-select: none;
-  box-shadow: 0 2px 1px rgba(0, 0, 0, 0.09), 0 4px 2px rgba(0, 0, 0, 0.09),
+  /* box-shadow: 0 2px 1px rgba(0, 0, 0, 0.09), 0 4px 2px rgba(0, 0, 0, 0.09),
     0 8px 4px rgba(0, 0, 0, 0.09), 0 16px 8px rgba(0, 0, 0, 0.09),
-    0 32px 16px rgba(0, 0, 0, 0.03);
+    0 32px 16px rgba(0, 0, 0, 0.03); */
   background: ${(props) => props.theme.primary};
-  background: url(${(props) => props.thumbnailUrl}) no-repeat center center;
-    background-size: cover;
-    
+  background: url(${(props) => props.thumbnailUrl}) no-repeat ;
+  box-shadow: 0px 50px 70px rgba(0,0,0,0.3),
+              0px 10px 10px rgba(0,0,0,0.1);
+    background-position: bottom;
+  background-size: cover;
       transform: perspective(1000px)
-    rotateX(4deg)
+    rotateX(8deg)
     rotateY(-16deg)
     rotateZ(4deg)
     skew(2deg);
-  /* box-shadow: 24px 16px 64px 0 rgba(0, 0, 0, 0.08); */
-  border-radius: 15px;
  
-
+ &:before {
+  content:"";
+  width:inherit;
+  height: 42%;
+  position: absolute;
+  bottom: -42%;
+  background: linear-gradient(to bottom, rgba(255,255,255,0.4),white);
+  z-index: 1;  cursor: default;
+}
   &:after {
+    content:"";
+  background-image: inherit;
+  width:inherit;
+  height:40%;
+  background-position: bottom;
+  background-size: cover;
+  position: absolute;  opacity: 0.5;
+  bottom:-41%;
+  transform: scaleY(-1) ;
+}
+  /* &:after {
     content: '';
  
     position: absolute;
@@ -138,14 +157,14 @@ const TheItem = styled.div`
     width: 100%;
     background: linear-gradient(180deg, transparent 0%, rgba(0, 0, 0, 1) 100%);
     
-  }
+  } */
   @media (min-width: 992px) {
     height: 320px;
-    width: 90%;
+    width: 100%;
   }
   @media (min-width: 1100px) {
     height: 320px;
-    width: 90%;
+    width: 100%;
   } 
   h3 {
     color: white;
@@ -205,7 +224,12 @@ const Play = styled.img`
 opacity: 1;
   }
 `
-
+const Img = styled.img`
+position: absolute;
+right:100px;
+margin-top: 30px;
+z-index:9999;
+`
 const ParallaxImage = ({ src, ...style }) => {
   const [elementTop, setElementTop] = useState(0)
   const ref = useRef(null)
@@ -222,8 +246,8 @@ const ParallaxImage = ({ src, ...style }) => {
 
   return (
     <div ref={ref} className="image-container">
-      <motion.div className="overlay" style={{ ...style, y }} />
-      <img src={src} alt="" />
+ 
+      <motion.div style={{ ...style, y }}>hey</motion.div >
     </div>
   )
 }
@@ -260,7 +284,8 @@ function MostRecentVideo(props) {
 
           <img  className="ribbon" src="../static/img/mostrecent2.svg" />
         </TheItem>{' '}
-        <ParallaxImage />
+        <ParallaxImage/>
+        
       </div>
       <div className="left">
 
@@ -277,3 +302,23 @@ function MostRecentVideo(props) {
 }
 
 export default MostRecentVideo
+{/* <div className="canvas-wrapper">
+	<a href="#" className="canvas">
+		<div className="canvas_border">
+			<svg>
+				<defs><linearGradient id="grad-orange" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" style="stop-color:rgb(253,137,68);stop-opacity:1"></stop><stop offset="100%" style="stop-color:rgb(153,75,23);stop-opacity:1"></stop></linearGradient><linearGradient id="grad-red" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#D34F48"></stop><stop offset="100%" stop-color="#772522"></stop></linearGradient></defs>
+				<rect id="rect-grad" className="rect-gradient" fill="none" stroke="url(#grad-orange)" stroke-linecap="square" stroke-width="4" stroke-miterlimit="30" width="100%" height="100%"></rect>
+			</svg>
+		</div>
+		<div className="canvas_img-wrapper">
+			<img className="canvas_img" src="https://blog.codepen.io/wp-content/uploads/2012/06/Button-Black-Large.png" alt="">
+		</div>
+		<div className="canvas_copy canvas_copy--left">
+			<span className="canvas_copy_subtitle">Heading</span>
+			<strong className="canvas_copy_title">Hello</strong>
+			<strong className="canvas_copy_title">World</strong>
+			<span className="canvas_copy_details">Details and stuff</span>
+		</div>
+	</a>
+	 
+</div> */}

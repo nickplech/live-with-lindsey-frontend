@@ -261,55 +261,56 @@ const Wrap = styled.div`
   }
 `
 const Tags = styled.div`
-  width: 90%;
-  position: relative;
-  z-index: 2280;
-  margin: 0 auto;
-  text-transform: uppercase;
+width: 96%;
+position: relative;
+z-index: 2280;
+font-family: 'Comfortaa';
+margin: 0 auto;
+
+display: flex;
+transform: translateY(-30px);
+flex-flow: row wrap;
+
+span {
+  margin: 3px 3px;
+  background: transparent;
+  color: ${(props) => props.theme.third};
+  max-height: 24px;
+  border-radius: 2px;
+  padding: 2px 5px;
+  letter-spacing: 1px;
+  line-height: 16px;
+  border: 1px solid ${(props) => props.theme.third};
+  opacity: 0.8;
+}
+h2 {
+  margin: 0;
+  border-left: 3px solid #f8b0b0;
+  padding-left: 5px;
+  padding-bottom: 3px;
+  line-height: 22px;
+  transform: translateY(-20px);
   display: flex;
-  transform: translateY(-25px);
-  flex-flow: row wrap;
+  font-size: 22px;
+  /* transform: translateY(-30px); */
+  color: ${(props) => props.theme.third};
+  font-family: 'Bison';
+  letter-spacing: 2px;
+}
+.the_date {
+  margin-left: 7px;
+  font-family: 'Bison';
+  letter-spacing: 2px;
+  font-size: 16px;
 
-  span {
-    margin: 3px 3px;
-    background: ${(props) => props.theme.third};
-    color: white;
-    max-height: 24px;
-    border-radius: 2px;
-    padding: 0px 5px;
-    letter-spacing: 3px;
-    line-height: 16px;
-    font-family: 'Bison';
-    opacity: 0.8;
-  }
-  h2 {
-    margin: 0;
-    border-left: 3px solid #f8b0b0;
-    padding-left: 5px;
-    padding-bottom: 3px;
-    line-height: 22px;
-    transform: translateY(-20px);
-    display: flex;
-    font-size: 22px;
-    /* transform: translateY(-30px); */
-    color: ${(props) => props.theme.third};
-    font-family: 'Bison';
-    letter-spacing: 2px;
-  }
-  .the_date {
-    margin-left: 7px;
-    font-family: 'Bison';
-    letter-spacing: 2px;
-    font-size: 16px;
-
-    border-radius: 8px;
-    padding: 0 6px;
-    line-height: 18px;
-    transform: translateY(1px);
-  }
-  /* span {
-    background: ${(props) => props.theme.primary};
-  } */
+  border-radius: 8px;
+  padding: 0 6px;
+  line-height: 18px;
+  transform: translateY(1px);
+}
+/* span {
+  background: ${(props) => props.theme.primary};
+} */
 `
 
 const Tite = styled.h1`

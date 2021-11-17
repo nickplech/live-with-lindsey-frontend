@@ -115,14 +115,14 @@ const CallToAction = () => (
   <Wrap>
     <GradientDiv />
     <BlackBack />
-    <Block>
+    {/* <Block>
       <h1>
         Your First Live Workout with Lindsey is <span>Completely Free!</span>
       </h1>
       <Link href="/signup">
         <StyledButton>Click to Get Started</StyledButton>
       </Link>
-    </Block>
+    </Block> */}
   </Wrap>
 )
 

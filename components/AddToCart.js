@@ -2,8 +2,8 @@ import React, {useState} from 'react'
 import gql from 'graphql-tag'
 import Router from 'next/router'
 import { useMutation } from '@apollo/client'
-import {useUser} from './User'
-import { CURRENT_USER_QUERY } from './User'
+
+import { useUser, CURRENT_USER_QUERY } from './User'
 
 import styled, { keyframes } from 'styled-components'
 const loader = keyframes`
@@ -87,7 +87,8 @@ const Pic = styled.div`
   background-color: ${(props) => props.theme.second};
   box-shadow: 0 5px 10px rgba(0,0,0,.1);
   color: #fff;
-  font: 700 18px/1 'Lato', sans-serif;
+  letter-spacing: 3px;
+  font: 700 22px/1 'Bison';
   text-shadow: 0 1px 1px rgba(0,0,0,.2);
   text-transform: uppercase;
   text-align: center;

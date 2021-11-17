@@ -63,8 +63,7 @@ const Wrap = styled.div`
   }
     .topper {
       width: 90%;
-      border-top: ${(props) =>
-        props.thumbnail === null ? '2px solid white' : null};
+     
       margin: 0 auto;
       text-align: center;
       justify-content: center;

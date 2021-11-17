@@ -39,33 +39,7 @@ const REMOVE_MUTATION = gql`
     }
   }
 `
-const Div = styled.div`
-  padding: 0px 8px;
-  margin: 2px 2px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-family: 'Bison';
-  max-width: 180px;
-  opacity: 0.6;
-  flex-flow: row;
-  font-size: 12px;
-  height: 30px;
-  color: white;
-  letter-spacing: 3px;
-  min-width: 50px;
-  position: relative;
-  text-align: center;
-  cursor: pointer;
-  text-transform: uppercase;
-  border-radius: 0px;
-  list-style: none;
-  transition: 0.2s;
-  background: ${(props) => props.theme.third};
-  &:hover {
-    opacity: 1;
-  }
-`
+ 
 const Wrap = styled.div`
   height: 100%;
   width: 100%;
@@ -127,7 +101,7 @@ const SingleItemStyles = styled.div`
     position: relative;
     overflow: hidden;
     padding-top: 56.25%;
-    transform: translate(20px, 15px)
+    transform: translate(0px, 15px)
   }
   iframe {
     position: relative;
@@ -136,14 +110,17 @@ const SingleItemStyles = styled.div`
     border-radius: 10px;
     border: 0;
     margin: 0 auto;
-    object-fit: contain;
+    object-fit: contain;      box-shadow: 
+ 
+ 0 2px 1px rgba(0, 0, 0, 0.09), 0 4px 2px rgba(0, 0, 0, 0.09),
+   0 8px 4px rgba(0, 0, 0, 0.09), 0 16px 8px rgba(0, 0, 0, 0.09);
     @media (min-width: 768px) {
       width: 95%;
       height: 95%;
       margin: 0;
       top: 0;
       background: grey;
-      left: 0;
+      left: 20px;
       position: absolute; box-shadow: 0 2px 1px rgba(0, 0, 0, 0.09), 0 4px 2px rgba(0, 0, 0, 0.09),
       0 8px 4px rgba(0, 0, 0, 0.09), 0 16px 8px rgba(0, 0, 0, 0.09),
     }
@@ -214,51 +191,56 @@ const GoBacks = styled.div`
 
 `
 
-
 const Tags = styled.div`
-  width: 98%;
-  grid-column: 1;
-  
+  width: 96%;
   position: relative;
-  z-index: 2280;
-  margin: 0px 20px;
-  transform: translateY(-70px);
-  text-transform: uppercase;
+  z-index: 1880;
+  font-family: 'Comfortaa';
+  margin: 0 auto;
+ 
   display: flex;
- align-items: center;
+  transform: translate(10px, -65px);
   flex-flow: row wrap;
-
+div {
+  margin-left: 15px;
+}
   span {
     margin: 3px 3px;
-    background: ${(props) => props.theme.third};
-    color: white;
+    background: transparent;
+    color: ${(props) => props.theme.third};
     max-height: 24px;
     border-radius: 2px;
-    padding: 0px 3px;
-    letter-spacing: 3px;
-    cursor: pointer;
-font-size: 12px;
-line-height: 16px;
-    font-family: 'Bison';
+    padding: 2px 5px;
+    letter-spacing: 1px;
+    line-height: 16px;
+    border: 1px solid ${(props) => props.theme.third};
     opacity: 0.8;
-    &:hover {
-      opacity: 1;
-    }
-  }
-  div {
-    font-size: 16px;
-    padding: 0;
-    margin: 0 10px 0 0;
   }
 `
  
 const EquipmentList = styled.div`
   display: flex;
 grid-column: 2;
+/* background: rgba(230,230,230,.5); */
 grid-row: 2; margin-left: 0px;
 position: relative;
 transform: translateY(250px);
   flex-flow: row;
+&:after {
+  content: 'EQUIPMENT';
+  color: lightgrey;
+  opacity:.4;
+  transform: translate(-10px);
+  font-size: 80px;
+  line-height:80px;
+  text-align: center;
+  width: 100%;
+  z-index: 0;
+  margin: 20px auto;
+  background: rgba(230,230,230,.8);
+  font-family: 'Bison';
+  position: absolute;
+}
   .noequip {
     font-size: 18px;
     color: slategray;
@@ -289,6 +271,8 @@ const PopUp = styled.span`
  display: flex; 
  flex-flow: row;
  width: 100%;
+ position: relative;
+ z-index: 2000;
     justify-content: center;
     align-items: center;
     line-height: 26px;
@@ -320,29 +304,30 @@ const PopUp = styled.span`
     .theequipment {
       box-shadow: 
  
-    0 2px 1px rgba(0, 0, 0, 0.09), 0 4px 2px rgba(0, 0, 0, 0.09),
-      0 8px 4px rgba(0, 0, 0, 0.09), 0 16px 8px rgba(0, 0, 0, 0.09);
+    0 1px 4px rgba(0, 0, 0, 0.19), 0 4px 40px rgba(0, 0, 0, 0.09) ;
     }
 `
 const Bubble = styled.div`
 display: none;
   background: white;
-  max-width: 300px;
+  width: 300px;
   border-radius: 10px;
   transform: translate(-50%, 0);
   padding: 5px 10px;
   position: absolute;
   color: grey;
-  font-family: 'Bison';
+ 
   flex-flow: column;
   justify-content: center;
-border: 1px solid lightgray;
+  border: 1px solid lightgray;
+
   h4 {
     margin: 0;
     font-size: 24px;  
     justify-self: center;
     letter-spacing: 2px;
     align-self: center;
+    font-family: 'Bison';
     margin-left: 5px;
     color: black;
   }
@@ -350,6 +335,7 @@ border: 1px solid lightgray;
     font-size: 15px;
     letter-spacing: 2px;
     margin: 0;
+    margin-top: 5px;
     line-height: 18px;
   }
    ${PopUp}:hover & {
@@ -497,7 +483,7 @@ useEffect(() => {
           ></iframe>
   
         </SingleItemStyles>
-        <Tags>   <div>TAGS:</div> 
+        <Tags>    
             {data.vodViewingAuth &&
               data.vodViewingAuth.tags.map((tag) => {
                 return <span key={tag.name}>{tag.name}</span>
@@ -516,9 +502,12 @@ useEffect(() => {
               data.vodViewingAuth && data.vodViewingAuth.equipment.map((equip) => {
                   
                 return (
+                  <>
                   <PopUp key={equip.name}>
              <img className="theequipment" style={{borderRadius: '50%',  height: '45px', width: '45px'  }} src={equip.image.publicUrlTransformed} alt={equip.name} /> 
-                      <Bubble>
+                  
+                 
+                     <Bubble>
                         <div style={{ display: 'inline-flex' }}>
                           {' '}
                           <img  height='40' src={equip.image.publicUrlTransformed} />
@@ -526,9 +515,7 @@ useEffect(() => {
                         </div>
 
                         <p>{equip.description}</p>
-                      </Bubble>
-                    </PopUp>
-                 
+                      </Bubble>   </PopUp></>
                 )
               })}
            

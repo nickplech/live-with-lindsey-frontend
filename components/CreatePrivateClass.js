@@ -134,7 +134,7 @@ const CREATE_PRIVATE_CLASS_MUTATION = gql`
   mutation CREATE_PRIVATE_CLASS_MUTATION(
 
     $price: Int
-    $date: [DateTime!]
+    $date: DateTime!
     $name: String
    
     $userId: ID!
@@ -189,7 +189,7 @@ function CreatePrivateClass() {
   const [selectedOption, setSelectedOption] = useState('')
   const [userNameState, setUserNameState] = useState('')
   const [date, setDate] = useState(new Date())
-  const [selectedDates, setSelectedDates] = useState([])
+  const [selectedDate, setSelectedDate] = useState(new Date())
   function handleSelectedOption(e) {
     setSelectedOption(e)
     setUserNameState(e.label)
@@ -203,7 +203,7 @@ function CreatePrivateClass() {
     CREATE_PRIVATE_CLASS_MUTATION,
     {
       variables: {
-        date: selectedDates,
+        date: selectedDate && formatISO(selectedDate),
         name: nameState.label,
         price: parseInt(priceState),
         userId: selectedOption && selectedOption.value
@@ -221,9 +221,9 @@ function CreatePrivateClass() {
     let { value, name, type } = e.target
  
  
-    setSelectedDates(
-      [...selectedDates,
-      value]
+    setSelectedDate(
+
+      value
     )
   }
 
@@ -235,7 +235,7 @@ function CreatePrivateClass() {
     return { value, label }
   })
   console.log(date)
-console.log(selectedDates)
+console.log(selectedDate)
   const needsClass = selectedOption && selectedOption.length
   const needsDateTime = date && date !== null
 
@@ -301,8 +301,8 @@ console.log(selectedDates)
                         type="datetime-local"
                         step="900"
                         required
-                        defaultValue={date}
-                        onChange={setDate}
+                        defaultValue={selectedDate}
+                        onChange={setSelectedDate}
                       />
                       <button onClick={(e) => handleChange(e)}>Add Another Date</button>
                     </label>

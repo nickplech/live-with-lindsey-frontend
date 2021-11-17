@@ -15,6 +15,21 @@ const Tilty = styled.div`
     .js-tilt-glare {
         border-radius: 20px;
     }
+    .live {
+    color: white;
+    background: rgba(240, 20, 20, 0.7);
+    margin: 0;
+    
+    line-height: 23px;
+    padding: 2px 4px 2px 8px;
+    width: 60px;
+    transform: rotate(-4deg) translate(10px, 10px);
+    display: inline-flex;
+    font-size: 22px;
+    font-family: 'Bison';
+    letter-spacing: 4px;
+    transition: 0.2s;
+  }
 `
 
 const Grid = styled.div`
@@ -37,13 +52,16 @@ const Grid = styled.div`
     margin: 0;
     margin-top: 10px;
    
-    line-height: 16px;
+    line-height: 18px;
     font-size: 16px;     
   margin: 10px;
   letter-spacing: 2px;
     color: white;
     padding: 0;
-      
+      &:nth-of-type(2){
+        font-family: 'Comfortaa';
+        letter-spacing: 0px;
+      }
   }
  
   
@@ -82,7 +100,7 @@ const Grid = styled.div`
     }
   
  `
-function Details( { addToFav, removeFromFavoritesButChill, isAFav, vodViewingAuth, me} ){
+function Details( { addToFav, removeFromFavoritesButChill,owner, isAFav, vodViewingAuth, me} ){
     const tiltRef = useRef()
  
    useEffect(() => {
@@ -110,6 +128,7 @@ function Details( { addToFav, removeFromFavoritesButChill, isAFav, vodViewingAut
      
      >
     <Grid>
+     { owner ? <span className="live">LIVE</span> : null}
  <h2>{vodViewingAuth && vodViewingAuth.name}</h2> 
            
          {vodViewingAuth && (

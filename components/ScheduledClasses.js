@@ -112,9 +112,9 @@ const P = styled.p`
 `
 const Title = styled.div`
   display: flex;
-  margin: 20px 0px 0px 25px;
+  margin:  0px 0px 0px 25px;
   width: 95%;
-  border-bottom: 3px solid rgba(20, 20, 20, 0.2);
+  /* border-top: 3px solid rgba(20, 20, 20, 0.2); */
   font-family: 'Felix';
   font-size: 32px;
   color: ${(props) => props.theme.second};

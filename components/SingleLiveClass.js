@@ -4,9 +4,10 @@ import { useMutation, useQuery } from '@apollo/client'
 import styled from 'styled-components'
 import Head from 'next/head'
 import Error from './ErrorMessage'
+import { CURRENT_USER_QUERY } from './User'
 import Footer from './Footer'
 import Details from './Details'
-import ClassBackground from './ClassBackground'
+ import ClassBackground from './ClassBackground'
 import Link from 'next/link'
 import Loader from './Loader'
  import ShareButtons from './ShareButtons'
@@ -42,34 +43,34 @@ const LIVE_STREAM_QUERY = gql`
     }
   }
 `
-const VOD_AUTH_QUERY = gql`
-  query VOD_AUTH_QUERY($id: ID!) {
-    vodViewingAuth(  id: $id ) {
-      id
-      name
-       date
-      description
-      url
-      thumbnailUrl
-        equipment {
-          id
-          description
-          name
-          image {
-            publicUrlTransformed
-          }
-        }
+// const VOD_AUTH_QUERY = gql`
+//   query VOD_AUTH_QUERY($id: ID!) {
+//     vodViewingAuth(  id: $id ) {
+//       id
+//       name
+//        date
+//       description
+//       url
+//       thumbnailUrl
+//         equipment {
+//           id
+//           description
+//           name
+//           image {
+//             publicUrlTransformed
+//           }
+//         }
      
-      isFavorite {
-        id
-      }
-      tags {
-        id
-        name
-      }
-    }
-  }
-`
+//       isFavorite {
+//         id
+//       }
+//       tags {
+//         id
+//         name
+//       }
+//     }
+//   }
+// `
 const Div = styled.div`
   padding: 0px 8px;
   margin: 2px 2px;
@@ -162,7 +163,9 @@ const SingleItemStyles = styled.div`
   }
   .theClass {
     position: relative;
-
+    box-shadow: 
+ 0 2px 1px rgba(0, 0, 0, 0.09), 0 4px 2px rgba(0, 0, 0, 0.09),
+   0 8px 4px rgba(0, 0, 0, 0.09), 0 16px 8px rgba(0, 0, 0, 0.09);
     height: 400px;
     border-radius: 10px;
     border: 0;
@@ -175,7 +178,7 @@ const SingleItemStyles = styled.div`
       background: grey;
  
       position: absolute; box-shadow: 0 2px 1px rgba(0, 0, 0, 0.09), 0 4px 2px rgba(0, 0, 0, 0.09),
-      0 8px 4px rgba(0, 0, 0, 0.09), 0 16px 8px rgba(0, 0, 0, 0.09),
+      0 8px 4px rgba(0, 0, 0, 0.09), 0 16px 8px rgba(0, 0, 0, 0.09);
     }
     &:after {
       display: flex;
@@ -218,50 +221,66 @@ const GoBacks = styled.div`
 `
 
 
-const Tags = styled.div`
-  width: 98%;
-  grid-column: 1;
+// const Tags = styled.div`
+//   width: 98%;
+//   grid-column: 1;
   
-  position: relative;
-  z-index: 2280;
-  margin: 0px 20px;
-  transform: translateY(-70px);
-  text-transform: uppercase;
-  display: flex;
- align-items: center;
-  flex-flow: row wrap;
+//   position: relative;
+//   z-index: 2280;
+//   margin: 0px 20px;
+//   transform: translateY(-70px);
+//   text-transform: uppercase;
+//   display: flex;
+//  align-items: center;
+//   flex-flow: row wrap;
 
-  span {
-    margin: 3px 3px;
-    background: ${(props) => props.theme.third};
-    color: white;
-    max-height: 24px;
-    border-radius: 2px;
-    padding: 0px 3px;
-    letter-spacing: 3px;
-    cursor: pointer;
-font-size: 12px;
-line-height: 16px;
-    font-family: 'Bison';
-    opacity: 0.8;
-    &:hover {
-      opacity: 1;
-    }
-  }
-  div {
-    font-size: 16px;
-    padding: 0;
-    margin: 0 10px 0 0;
-  }
-`
+//   span {
+//     margin: 3px 3px;
+//     background: ${(props) => props.theme.third};
+//     color: white;
+//     max-height: 24px;
+//     border-radius: 2px;
+//     padding: 0px 3px;
+//     letter-spacing: 3px;
+//     cursor: pointer;
+// font-size: 12px;
+// line-height: 16px;
+//     font-family: 'Bison';
+//     opacity: 0.8;
+//     &:hover {
+//       opacity: 1;
+//     }
+//   }
+//   div {
+//     font-size: 16px;
+//     padding: 0;
+//     margin: 0 10px 0 0;
+//   }
+// `
  
 const EquipmentList = styled.div`
   display: flex;
 grid-column: 2;
+
 grid-row: 2; margin-left: 0px;
 position: relative;
 transform: translateY(250px);
   flex-flow: row;
+&:after {
+  content: 'EQUIPMENT';
+  color: lightgrey;
+  opacity:.4;
+  transform: translate(-10px);
+  font-size: 80px;
+  line-height:80px;
+  text-align: center;
+  width: 100%;
+  z-index: 0;
+  margin: 10px auto;
+  background: rgba(230,230,230,.8);
+  font-family: 'Bison';
+  position: absolute;
+}
   .noequip {
     font-size: 18px;
     color: slategray;
@@ -281,11 +300,7 @@ transform: translateY(250px);
     font-size: 20px;
   }
  
-  
-  p {
-    margin: 3px;
-  }
-`
+  `
 const PopUp = styled.span`
   cursor: pointer ;
     margin: 10px 10px ;
@@ -383,9 +398,9 @@ transform: translate(-5px, 5px);
 }
 `
 
-function OwnsIt({ id }) {
+export default function OwnsIt({ id }) {
   const { data, loading } = useQuery(CURRENT_USER_QUERY)
-  if (loading) return <p>loading</p>
+  if (loading) return <p>loading...</p>
   if (!data.authenticatedUser) return <SingleLiveClass id={id} />
   const me = data.authenticatedUser
 
@@ -441,7 +456,7 @@ function SingleLiveClass({ id, userId }) {
       <ClassBackground         
       tags={item.tags}
         status={item.status}
-        owner={owner}
+        owner={owner && owner}
         date={item.date}
         name={item.reason.name}
         classId={item.id}     
@@ -454,7 +469,11 @@ function SingleLiveClass({ id, userId }) {
         
         </div>
        
-        <Details >
+        <Details    status={item.status}
+        owner={owner && owner}
+        date={item.date}
+        name={item.reason.name}
+        classId={item.id}   >
          
         </Details>
         <EquipmentList>
@@ -487,5 +506,5 @@ function SingleLiveClass({ id, userId }) {
   )
 }
 
-export default SingleLiveClass
-export { VOD_AUTH_QUERY, LIVE_STREAM_QUERY }
+
+export { LIVE_STREAM_QUERY }

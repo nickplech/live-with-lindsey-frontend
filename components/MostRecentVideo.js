@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect } from 'react'
+import React, { useRef, useState, useEffect, useLayoutEffect,  ReactNode } from 'react'
 import styled from 'styled-components'
 import Link from 'next/link'
 import gql from 'graphql-tag'
@@ -40,10 +40,11 @@ const Wrap = styled.div`
     margin-bottom: 155px;
   }
   .left {
-    width: 95%;
+    width: 100%;
     grid-row: 2;
     grid-column: 1;
-    margin: 0 auto;text-align: right;
+    margin: 0 auto;
+    text-align: right;
     letter-spacing: 0px;
     @media (min-width: 768px) {
       grid-column: 1;
@@ -85,10 +86,12 @@ const Wrap = styled.div`
   }
   p {
     margin: 0;
+    font-family: 'Comfortaa';
     z-index: 80000;
     font-size: 16px;
-    position: relative;
-    letter-spacing: 2px;
+    display: inline-flex;
+
+    max-width: 450px;
     color: slategrey;
     line-height: 26px;
     margin-bottom: 10px;
@@ -144,20 +147,7 @@ const TheItem = styled.div`
   bottom:-41%;
   transform: scaleY(-1) ;
 }
-  /* &:after {
-    content: '';
  
-    position: absolute;
-    margin: 0;
-    z-index: 9999;
-    height: 100%;
-    border-radius: 0 0 15px 15px;
-    padding: 5px 15px;
-    opacity: 0.5;
-    width: 100%;
-    background: linear-gradient(180deg, transparent 0%, rgba(0, 0, 0, 1) 100%);
-    
-  } */
   @media (min-width: 992px) {
     height: 320px;
     width: 100%;
@@ -197,6 +187,13 @@ const TheItem = styled.div`
  
 
 `
+const MostRecent = styled(motion.div)`
+font-size: 170px;
+position: absolute;
+line-height: 170px; opacity: .5;
+color: ${props => props.theme.primary};
+text-align: left;
+`
 const Play = styled.img`
   height: 60px;
     padding: 0px;
@@ -230,14 +227,15 @@ right:100px;
 margin-top: 30px;
 z-index:9999;
 `
-const ParallaxImage = ({ src, ...style }) => {
+const ParallaxImage = ({ src,  children, offset = 50, ...style}) => {
   const [elementTop, setElementTop] = useState(0)
   const ref = useRef(null)
+  const [clientHeight, setClientHeight] = useState(0)
   const { scrollY } = useViewportScroll()
-
-  const y = useTransform(scrollY, [elementTop, elementTop + 1], [0, -1], {
-    clamp: false,
-  })
+  const y = useTransform(scrollY, [400, 100], [0, 400])
+  // const y = useTransform(scrollY, [elementTop, elementTop + 1], [0, -1], {
+  //   clamp: false,
+  // })
 
   useEffect(() => {
     const element = ref.current
@@ -245,10 +243,10 @@ const ParallaxImage = ({ src, ...style }) => {
   }, [ref])
 
   return (
-    <div ref={ref} className="image-container">
+    <MostRecent ref={ref} className="image-container" style={{  y, ...style }}>
  
-      <motion.div style={{ ...style, y }}>hey</motion.div >
-    </div>
+       {children} 
+    </MostRecent>
   )
 }
 
@@ -282,20 +280,21 @@ function MostRecentVideo(props) {
        
           </Link>
 
-          <img  className="ribbon" src="../static/img/mostrecent2.svg" />
+          {/* <img  className="ribbon" src="../static/img/mostrecent2.svg" /> */}
         </TheItem>{' '}
-        <ParallaxImage/>
+     
         
       </div>
       <div className="left">
-
+   <ParallaxImage>MOST<br/>RECENT</ParallaxImage>
         <h2>{mostRecentVod.name}</h2>
        
        <p>{mostRecentVod.description}</p>
+       <div>
        <span><img src="../static/img/calendar.svg" height="20" width="20" alt="calendar graphic to represent date which video first aired live" />  <h3>aired on: {format(new Date(mostRecentVod.date), 'MMM dd, yyyy')}</h3></span>
       
        <span><img style={{   marginLeft: '15px' }} src="../static/img/clock.svg" height="20" width="20" alt="class length icon" />  <h3>60 mins</h3></span>
-
+</div>
       </div>
     </Wrap>
   )

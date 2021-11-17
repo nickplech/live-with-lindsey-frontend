@@ -2,7 +2,7 @@ import PhotoArray from '../components/PhotoArray'
 import Footer from '../components/Footer'
 import { useUser } from '../components/User'
 import MostRecentVideo from '../components/MostRecentVideo'
-
+import VodNewSliderComponent from '../components/VodNewSliderComponent'
 import VodListSlider from '../components/VodListSlider'
 import VodFavoritesSlider from '../components/VodFavoritesSlider'
 import CommunityFavoritesSlider from '../components/CommunityFavorites'
@@ -19,6 +19,7 @@ const VOD = (props) => {
           <VodFavoritesSlider  user={me} />
           <VodListSlider  user={me} />
           <CommunityFavoritesSlider user={me} />
+          <VodNewSliderComponent />
         </div>
       <Footer />
     </>

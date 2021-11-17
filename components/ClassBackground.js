@@ -49,12 +49,14 @@ function ClassBackground(props) {
 export default ClassBackground
 
 const Overlay = styled.div`
+ 
+  
   &:before {
     content: '';
     height: 100%;
     width: 100%;
     display: flex;
-    background: rgba(0, 0, 0, 0.6);
+    background: rgba(0, 0, 0, 0.5);
     position: absolute;
     z-index: 1000;
   }

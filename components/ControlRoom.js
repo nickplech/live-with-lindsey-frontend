@@ -68,8 +68,9 @@ const Wrapper = styled.div`
     margin: 0 5px;
     padding: 4px 8px;
     cursor: pointer;
-    border-radius: 5px  ;
-    background: lightgrey;
+    border-radius: 0px  ;
+    background: transparent;
+ 
     &:active,:focus {
       background: ${props => props.theme.second};
 

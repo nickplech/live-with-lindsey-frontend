@@ -4,6 +4,7 @@ import {
   TwitterIcon,
   TwitterShareButton,
   EmailShareButton,
+  EmailIcon,
   FacebookIcon,
   FacebookShareButton,
 } from "react-share";
@@ -79,6 +80,18 @@ function ShareButtons({classId}) {
             >
               <FacebookIcon size={26} round />
             </FacebookShareButton>
+    </div>
+  </div>
+  <div className="share-button">
+  
+    <div className="share-button-primary">
+    <EmailShareButton
+              url={`https://lindseyharrod.com/class?${classId}/`}
+              title={`Share this class with Email!`}
+              className='share_icon'
+            >
+              <EmailIcon size={26} round />
+            </EmailShareButton>
     </div>
   </div>
 </div>

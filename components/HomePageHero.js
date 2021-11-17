@@ -63,13 +63,17 @@ display: flex;
  color: slategray;
  display: flex;
  justify-content:center;
- align-items: center;
+ align-items: flex-start;
  flex-flow: column;
  text-align: left;
  padding-top: 0px;
+ padding-left: 10px;
  margin: 0 auto;
- @media(max-width: 992px) {
-   padding-left: 10px;
+ @media(min-width: 992px) {
+   padding-left: 60px;
+ }
+ @media(min-width: 1400px) {
+   padding-left: 90px;
  }
  h1 {
      font-size:60px;
@@ -90,7 +94,8 @@ display: flex;
   -webkit-background-clip: text;
     background-image: linear-gradient(135deg, #f8b0b0, #ffd7d4,  #f8b0b0);
     background-clip: text;
-   
+ 
+    
  }
   
  `
@@ -99,7 +104,8 @@ display: flex;
  
   border-radius: 5px;
   overflow: hidden;
-  background: url('../static/img/fullbodypyramid.gif') center center no-repeat;
+  transform: translate(-70px , 400px);
+  background: url('../static/img/lindsey-harrod-optimize.gif') center center no-repeat;
   background-size: cover;
   box-shadow: 0 2px 1px rgba(0, 0, 0, 0.09), 0 4px 2px rgba(0, 0, 0, 0.09),
       0 8px 4px rgba(0, 0, 0, 0.09), 0 16px 8px rgba(0, 0, 0, 0.09),
@@ -111,7 +117,7 @@ display: flex;
        align-items: center;    display: flex;
  border-radius: 5px;
  overflow: hidden;
- background: url('../static/img/lindseyharrodondemand.jpg') center center no-repeat;
+ background: url('../static/img/lindseyharrod-ondemand.jpg') center center no-repeat;
  background-size: cover;
  box-shadow: 0 2px 1px rgba(0, 0, 0, 0.09), 0 4px 2px rgba(0, 0, 0, 0.09),
      0 8px 4px rgba(0, 0, 0, 0.09), 0 16px 8px rgba(0, 0, 0, 0.09) 
@@ -126,17 +132,20 @@ display: flex;
        height: 60px;
        width: 60px;
        transition: .3s;
-       &:hover {
+       /* &:hover {
          transform: scale(1.1);
-       }
+       } */
      }
 `
  const SignMeUp = styled.a`
 
  color: white;
   padding: 8px 16px;   font-size: 26px;line-height: 26px;
-  margin-top: 15px;
+  margin: 25px 0;
   cursor: pointer;
+  grid-column: 1;
+  position:relative;
+  justify-self: flex-start;
   border-radius: 5px;
   transition: .4s;   background: #f8b0b0;
     box-shadow: 0px 8px 40px rgba(10,10,10,.1);
@@ -198,10 +207,38 @@ const SubmitButton = styled.button`
   width: 100px;
   height: 36px;box-shadow: 0 -2px 15px -4px rgba(0, 0, 0, 0.09),
       0 2px  13px rgba(0, 0, 0, 0.15)  ;
+transition: .3s;
+&:hover {
+ 
+background-image: linear-gradient(135deg, #f8b0b0, #ffd7d4);
+}
+&:active {
+  box-shadow: none;
+  box-shadow: 0 -1px 8px -4px rgba(0, 0, 0, 0.09);
+ 
+}
+ 
 `
+// const Sheen = styled.div`
+//   position: absolute;
+//   top: -30px;
+//   left: 0;
+//   content: '';
+//   width: 200%;
+//   height: 200%;
+//   cursor: default;
+//   user-select: none;
+//   background-image: linear-gradient(60deg, rgba(255,255,255,0) 20%, rgba(255,255,255,0.3), rgba(255,255,255,0) 80%);
+//   transform: translateX(-100%);
+//   transition: all 1.2s ease-in-out;
+//   &:hover {
+//     transform: translateX(100%);
+
+//   }
+
+// `
 const HomePageHero = () => {
-  const x = useMotionValue(195);
-  const y = useMotionValue(100);
+ 
  
 
 return(
@@ -212,22 +249,21 @@ return(
         <h1>
             Live <span>&amp;</span> On-Demand workouts<br/>
                 
-            by <span  >Lindsey Harrod </span>  </h1>
+            by <span>Lindsey Harrod </span>  </h1>
+                  <Link href={{ pathname: '/signup' }}>
+            <SignMeUp>Click Here to Get Started Free!</SignMeUp>
+          </Link>
+
             <div className="main-text">
-      
-           <p>Always be up-to-date with the Lindsey Harrod Fitness community&mdash;be the first to know about 
-             fitness challenges &amp; upcoming community events, Just enter your email below! <br/><br/>
+           <p>Be the first to know about fitness challenges &amp; upcoming Lindsey Harrod Fitness community events! Just enter your email below! <br/><br/>
              </p>
                <MailingListInput placeholder="enter your email for updates"/>
-             <SubmitButton className="submit-email">Submit to Join</SubmitButton>
+             <SubmitButton className="submit-email">Subscribe!</SubmitButton>
              </div>
            
-          {/* <Link href={{ pathname: '/signup' }}>
-            <SignMeUp>Sign Up for Free </SignMeUp>
-          </Link> */}
+    
     </Title>
         <Lindsey style={{
-                 
                 perspective: 800
             }}>
       <img src='../static/img/lindsey-harrod-fitness-header.png' alt='Lindsey Harrod Fitness' />
@@ -236,18 +272,23 @@ return(
                     width: 240,
                     height: 160,
                     borderRadius: 10,
-              
                     backgroundColor: '#f8b0b0',
                     opacity: ".75",
-                    left: -305,
-                    top: 400,
+                    left: "-125px",
+                    top: "490px",
                     position: "relative",
-                    x: x,
-                    y: y,
+                    y: 0,
+                    cursor: "grab"  }}
+                    animate={{ y: 4 }}
+                    transition={{
+                        type: "linear",
+                        repeat: Infinity,
+                        repeatType: "mirror",
+                        duration: 2,
+                    
+                        repeatDelay: 0
                   
-                    cursor: "grab"
                 }}
-               
               
                 whileTap={{ cursor: "grabbing" }}
             ><img src="../static/img/playbutton.svg" className="playbutton"/></OnDemandScreen>
@@ -261,15 +302,11 @@ return(
                   
                  
                     opacity: ".65",
-                    left: -270,
-                    top: 300,
-                    position: "absolute",
-                    x: x,
-                    y: y,
                   
+                    position: "absolute",
+             
                    
                 }}
-               
               
                 whileTap={{ cursor: "grabbing" }}
             ><div className="circle"/></LiveScreen>

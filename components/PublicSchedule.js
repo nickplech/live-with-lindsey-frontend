@@ -42,9 +42,16 @@ const Wrap = styled.div`
       display: none;
     }
   }
- 
+  background: linear-gradient(
+      180deg,
+      rgba(248, 176, 176, 0.6026785714285714) 0%,
+      rgba(255, 215, 212, 0.6643032212885154) 43%,
+      rgba(255, 255, 255, 0.3757878151260504) 69%,
+      rgba(255, 255, 255, 0.3169642857142857) 100%
+    );
   user-select: none;
   outline: none;
+  min-height: 500px;
   width: 100%;
   margin-bottom: 0px;
   margin-top: 0px;
@@ -400,7 +407,7 @@ const Schedule = styled.div`
   }
   p {
     margin: 2px;
-    transform: translate(-15px, 60px);
+
     font-family: 'Bison thickoutline';
     font-size: 36px;
     color: ${(props) => props.theme.fourth};
@@ -522,7 +529,7 @@ export function ProductSlider() {
 
   return (
     <>
-          <Schedule>
+          {/* <Schedule>
             <p>
               Live Schedule:{' '}
               {`${
@@ -533,7 +540,7 @@ export function ProductSlider() {
                 format(weekEnds, 'M/dd')
               }`}
             </p>
-          </Schedule>
+          </Schedule> */}
           <Wrap>
       <div className="mobile-layout">
         <CarouselProvider

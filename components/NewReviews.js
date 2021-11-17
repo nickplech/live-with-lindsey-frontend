@@ -21,12 +21,14 @@ const Card = styled(motion.div)`
   align-items: center;
   display: flex;
   font-Size: 18px;
+  letter-spacing: 2px;
+  line-height: 20px;
   width: 90%;
   background: ${props => props.theme.second};
  background-image: linear-gradient(145deg,  #f8b0b0 ,#ffd7d4 );
   height: 200px;
  flex-flow: column;   overflow: hidden;
-  color: white;
+  color: rgba(245,245,245,1);
   padding: 15px;
 
   transform-origin: top center;
@@ -72,9 +74,10 @@ export default function NewReviews(){
             >{card.paraphrase} <p> &mdash; {card.name}      </p>  <div
             style={{
               color: 'white',
-              transform: 'translateY(20%)',
+              transform: 'translateY(30%)',
               left: '20px',
               overflow: "hidden",
+              lineHeight: '330px',
               fontSize: '280px',
               position: 'absolute',
               zIndex: 100000,

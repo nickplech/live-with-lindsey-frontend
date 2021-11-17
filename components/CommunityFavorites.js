@@ -251,25 +251,26 @@ const Wrap = styled.div`
   }
 `
 const Tags = styled.div`
-  width: 90%;
+  width: 96%;
   position: relative;
   z-index: 2280;
+  font-family: 'Comfortaa';
   margin: 0 auto;
-  text-transform: uppercase;
+ 
   display: flex;
-  transform: translateY(-25px);
+  transform: translateY(-30px);
   flex-flow: row wrap;
 
   span {
     margin: 3px 3px;
-    background: ${(props) => props.theme.third};
-    color: white;
+    background: transparent;
+    color: ${(props) => props.theme.third};
     max-height: 24px;
     border-radius: 2px;
-    padding: 0px 5px;
-    letter-spacing: 3px;
+    padding: 2px 5px;
+    letter-spacing: 1px;
     line-height: 16px;
-    font-family: 'Bison';
+    border: 1px solid ${(props) => props.theme.third};
     opacity: 0.8;
   }
   h2 {

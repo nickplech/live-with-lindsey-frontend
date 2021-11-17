@@ -9,14 +9,14 @@ const StyleMePritay = styled.section`
   z-index: 100;
   grid-template-rows: 1fr;
   width: 100%;
-  max-height: 750px;
+  max-height: 730px;
 
   .left {
     justify-content: center;
     grid-row: 1;
     grid-column: 2;
-    transform: translateY(50px);
-    padding: 20px 0 0 0px;
+ 
+    padding:  0px 0 0 0px;
   }
   .right {
     grid-column: 1/3;
@@ -24,11 +24,11 @@ const StyleMePritay = styled.section`
  
   justify-content: flex-start;
     grid-row: 1;
-    height: 720px;
-    background: url('../static/img/phonewithvideotestfinal2.png') -190px bottom;
+    height: 700px;
+    background: url('../static/img/phonewithvideotestfinal2.png')  -190px bottom;
     background-repeat: no-repeat;
-    background-size: auto 720px;
-
+    background-size: auto 700px;
+    /* transform:   rotate(-23deg); */
     z-index: 2150;
     position: relative;
  }
@@ -43,11 +43,12 @@ const StyleMePritay = styled.section`
    color: slategray;
    flex-flow: column;
    align-items: flex-start;
-   transform: translate(0, -50px);
+  
  }
   h2 {
     font-family: 'Bison';
     color: slategray;
+    letter-spacing: 2px;
     font-size: 26px;
     margin-bottom: 0px;
   }
@@ -56,7 +57,7 @@ const StyleMePritay = styled.section`
   }
   span {
     font-family: 'Bison';
-    font-size: 22px;
+    font-size: 34px;
     letter-spacing: 2px;
     -webkit-text-fill-color: transparent;
   -webkit-background-clip: text;
@@ -65,12 +66,12 @@ const StyleMePritay = styled.section`
   }
 `
 const Video = styled.div`
-  height: 455px;
+  height: 440px;
   position: absolute;
   /* grid-column: 1; */
-  transform: translate(225px, -635px) rotate(23.5deg);
+  transform: translate(205px, -620px) rotate(23.5deg);
   border-radius: 25px;
-  width: 220px;
+  width: 215px;
   overflow: hidden;
   video {
     height: 450px;
@@ -78,30 +79,7 @@ const Video = styled.div`
   }
 `
 
-const Schedule = styled.div`
-  font-family: 'Felix';
-  transform: translate(190px, 560px);
-  text-transform: uppercase;
-  z-index: 0;
-  right: 0;
-
-  position: absolute;
-  h1 {
-    margin: 2px;
-    font-size: 36px;
-  }
-  p {
-    margin: 2px;
-    transform: translate(-15px, 60px);
-    font-family: 'Bison thickoutline';
-    font-size: 36px;
-    color: ${(props) => props.theme.fourth};
-    width: 500px;
-  }
-  img {
-    transform: translate(5px, 0px);
-  }
-`
+ 
 export default function BounceBars() {
 
   const iconColor = '#f8b0b0'
@@ -110,11 +88,11 @@ export default function BounceBars() {
       <StyleMePritay className="white-plain py-5">
         <div className="left">
          <div className="main-text">
-           <h2>Get ready to have fun and work hard</h2>
+           <h2>My Classes cater to <span>All Levels</span> of Fitness</h2>
          <p> 
-            My classes range from low impact, 
-            to strength training, to high intensity, 
-            and cater to all fitness levels. <br/><br/>
+            From Low Impact, 
+            to Strength Training, to High Intensity
+              <br/><br/>
             Be prepared to gain strength &amp; confidence, 
             connect with like-minded women,
              and leave every class feeling challenged, 

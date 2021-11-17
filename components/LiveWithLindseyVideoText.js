@@ -8,8 +8,7 @@ const Wrap = styled.div`
     margin: 0 auto;
     position: relative;
     max-width: 1200px;
-  }
- 
+  
   
   
   

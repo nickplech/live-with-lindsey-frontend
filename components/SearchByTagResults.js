@@ -14,7 +14,7 @@ const SEARCH_BY_TAGS = gql`
   query SEARCH_BY_TAGS($tags: [String]) {
     allVideoOnDemands(
       where: { AND: [{ tags_some: { name_in: $tags } }] }
-      first: 9
+      first: 15
     ) {
       id
       thumbnailUrl
@@ -101,14 +101,7 @@ const H1 = styled.h1`
 `
 function SearchByTagResults({ tags, id }) {
     const [tagArr, setTagArr] = useState([])
-//   const { data, error, loading } = useQuery(ALL_FAVORITES_QUERY, {
-//     variables: { id: user && user.id },
-//   })
-//   if (loading) return <Loader />
-//   if (error) return <p>Error: {error.message}</p>
 
-//   if (!user) return null
-//   if (data.allVideoOnDemands.length === 0) return null
   const { data, loading, error } = useQuery(SEARCH_BY_TAGS, {
     variables: { tags: tagArr },
   })
@@ -128,6 +121,7 @@ function SearchByTagResults({ tags, id }) {
                 pathname: '/item',
                 query: { id: video.id },
               }}
+              key={video.id}
             >
               <Videos thumbnailUrl={video.thumbnailUrl} key={i}>
                 <h2>{video.name}</h2>

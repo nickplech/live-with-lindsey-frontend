@@ -104,24 +104,24 @@ overflow: hidden;
     transform: translateY(10px);
   }
 `
-const P = styled.p`
-  color: slategray;
-  margin: 5px auto;
-  text-align: center;
-  justify-self: center;
-  display: flex;
-  max-width: 500px;
-  line-height: 26px;
-  font-size: 32px;
-  color: ${(props) => props.theme.second};
-  letter-spacing: 4px;
-  &:nth-of-type(2) {
-    max-width: 400px;
-    font-size: 18px;
-    color: slategray;
-    letter-spacing: 3px;
-  }
-`
+// const P = styled.p`
+//   color: slategray;
+//   margin: 5px auto;
+//   text-align: center;
+//   justify-self: center;
+//   display: flex;
+//   max-width: 500px;
+//   line-height: 26px;
+//   font-size: 32px;
+//   color: ${(props) => props.theme.second};
+//   letter-spacing: 4px;
+//   &:nth-of-type(2) {
+//     max-width: 400px;
+//     font-size: 18px;
+//     color: slategray;
+//     letter-spacing: 3px;
+//   }
+// `
 const SubText = styled.p`
   max-width: 400px;
   font-size: 18px;
@@ -168,13 +168,13 @@ margin: 10px 0 15px;
     grid-template-columns: 140px 1fr 1fr;
     grid-template-rows: 1fr;
     border-radius: 10px;
-    border: 1px solid rgba(20, 20, 20, 0.05);
-    box-shadow: 0 10px 10px -5px rgba(0, 0, 0, 0.2);
+ 
+    box-shadow: 0 10px 11px -6px rgba(0, 0, 0, 0.14),  0 -4px 46px rgba(0, 0, 0, 0.07);
     display: grid;
 
     width: 95%;
     max-width: 800px;
-    margin: 0 auto;
+    margin: 0 auto 20px;
 
     height: 150px;
     overflow: hidden;
@@ -294,11 +294,11 @@ margin: 10px 0 15px;
     min-width: 190px;
     margin-top: 35px;
     letter-spacing: 1px;
-    cursor: pointer;
+    cursor: not-allowed;
     background-color: ${(props) => props.theme.second};
-    border: 1px solid;
+border: none;
     outline: none;
-    box-shadow: 0 6px 6px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 10px 11px -6px rgba(0, 0, 0, 0.14),  0 -4px 46px rgba(0, 0, 0, 0.07);
     opacity: 0.5;
     @media (max-width: 992) {
       width: 150px;
@@ -326,9 +326,9 @@ margin: 10px 0 15px;
     letter-spacing: 1px;
     cursor: pointer;
     background-color: ${(props) => props.theme.second};
-    border: 1px solid;
+    border: none;
     outline: none;
-    box-shadow: 0 6px 6px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 10px 11px -6px rgba(0, 0, 0, 0.2),  0 -4px 46px rgba(0, 0, 0, 0.07);
     @media (max-width: 992) {
       width: 150px;
     }
@@ -352,7 +352,8 @@ margin: 10px 0 15px;
     }
   }
   .private {
-
+ 
+ 
   }
 `
 
@@ -397,10 +398,11 @@ const Status = styled.div`
     background-color: rgba(255, 82, 82, 1);
     border-radius: 50%;
     animation: pulse-red 2s infinite;
-    height: 15px;
+    height: 10px;
     margin-left: 4px;
-    margin-bottom: -1px;
-    width: 15px;
+   
+    width: 10px;
+    position: relative;
     display: inline-flex;
   }
   /* .div {
@@ -409,15 +411,15 @@ const Status = styled.div`
   } */
   @keyframes pulse-red {
     0% {
-      transform: scale(0.9);
+      transform: translateY(-2px) scale(0.9);
       box-shadow: 0 0 0 0 rgba(255, 82, 82, 0.7);
     }
     70% {
-      transform: scale(1);
+      transform: translateY(-2px)  scale(1);
       box-shadow: 0 0 0 10px rgba(255, 82, 82, 0);
     }
     100% {
-      transform: scale(0.9);
+      transform: translateY(-2px)  scale(0.9);
       box-shadow: 0 0 0 0 rgba(255, 82, 82, 0);
     }
   }
@@ -505,7 +507,7 @@ function DashboardComponent() {
 }
 
 function TodaysClasses({ items, id }) {
-
+// const {readyToGoOut} = usePeerSocket()
   const [onHoverState, setOnHoverState] = useState(false)
 
   const handleSetOnHoverState = () => {
@@ -538,24 +540,16 @@ function TodaysClasses({ items, id }) {
         return (
           item.private ?
           
-          <div key={item.id} className="course private">
-            <div className="course-preview">
-              <h4>{item.reason && item.reason.name}</h4>
-              <div className="card__clock-info">
-                <svg className="card__clock" viewBox="0 0 30 30">
-                  <path d="M12,20A7,7 0 0,1 5,13A7,7 0 0,1 12,6A7,7 0 0,1 19,13A7,7 0 0,1 12,20M19.03,7.39L20.45,5.97C20,5.46 19.55,5 19.04,4.56L17.62,6C16.07,4.74 14.12,4 12,4A9,9 0 0,0 3,13A9,9 0 0,0 12,22C17,22 21,17.97 21,13C21,10.88 20.26,8.93 19.03,7.39M11,14H13V8H11M15,1H9V3H15V1Z" />
-                </svg>{' '}
-                <span className="card__time">
-                  {' '}
-                  {item.reason && item.reason.classLength}
-                </span>
-              </div>
+          <div key={item.id} className="course ">
+            <div className="course-preview private">
+              <h4>{item.private && item.name}</h4>
+              
             </div>
             <div className="course-info">
               <h1> {format(new Date(item.date), 'h:mm aa')}</h1>
               <h2> {format(new Date(item.date), 'eeee | MMMM dd')}</h2>
 
-              {true ? (
+              {false ? (
                 <Link
                   href={{
                     pathname: '/privateclass',

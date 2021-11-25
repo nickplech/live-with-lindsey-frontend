@@ -2,7 +2,7 @@ import React, {useRef, useEffect} from 'react'
 import styled from 'styled-components'
 import Link from 'next/link'
 import { ALL_ITEMS_QUERY } from './Items'
-import { motion } from 'framer-motion'
+import  gql  from 'graphql-tag'
 import VanillaTilt from 'vanilla-tilt'
 import Loader from './Loader'
 import {
@@ -15,7 +15,25 @@ import {
 import { useQuery } from '@apollo/client'
 import Item from './Item'
 
-
+const SEARCH_BY_TAGS = gql`
+  query SEARCH_BY_TAGS($tags: [String]) {
+    allVideoOnDemands(
+      where: { AND: [{ tags_some: { name_in: $tags } }] }
+      first: 15
+    ) {
+      id
+      thumbnailUrl
+      name
+      isFavorite {
+        id
+      }
+      tags {
+        id
+        name
+      }
+    }
+  }
+`
 const Wrap = styled.div`
   @media screen and (min-width: 992px) {
     .mobile-layout {
@@ -338,27 +356,33 @@ function MenuItem( {videoOnDemand, subscription} ){
  ) } 
 
 
-function  VodListSlider({id, user}) {
-  const { data, error, loading } = useQuery(ALL_ITEMS_QUERY)
+function  VodNewSlidersComponent({id, user, nameOfList}) {
+  const { data, error, loading } = useQuery(SEARCH_BY_TAGS, {variables: {tags: nameOfList}})
   if (loading) return <Loader />
   if (error) return <p>Error: {error.message}</p>
-  if (!data)
+  if (data.allVideoOnDemands.length === 0)
     return (
+      <>
+        <Tite style={{ marginTop: '70px', marginLeft: '30px' }}>
+        {nameOfList}
+        </Tite>
+        <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100%', textAlign: 'center'}}>
       <p>
         No videos matched your search at this time, please modify your search
         and try again!
-      </p>
+      </p></div>
+      </>
     )
   return (
     <>
       <Link
         href={{
           pathname: '/viewallondemands',
-          query: { category: 'All Live Streams' },
+          query: { category: nameOfList },
         }}
       >
         <Tite style={{ marginTop: '70px', marginLeft: '30px' }}>
-        (Re)live Streams
+        {nameOfList}
         </Tite>
       </Link>
       <Wrap>
@@ -423,4 +447,4 @@ function  VodListSlider({id, user}) {
   )
 }
 
-export default VodListSlider
+export default VodNewSlidersComponent

@@ -101,7 +101,7 @@ const Grid = styled.div`
     }
   
  `
-function Details( { addToFav, removeFromFavoritesButChill,owner, isAFav, vodViewingAuth, me} ){
+function DetailsLive( { status, date, name, classId,owner } ){
     const tiltRef = useRef()
  
    useEffect(() => {
@@ -129,17 +129,17 @@ function Details( { addToFav, removeFromFavoritesButChill,owner, isAFav, vodView
      
      >
     <Grid>
-     { owner ? <span className="live">LIVE</span> : null}
- <h2>{vodViewingAuth && vodViewingAuth.name}</h2> 
-           
-         {vodViewingAuth && (
+  
+ <h2>{name && name}</h2> 
+           <span className="live">LIVE</span>  
+         {date && (
          <p className="datecolorchange">
-               Aired On{' '}{format(new Date(vodViewingAuth.date), 'MMM dd, yyyy')}
+                 On{' '}{format(new Date(date), 'MMM dd, yyyy')}
               </p> 
               )
          }
-           <p className="datecolorchange">{vodViewingAuth && vodViewingAuth.description}</p>
-               {!me ? null : (
+           {/* <p className="datecolorchange">{description && description}</p> */}
+               {/* {!me ? null : (
                     <div className="extras">  
             <Heart 
             height="20"
@@ -150,9 +150,9 @@ function Details( { addToFav, removeFromFavoritesButChill,owner, isAFav, vodView
           
               </div>
                 )
-              } 
+              }  */}
    </Grid> 
     </Tilty>
      )}
 
-     export default Details
+     export default DetailsLive

@@ -181,7 +181,7 @@ const SignUpTitle = styled.h3`
   color: ${(props) => props.theme.second};
 `
 
-const nameOptions = [{value: '15 Minutes', label: '15 Minute Session'},{value: '30 Minutes', label: '30 Minute Session'}, {value: '45 Minutes', label: '45 Minute Session'},{value: '60 Minutes', label: '60 Minute Session'},{value: '90 Minutes', label: '90 Minute Session'}]
+const nameOptions = [{value: '15 Minutes', label: '15 Minute Private Session'},{value: '30 Minutes', label: '30 Minute Private Session'}, {value: '45 Minutes', label: '45 Minute Private Session'},{value: '60 Minutes', label: '60 Minute Private Session'},{value: '90 Minutes', label: '90 Minute Private Session'}]
 
 function CreatePrivateClass() {
    const [nameState, setNameState] = useState('')
@@ -194,7 +194,11 @@ function CreatePrivateClass() {
     setSelectedOption(e)
     setUserNameState(e.label)
   }
-  
+  const { inputs, handleChange } = useForm({
+    date: new Date(),
+    reason: '',
+  })
+ console.log(inputs.date)
  
   const weekStarts = startOfWeek(new Date(), {
     weekStartsOn: 0,
@@ -203,7 +207,7 @@ function CreatePrivateClass() {
     CREATE_PRIVATE_CLASS_MUTATION,
     {
       variables: {
-        date: selectedDate && formatISO(selectedDate),
+        date: inputs.date && formatISO(new Date(inputs.date)),
         name: nameState.label,
         price: parseInt(priceState),
         userId: selectedOption && selectedOption.value
@@ -217,15 +221,7 @@ function CreatePrivateClass() {
       ],
     },
   )
-  function handleChange(e) {
-    let { value, name, type } = e.target
  
- 
-    setSelectedDate(
-
-      value
-    )
-  }
 
   const { data } = useQuery(ALL_USERS_QUERY)
   if (!data) return null
@@ -246,7 +242,7 @@ console.log(selectedDate)
             e.preventDefault()
             await createNewPrivate()
             Router.push({
-              pathname: '/',
+              pathname: '/admdash',
             })
           }}
     >
@@ -293,7 +289,8 @@ console.log(selectedDate)
                     />
    </label>
           
-                    <label htmlFor="date">
+        
+   <label htmlFor="date">
                       SELECT DATE &amp; TIME
                       <input
                         id="date"
@@ -301,11 +298,12 @@ console.log(selectedDate)
                         type="datetime-local"
                         step="900"
                         required
-                        defaultValue={selectedDate}
-                        onChange={setSelectedDate}
+                        defaultValue={inputs.date}
+                        onChange={handleChange}
                       />
-                      <button onClick={(e) => handleChange(e)}>Add Another Date</button>
-                    </label>
+</label>
+                      {/* <button onClick={(e) => handleChange(e)}>Add Another Date</button> */}
+              
          
                   
  

@@ -28,7 +28,7 @@ const COLORS = ['#f8b0b0', '#ffd7d4'];
     <Pie
           data={theDataState}
           cx={120}
-          cy={200}
+          cy={150}
           innerRadius={60}
           outerRadius={80}
           fill="##f8b0b0"

@@ -55,11 +55,11 @@ const EQUIPMENT_QUERY = gql`
   }
 `
 const Mode = styled.form`
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  grid-auto-rows: 1fr   ;
- grid-row-gap: 10px;
+  display: flex;
  
+ 
+ justify-content: center;
+ align-items: center;
   z-index: 100;
   position: relative;
   font-size: 12px;
@@ -79,12 +79,11 @@ width:100%;
   margin: 0 auto;
   background: white;
 
- 
+
   .header {
     width: 100%;
     position: relative;
-grid-row: 1;
-grid-column: 1;
+ 
     font-size: 18px;
     text-align: center;
  
@@ -96,37 +95,26 @@ const Left = styled.div`
 height: 100%;
 position: relative;
 width: 100%;
-grid-column: 1;
+ max-width: 1200px;
 background: white;
-padding-right: 20px;
+ 
+ 
 `
 const TheDates = styled.div`
-width: 100%;  grid-row: 2; display: flex; flex-flow: row;   justify-content:center;
+width: 100%;    display: flex; flex-flow: row;   justify-content:center;
    align-items: center;
    margin: 0 auto;
    text-align: center;max-width: 400px;
    p {
      margin: 2px;
    }
-`
-const Right = styled.div`
-height: 100vh;
-position: relative;
-display: flex;
-flex-flow: column;
-justify-content: center;
-align-items: center;
-width: 100%;
-grid-column: 2;
-background: lightslategray;
-`
+` 
 const SignUpTitle = styled.h3`
   font-family: 'Bison';
-  grid-row: 1;
-  grid-column: 1;
+ 
   font-size: 28px;
   text-align: left;
-  margin: 0 0 26px 0px;
+  margin: 0 0 0px 0px;
   color: ${(props) => props.theme.second};
 `
  
@@ -164,10 +152,11 @@ min-width: 390px;
 `
 
   
-const EquipmentList = styled.div`
+const EquipmentList = styled.ul`
 display: flex;
 flex-flow: row wrap;
 margin: 0 auto;
+ list-style: none;
 width: 100%;
  .menu-item-wrapper {
     user-select: none;
@@ -182,74 +171,62 @@ width: 100%;
     
  
   }
-`
-const Div = styled.div`
-
-  display: flex;
-  flex-flow: column;
-  justify-content: center;
-  align-items: center;
-  margin: 10px 25px;
-  font-family: 'Comfortaa';
-  font-size: 12px;
-  background: transparent;
-  color: ${(props) => props.color};
- padding: 5px;
- height: 80px;
- 
-  width:100px;
-  text-align: center;
- 
- line-height: 12px;
-  list-style: none;
-  transition: 0.2s;
- 
-  img {
-margin-bottom: 10px;
+    img {
+margin: 0 10px;
 height: 30px;
 width: 30px;
   }
+  li{
+    margin: 10px 20px;
+  }
+`
+const Div = styled.ul`
+
+  display: flex;
+ 
+  justify-content: center;
+  align-items: center;
+  margin: 0 auto;
+  
+  
+  background: transparent;
+  color: ${(props) => props.color};
+ padding: 5px;
+  
+ 
+ 
+  text-align: center;
+ 
+  
+  transition: 0.2s;
+ 
+
 `
 
-const MenuItem = (
+const MenuItem = ({handleEquipmentSelect}
 ) => {
   const {data, loading} = useQuery(EQUIPMENT_QUERY)
  if (loading) return <p>loading...</p>
  if (!data) return null
  const theEquipment = data.allRequireds
   return (
-    <>
-    <p
-    style={{
-      paddingTop: '10px',
-      transform: 'translateY(10px)',
-      textTransform: 'uppercase',
-    }}
-  >
-    Add Necessary Equipment
-  </p>
+    <Div>
+  
   <EquipmentList> {theEquipment &&
 theEquipment.map((equipment, i) => {
 
 return (
-
-  <Div
-      className="theDiv"
-
-      style={{
-        background: 'transparent',
-        color: 'black',
-      }}
-    >
+<li key={equipment.id} onClick={() => handleEquipmentSelect(equipment.id)}>
+ 
       <img height="auto" width="60" src={equipment.image.publicUrlTransformed} />
         <div style={{textTransform: 'uppercase'}}>
           {equipment.name}
       
         </div>
-    </Div>
+   </li>
  )
 })}</EquipmentList>
-</>
+</Div>
    
   )
 }
@@ -257,7 +234,7 @@ return (
 export default function ScheduleClasses() {
 
  
-  const [equipmentId, setEquipmentSearch] = useState('')
+  const [equipmentId, setEquipmentSelect] = useState('')
   const [tagsId, setTagsSearch] = useState('')
   const [selectedEquipment, setSelectedEquipment] = useState([])
   const [selectedTags, setSelectedTags] = useState([])
@@ -270,23 +247,27 @@ export default function ScheduleClasses() {
 
  
  
- 
+ console.log(selectedEquipment)
   
   function handleSelectedOption(e) {
     setSelectedOption(e)
   }
   
-  const handleEquipmentSearch = (item) => {
+  const handleEquipmentSelect = (equipmentId) => {
+    // const isAlreadySelected = selectedEquipment.includes(equipment => {
+    //   return
+    // })
     let selectedCopy = [...selectedEquipment]
-    selectedCopy.push(item.id)
+  
+    selectedCopy.push(equipmentId)
     setSelectedEquipment(selectedCopy)
-    setEquipmentSearch(item.id)
+ 
   }
 
-  const removeEquipmentSearch = (item) => {
-    const filteredEquip = selectedEquipment.filter((i) => i !== item.id)
-    setSelectedEquipment(filteredEquip)
-  }
+  // const removeEquipmentSelection = (equipmentId) => {
+  //   const filteredEquip = selectedEquipment.filter((i) => i !== equipmentId)
+  //   setSelectedEquipment(filteredEquip)
+  // }
   const handleTagsSearch = (item) => {
     let selectedCopy = [...selectedTags]
     selectedCopy.push(item.id)
@@ -359,8 +340,19 @@ export default function ScheduleClasses() {
   <Left>
    
                   <SignUpTitle> Live Stream Scheduler</SignUpTitle>
-                   <Error error={error} />    
-                   <div style={{gridColumn: 1}}>
+                   <Error error={error} />                      <label htmlFor="date">
+                      SELECT DATE &amp; TIME
+                      <input
+                        id="date"
+                        name="date"
+                        type="datetime-local"
+                        step="900"
+                        required
+                        defaultValue={inputs.date}
+                        onChange={handleChange}
+                      />
+</label>  
+                  
                     <p
                       style={{
                        
@@ -383,26 +375,23 @@ export default function ScheduleClasses() {
                       name="reason"
                       options={optionList}
                     />
-                    </div>
-                     
-                    <label htmlFor="date">
-                      SELECT DATE &amp; TIME
-                      <input
-                        id="date"
-                        name="date"
-                        type="datetime-local"
-                        step="900"
-                        required
-                        defaultValue={inputs.date}
-                        onChange={handleChange}
-                      />
-</label>
+                  
 
-                    <div >
-                  <MenuItem removeEquipmentSearch={removeEquipmentSearch}
-                      selected={selectedEquipment} equipmentId={equipmentId}/>
-        </div>
-                    <div  >
+
+                    <p
+                      style={{
+                        transform: 'translateY(10px)',
+                        color: 'slategrey',
+                        fontSize: '22px',
+                        textTransform: 'uppercase',
+                      }}
+                      >
+    Add Equipment
+  </p>     
+  
+                    <MenuItem handleEquipmentSelect={handleEquipmentSelect} 
+                      selected={selectedEquipment}  />
+                    <div>
                     <p
                       style={{
                         paddingTop: '10px',
@@ -418,8 +407,7 @@ export default function ScheduleClasses() {
                       handleTagsSearch={handleTagsSearch}
                       tagsId={tagsId}
                     /></div>
-                 
-    <SickButton
+                    <SickButton
                       disable={
                         loading || needsClass || needsDateTime || tooManyTags
                       }
@@ -427,13 +415,8 @@ export default function ScheduleClasses() {
                       type="submit"
                     >
                       CREATE CLASS
-                    </SickButton>           
-
-                 
-    </Left>
-    
+                    </SickButton>                 
+          </Left>
       </Mode>
-    
-                
   )
 }

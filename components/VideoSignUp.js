@@ -59,7 +59,18 @@ const AlreadyHaveIt = styled.div`
   font-family: 'Bison';
   transform: translateY(80px);
 `
-
+const HaveIt = styled.div`
+color: white;
+font-size: 26px;background-color: transparent;
+  align-self: center;
+  justify-self: center;
+  position: absolute;
+ transform: translate(0, 120px);
+  justify-content: center;
+  align-items: center;
+  z-index: 15000;
+text-align: center;
+`
 const NotLoggedIn = styled.div`
   display: flex;
   justify-content: center;
@@ -137,6 +148,14 @@ const VideoSignUp = ({ date, classId, owner }) => {
         Log In
       </a>
     </NotLoggedIn>
+  ) : owner === true && me ? (
+   
+      <HaveIt  >
+        
+          You Are Enrolled for This Live!
+      
+      </HaveIt>
+ 
   ) : (
     <>
       <AlreadyHaveIt style={{ display: displayMe }} />

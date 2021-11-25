@@ -226,10 +226,8 @@ const Wrap = styled.div`
     user-select: none;
     cursor: grab;
     border-radius: 10px;
-    /* background: rgba(245, 245, 245, 0.8); */
-    box-shadow: 0 2px 1px rgba(0, 0, 0, 0.09), 0 4px 2px rgba(0, 0, 0, 0.09),
-      0 8px 4px rgba(0, 0, 0, 0.09), 0 16px 8px rgba(0, 0, 0, 0.09),
-      0 32px 16px rgba(0, 0, 0, 0.09);
+    box-shadow: 0 10px 11px -6px rgba(0, 0, 0, 0.14),  0 -4px 46px rgba(0, 0, 0, 0.07);
+
     display: flex;
     align-items: center;
     width: 80%;
@@ -356,18 +354,16 @@ const DateBlock = styled.a`
     line-height: 28px;
     position: relative;
     color: white;
-    padding:  5px;  box-shadow: 0 2px 1px rgba(0, 0, 0, 0.09), 0 4px 2px rgba(0, 0, 0, 0.09),
-      0 8px 4px rgba(0, 0, 0, 0.09), 0 16px 8px rgba(0, 0, 0, 0.04),
-      0 32px 16px rgba(0, 0, 0, 0.04);
+    padding:  5px; box-shadow: 0 10px 11px -6px rgba(0, 0, 0, 0.14),  0 -4px 46px rgba(0, 0, 0, 0.07);
+
   }
       .title {
       font-family: 'Bison';
       letter-spacing: 2px;
       font-size: 46px;
       margin: 0px auto 8px;
-      box-shadow: 0 2px 1px rgba(0, 0, 0, 0.09), 0 4px 2px rgba(0, 0, 0, 0.09),
-      0 8px 4px rgba(0, 0, 0, 0.09), 0 16px 8px rgba(0, 0, 0, 0.04),
-      0 32px 16px rgba(0, 0, 0, 0.04);
+      box-shadow: 0 10px 11px -6px rgba(0, 0, 0, 0.14),  0 -4px 46px rgba(0, 0, 0, 0.07);
+
     padding: 0 5px;  
     position: relative;
       line-height: 46px;
@@ -401,8 +397,7 @@ const MenuItem = ({
  
   const cleanName = item.reason.name && item.reason.name.toLowerCase().replace(/\s/g, '')
   const currentlyLive = active === id
-  console.log(currentlyLive)
-  console.log(active)
+ 
  
 
   return (

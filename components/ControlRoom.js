@@ -120,7 +120,7 @@ const TheData = styled.div`
 const RegChart = styled.div`
   display: flex;
   width: 100%;
-  height: 250px;
+  height: 200px;
   justify-content: center;
   align-items: center;
   flex-flow: row;

@@ -46,14 +46,15 @@ const Calendar = styled.div`
  
 .passed {
  padding: 5px 0px;
-  background: rgba(20,20,20,.1);
+ background: rgba(180,180,180,.1);
    
 }
 .today { padding: 5px 0;
-  background: rgba(80,80,80,.1);
+
+  background: rgba(40,40,40,.1);
 }
 .future { padding: 5px 0px;
-background: rgba(140,140,140,.1);
+  background: rgba(120,120,120,.1);
 }
   .thirtyMins {
     height: 100%;
@@ -247,12 +248,15 @@ img {
 `
 const Col1 = styled.div`
   grid-column: 1; 
+  grid-row: 1;
 `
 const Col2 = styled.div`
   grid-column: 2; 
+  grid-row: 1;
 `
 const Col3 = styled.div`
   grid-column: 3; 
+  grid-row: 1;
 `
 function AdminCalendarAlt() {
 
@@ -288,13 +292,13 @@ function AdminCalendarAlt() {
   theDataLength === 0 && <p>No Classes Scheduled This Week!</p>
   return (
     <Calendar>
-    <Col1>
+    <Col3>
       
         <div className="passed"><h1>Finished Classes</h1></div>
       {passedArray.map((item, i) => {
              const test = format(new Date(item.date), 'eeee - M/dd | h:mm aa')
         return (
-          item.private ? <PrivateWorkout>        
+          item.private ? <PrivateWorkout key={item.id}>        
             < div className="middle"><div className="title">{item.private && item.user[0].firstName + ' ' + item.user[0].lastName + ' ' + item.user[0].businessName}</div> <div >{test}</div>
           </div>
             <Link
@@ -326,7 +330,7 @@ function AdminCalendarAlt() {
              </Link>
           </Workout> 
         )
-      })}</Col1><Col2>
+      })}</Col3><Col1>
       <div className="today"><h1>Today's Classes</h1></div>
       {todayArray.map((item, i) => {
              const test = format(new Date(item.date), 'eeee - M/dd | h:mm aa')
@@ -363,7 +367,7 @@ function AdminCalendarAlt() {
             
           </Workout> 
         )
-      })}</Col2><Col3>
+      })}</Col1><Col2>
       <div className="future"><h1>Upcoming Classes</h1></div>
 
       {futureArray.map((item, i) => {
@@ -373,7 +377,7 @@ function AdminCalendarAlt() {
         
           
           item.private ?
-            <PrivateWorkout>         
+            <PrivateWorkout key={item.id + 'future'}>         
               <div className="middle">
                 <div className="title">
                   {item.user && item.user[0].firstName + ' ' + item.user[0].lastName + ' ' + item.user[0].businessName}</div> <div >{test}</div>
@@ -392,7 +396,7 @@ function AdminCalendarAlt() {
   Enter Session
              </div> 
              </Link></PrivateWorkout> : 
-            <Workout key={item.id}  status={item.status} >
+            <Workout key={item.id + 'future'}  status={item.status} >
               <span />
               <div className="middle">
                 <div className="title">
@@ -412,7 +416,7 @@ function AdminCalendarAlt() {
           </Workout>
          
         )
-      })}</Col3>
+      })}</Col2>
     </Calendar>
   )
 }

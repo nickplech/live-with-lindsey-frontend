@@ -358,7 +358,7 @@ function  VodListSlider({id, user}) {
         }}
       >
         <Tite style={{ marginTop: '70px', marginLeft: '30px' }}>
-        (Re)live Streams
+        Latest Workouts
         </Tite>
       </Link>
       <Wrap>

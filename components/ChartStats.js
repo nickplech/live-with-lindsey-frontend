@@ -64,15 +64,15 @@ export default class ChartStats extends PureComponent {
 
   render() {
     return (
-      <Wrap style={{ width: '100%', height: 130 }}>
+      <Wrap style={{ width: '100%', height: '150px' }}>
         <ResponsiveContainer>
           <AreaChart
             data={data}
             margin={{
-              top: 0,
+              top: 30,
               right: 0,
               left: 0,
-              bottom: 10,
+              bottom: 0,
             }}
           >
             <defs>
@@ -85,7 +85,7 @@ export default class ChartStats extends PureComponent {
             {/* <XAxis dataKey="name" /> */}
      
             <Tooltip />
-            <Area type="monotone" dataKey="currentweek" stroke="#f8b0b0" fillOpacity={1} fill="url(#colorUv)" />
+            <Area type="monotone" dataKey="currentweek" strokeWidth="2" stroke="#f8b0b0" fillOpacity={1} fill="url(#colorUv)" />
           </AreaChart>
         </ResponsiveContainer>
       </Wrap>

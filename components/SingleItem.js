@@ -122,7 +122,7 @@ const SingleItemStyles = styled.div`
       background: grey;
       left: 20px;
       position: absolute; box-shadow: 0 2px 1px rgba(0, 0, 0, 0.09), 0 4px 2px rgba(0, 0, 0, 0.09),
-      0 8px 4px rgba(0, 0, 0, 0.09), 0 16px 8px rgba(0, 0, 0, 0.09),
+      0 8px 4px rgba(0, 0, 0, 0.09), 0 16px 8px rgba(0, 0, 0, 0.09);
     }
     &:after {
       display: flex;
@@ -221,7 +221,9 @@ div {
 const EquipmentList = styled.div`
   display: flex;
 grid-column: 2;
-/* background: rgba(230,230,230,.5); */
+justify-content: center;
+height: 100px;
+align-items: center; 
 grid-row: 2; margin-left: 0px;
 position: relative;
 transform: translateY(250px);
@@ -236,18 +238,21 @@ transform: translateY(250px);
   text-align: center;
   width: 100%;
   z-index: 0;
-  margin: 20px auto;
+  margin: 10px auto;
   background: rgba(230,230,230,.8);
   font-family: 'Bison';
   position: absolute;
 }
   .noequip {
-    font-size: 18px;
+    font-size: 24px;
     color: slategray;
-    opacity: .7;
+    opacity: .6;
     margin-top: 0;
+    z-index: 100;
+    transform: translate(0, 5px);
     padding-top: 0;
-    line-height: 16px;
+    color: rgba(200,100,100,.8);
+    line-height: 24px;
   }
   .title-equip {
     font-family: 'Bison';

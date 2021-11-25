@@ -18,7 +18,7 @@ const Wrap = styled.div`
   letter-spacing: 3px;
   text-align: left;transform: translate(0px, 55px);
   align-items: center;
-  z-index: 9001;
+  z-index: 601;
   @media (max-width: 768px) {
     transform: translate(0px, 45px);
   }
@@ -101,7 +101,7 @@ function CountDownTimer(props) {
           {props.status === 'LIVE'
             ? 'Currently In Session'
             : props.status === 'COMPLETE'
-            ? 'Livestream Ended'
+            ? 'Livestream Has Ended'
             : 'On Standby'}
         </span>
       )}

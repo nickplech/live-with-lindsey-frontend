@@ -164,9 +164,9 @@ display: flex;
  z-index:0;
     height: 500px;
  
-    width: 100%;
-    left: -10%;
- transform: translate(0, -30%) rotate(-15deg);
+    width: 120%;
+    left: -5%;
+ transform: translate(0, -200px) rotate(-15deg);
     background: linear-gradient(
       0deg,
       rgba(255, 255, 255, 1) 20%,
@@ -251,7 +251,7 @@ return(
                 
             by <span>Lindsey Harrod </span>  </h1>
                   <Link href={{ pathname: '/signup' }}>
-            <SignMeUp>Click Here to Get Started Free!</SignMeUp>
+            <SignMeUp>Click Here to Get Started for Free!</SignMeUp>
           </Link>
 
             <div className="main-text">

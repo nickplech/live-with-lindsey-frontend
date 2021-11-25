@@ -18,17 +18,14 @@
         "react"
     ],
     "rules": {
-        "indent": [
-            "error",
-            "space"
-        ],
+    
         "linebreak-style": [
             "error",
             "unix"
         ],
         "quotes": [
             "error",
-            "double"
+            "single"
         ],
         "semi": [
             "error",

@@ -1,5 +1,7 @@
-// import React, {useRef, useState, useEffect, useCallback} from 'react'
+import React from 'react'
 import ModalPicture from '../components/PictureUpdateModal'
+import { motion } from 'framer-motion'
+
 import styled from 'styled-components'
 import Link from 'next/link'
 import { format } from 'date-fns'
@@ -115,48 +117,16 @@ const TodayButton = styled.div`
     transform: translate(0px, 5px);
   }
 `
-const EnvButton = styled.div`
-  color: white;
- width: 100%;
-display: flex;
- position:absolute; 
- user-select: none;
- bottom: 10px;
- border-radius: 50%;
- grid-column: 2;
-  padding: 0;
- text-transform: uppercase;
- transform: translateX(25px);
-  opacity: ${(props) => (props.newUpdate === true ? 1 : 0.5  )};
- 
- cursor: pointer;
-  z-index: 999;
- 
-  width: auto;
-  position: absolute;
 
- 
-  display: flex;
- 
-  z-index: 6000;
- 
-  font-feature-settings: 'tnum';
-  font-variant-numeric: tabular-nums;
- 
-     
-  color: white;
-cursor: pointer;
-   opacity: ${(props) => (props.isToday === 'today' ? 1 : 0.5)};
-  font-size:24px;
-  font-family: 'Felix';
-`
 const Envelope = styled.img`
-height: 20px;
-width: 20px;
-transform: translate(-30px, 25px);
+height: 115px;
+width: auto;
+ 
+    transform: translate(-20px, 140px);
 position: absolute;
-fill: white;
-user-select: none;
+ right: 0;
+z-index: 1000;
+ 
 `
 const CartPic = styled.a`
   height: 33px;
@@ -204,18 +174,36 @@ const OnDemandPic = styled.a`
     }
   }
 `
-const Both = styled.div`
-grid-column: 1/3;
-position: relative;
-width: 100%;
-`
+
+const slideOut = {
+  in: {
+    opacity: 1,
+    display: 'flex',
+    transition: {
+      type: 'tween',
+      stiffness: 200,
+    },
+  },
+  out: {
+    opacity: 0,
+    display: 'none',
+    transition: {
+      type: 'tween',
+      stiffness: 200,
+    },
+    transitionEnd: {
+      display: 'none',
+    },
+  },
+}
+
 function TickerFeed({ count,  firstName, showPic, pic, today }) {
    const { isToday, handleIt, active } = useToast()
   // const userPic = me?.image ? me.image.publicUrlTransformed : '../static/img/profpic.svg'
   return (
     <Offline>
  
-        <h1>{firstName}'s Dashboard</h1>   
+        <h1>{firstName}&apos;s Dashboard</h1>   
         {showPic &&  
         <ModalPicture image={pic && pic} />}
    
@@ -239,7 +227,7 @@ function TickerFeed({ count,  firstName, showPic, pic, today }) {
         >
   <div className="todayName"
          
-          onClick={(e) => handleIt('today')}
+          onClick={() => handleIt('today')}
          
         >
           TODAY{' '}
@@ -247,13 +235,20 @@ function TickerFeed({ count,  firstName, showPic, pic, today }) {
         <span className="line" >|</span>
         <div className="weekName"
         
-          onClick={(e) => handleIt('week')}
+          onClick={() => handleIt('week')}
    
         >
           WEEK
         </div>
    </SwithButtons>
-   {/* <EnvButton isToday={isToday} ><Envelope src="../static/img/news.svg" alt="live with lindsey community updates icon" />Community Updates</EnvButton> */}
+
+   
+   <motion.div
+                variants={slideOut}
+                initial="in"
+                animate={isToday === 'today' ? 'in' : 'out'}
+              ><Envelope src="../static/img/lindsey-harrod-community-updates.png" alt="live with lindsey community updates" /> </motion.div>
+  
     </Offline>
   )
 }

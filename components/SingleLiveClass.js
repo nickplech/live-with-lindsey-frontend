@@ -1,12 +1,12 @@
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import gql from 'graphql-tag'
-import { useMutation, useQuery } from '@apollo/client'
+import { useQuery } from '@apollo/client'
 import styled from 'styled-components'
 import Head from 'next/head'
 import Error from './ErrorMessage'
 import { CURRENT_USER_QUERY } from './User'
 import Footer from './Footer'
-import Details from './Details'
+import DetailsLive from './DetailsLive'
  import ClassBackground from './ClassBackground'
 import Link from 'next/link'
 import Loader from './Loader'
@@ -149,7 +149,7 @@ const SingleItemStyles = styled.div`
   grid-row: 2;
   border-radius: 10px;
   margin-top: 0px;
-
+  box-shadow: 0 2px 1px rgba(0, 0, 0, 0.09), 0 4px 2px rgba(0, 0, 0, 0.09), 0 8px 4px rgba(0, 0, 0, 0.09), 0 16px 8px rgba(0, 0, 0, 0.09);
   @media (min-width: 768px) {
     grid-column: 1;
     grid-row: 2;
@@ -177,8 +177,7 @@ const SingleItemStyles = styled.div`
      
       background: grey;
  
-      position: absolute; box-shadow: 0 2px 1px rgba(0, 0, 0, 0.09), 0 4px 2px rgba(0, 0, 0, 0.09),
-      0 8px 4px rgba(0, 0, 0, 0.09), 0 16px 8px rgba(0, 0, 0, 0.09);
+      position: absolute;  
     }
     &:after {
       display: flex;
@@ -261,7 +260,9 @@ const GoBacks = styled.div`
 const EquipmentList = styled.div`
   display: flex;
 grid-column: 2;
-
+justify-content: center;
+height: 100px;
+align-items: center; 
 grid-row: 2; margin-left: 0px;
 position: relative;
 transform: translateY(250px);
@@ -281,13 +282,16 @@ transform: translateY(250px);
   font-family: 'Bison';
   position: absolute;
 }
-  .noequip {
-    font-size: 18px;
+.noequip {
+    font-size: 24px;
     color: slategray;
-    opacity: .7;
+    opacity: .6;
     margin-top: 0;
+    z-index: 100;
+    transform: translate(0, 10px);
     padding-top: 0;
-    line-height: 16px;
+    color: rgba(200,100,100,.8);
+    line-height: 24px;
   }
   .title-equip {
     font-family: 'Bison';
@@ -308,6 +312,8 @@ const PopUp = styled.span`
  flex-flow: row;
  width: 100%;
     justify-content: center;
+    align-self: center;
+    justify-self: center;
     align-items: center;
     line-height: 26px;
  border-radius: 50%;
@@ -435,7 +441,7 @@ function SingleLiveClass({ id, userId }) {
                 style={{ marginRight: '7px' }}
                 src="../static/img/arrow-back-white.svg"
                 alt="back arrow"
-              />Go Back to <span>{userId ? 'Dashboard' : 'Home '}</span>Page</P>
+              />Go Back to <span>{userId ? 'Dashboard ' : 'Home '}</span>Page</P>
             </a>
           </Link> </GoBacks>
          
@@ -469,17 +475,18 @@ function SingleLiveClass({ id, userId }) {
         
         </div>
        
-        <Details    status={item.status}
+        <DetailsLive    
+        status={item.status}
         owner={owner && owner}
         date={item.date}
         name={item.reason.name}
         classId={item.id}   >
          
-        </Details>
+        </DetailsLive>
         <EquipmentList>
             
-              {data.vodViewingAuth &&  data.vodViewingAuth.equipment.length === 0 ? <p className="noequip">No Equipment For this Workout</p> : 
-              data.vodViewingAuth && data.vodViewingAuth.equipment.map((equip) => {
+              {item &&  item.equipment.length === 0 ? <p className="noequip">No Equipment For this Workout</p> : 
+              item && item.equipment.map((equip) => {
                   
                 return (
                   <PopUp key={equip.name}>

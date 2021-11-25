@@ -36,6 +36,10 @@ const Wrap = styled.div`
     }
     .lwl {
       color: #f8b0b0;
+      -webkit-text-fill-color: transparent;
+  -webkit-background-clip: text;
+    background-image: linear-gradient(135deg, #f8b0b0, #ffd7d4 );
+    background-clip: text;
     }
   .packages {
     grid-column: 1;
@@ -198,7 +202,7 @@ function SelectSubscription({ handleSetPlan }) {
   return (
     <>
       <Wrap>
-        <div className="header"><h1>Pick the <span className="lwl">Live with Lindsey</span> Subscription that's the best fit for You</h1></div>
+        <div className="header"><h1>Which <span className="lwl">Lindsey Harrod Fitness</span> Subscription is Your Perfect Fit?</h1></div>
         <div className="packages">
           <div className="free">
             <h2>Pay-As-You-Go</h2>

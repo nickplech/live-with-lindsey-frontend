@@ -155,7 +155,7 @@ console.log(readyToMakeTheCallFromAdmin)
       })
     })
 
-    connectionRef.current = peer;
+    connectionRef.current = peer
     console.log(connectionRef.current)
   }
 
@@ -215,7 +215,7 @@ console.log(readyToMakeTheCallFromAdmin)
                   stream
                 )
 
-              myVideo.current.srcObject = stream;
+              myVideo.current.srcObject = stream
               setScreenShare(false)
             }
   
@@ -257,7 +257,7 @@ console.log(readyToMakeTheCallFromAdmin)
   Router.push({
         pathname: '/',
       })
- 
+ // window.location.reload()
  
   }
   const leaveCall2 = () => {
@@ -268,7 +268,7 @@ if(connectionRef.current !== null) {
 
 }
     // peerSocket.emit("endCall", { id: otherUser })
-    // window.location.reload()
+    
   }
 
   const leaveCall1 = () => {

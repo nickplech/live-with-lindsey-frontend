@@ -15,7 +15,7 @@ const Background = styled.div`
 const Title = styled.img`
   background: transparent;
   position: absolute;
-  z-index: 15000;
+  z-index: 600;
   margin: 0 auto;
   transform: translateY(-50px);
   width: 270px;
@@ -26,7 +26,7 @@ const Title = styled.img`
 `
 
 const BackgroundPic = styled.img`
-//background: url('../static/img/classbackgrounds/backsplashfinal/${props => props.name}.jpg') center center no-repeat;
+ 
 object-fit: cover;
 object-position: bottom;
 height: 100%;
@@ -58,7 +58,7 @@ const Overlay = styled.div`
     display: flex;
     background: rgba(0, 0, 0, 0.5);
     position: absolute;
-    z-index: 1000;
+    z-index: 500;
   }
 `
  function VideoPlayer({name}) {

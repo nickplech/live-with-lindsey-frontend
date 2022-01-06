@@ -65,9 +65,10 @@ const Row = styled(motion.div)`
 `
 
 const Img = styled(motion.img)`
-    width: 75%;
-    max-width: 600px;
+    width: 70%;
+    max-width: 570px;
     position: absolute;
+    transform: translateY(-30px);
     @media (max-width: 768px) {
       /* transform: translateY(-50px); */
     }

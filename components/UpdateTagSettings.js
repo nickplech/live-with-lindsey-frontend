@@ -1,17 +1,26 @@
-import React from 'react'
+import React, {useState} from 'react'
 import { useMutation, useQuery } from '@apollo/client'
-
+import Loader from './Loader'
 import gql from 'graphql-tag'
 import useForm from '../lib/useForm'
 import Error from './ErrorMessage'
 import styled from 'styled-components'
 import SickButton from './styles/SickButton'
 import Tag from './Tag'
+import Select from 'react-select'
 import Form3 from './styles/Form3'
 
 const CREATE_TAG_MUTATION = gql`
   mutation CREATE_TAG_MUTATION($name: String!) {
     createTag(data: { name: $name }) {
+      id
+      name
+    }
+  }
+`
+const UPDATE_TAG_MUTATION = gql`
+  mutation UPDATE_TAG_MUTATION($name: String!) {
+    updateTag(data: { name: $name }) {
       id
       name
     }
@@ -75,11 +84,19 @@ const Submitted = styled.p`
   padding: 15px 15px;
   border-left: 5px solid green;
 `
+const selectionCategories = [{value: 'Body Focus', label: 'Body Focus'}, {value: 'Modality', label: 'Modality'}, {value: 'Duration', label: 'Duration'}, {value: 'Difficulty', label: 'Difficulty'}, {value: 'Category', label: 'Category'} ]
 
 function UpdateTagSettings() {
-
+ const [selectedCategory, setSelectedCategory] = useState(null)
   const { inputs, handleChange, clearForm } = useForm()
   const { data, loading } = useQuery(ALL_TAGS_QUERY)
+ 
+
+  const handleSelectedCategory = (e) => {
+    console.log(e)
+    setSelectedCategory(e)
+  }
+ 
 
   const [createTag, { error, called }] = useMutation(CREATE_TAG_MUTATION, {
     variables: {
@@ -91,22 +108,29 @@ function UpdateTagSettings() {
       },
     ],
   })
-
+  
+  if (loading ) return <Loader/>
+ 
   return (
     <Inner>
+  
+
       <Form3
         onSubmit={async (e) => {
           e.preventDefault()
-          await createTag()
+    await createTag
+        
           await clearForm()
         }}
       >
    
         <fieldset disabled={loading} aria-busy={loading}>
+       
         <Error error={error} />
         {!error && !loading && called && (
           <Submitted>New Tag Created SuccessFully!</Submitted>
         )}
+          
           <>
             <Flex>
               <Types> Searchable Tags</Types>
@@ -121,7 +145,7 @@ function UpdateTagSettings() {
                 })
               )}
             </Flex>
-
+                 
               <label htmlFor="name">
                 Tag Name
                 <input
@@ -134,12 +158,36 @@ function UpdateTagSettings() {
                   value={inputs.name}
                   onChange={handleChange}
                 />
+              </label> 
+              <label htmlFor="search-category">
+              Add Tag as Option Under Specific Search Category?
+              <Select
+                type="select"
+                value={selectedCategory}
+                onChange={(e) => handleSelectedCategory(e)}
+                name="search-category"
+                options={selectionCategories}
+              />
+              </label>
+              <label htmlFor="name">
+              other
+                <input
+                  type="text"
+                  id="name"
+                  name="name"
+    
+                  placeholder="Name"
+                  autoComplete="off"
+                  value={inputs.name}
+                  onChange={handleChange}
+                />
               </label>
 
               <div style={{ marginTop: '40px' }}>
-                <SickButton disable={loading} type="submit">
+                
+              <SickButton disable={loading} type="submit">
                   Create Tag
-                </SickButton>{' '}
+                </SickButton>  
 
               </div>
 

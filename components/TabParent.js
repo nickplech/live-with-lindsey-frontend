@@ -1,6 +1,7 @@
 import React from 'react'
 import UpdateUserProfiles from './UpdateUserProfile'
 import Tabs from './Tabs'
+import MyDownloads from './MyDownloads'
 import styled from 'styled-components'
 import OrderCount from './OrdersList'
 import { useUser } from './User'
@@ -33,7 +34,10 @@ const TabParent = ({page}) => {
             image={me.image}
           />
         </Tabs.Tab>
-        <Tabs.Tab id="tab2" title="order history">
+        <Tabs.Tab id="tab2" title="downloads">
+          <MyDownloads  userId={me.id} />
+        </Tabs.Tab>
+        <Tabs.Tab id="tab3" title="order history">
           <OrderCount page={page} userId={me.id} />
         </Tabs.Tab>
 

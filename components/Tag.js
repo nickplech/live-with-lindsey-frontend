@@ -25,9 +25,9 @@ opacity:.8;
   }
 `
 
-const Tag = ({ tag }) => {
+const Tag = ({ tag, populateTagForUpdate }) => {
   return (
-    <Div>
+    <Div  onClick={() => populateTagForUpdate(tag)} >
       {tag.name}
       <DeleteTag color={tag.color} id={tag.id} name={tag.name} />
     </Div>

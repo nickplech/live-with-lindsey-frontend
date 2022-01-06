@@ -20,7 +20,6 @@ import Emoji from './Emoji'
 
 import { useToast } from './contexts/LocalState'
 
-import { usePeerSocket } from './contexts/PrivatePeerSocket'
 import { useUser } from './User'
 
 const USERS_WEEK_QUERY = gql`
@@ -310,7 +309,22 @@ border: none;
     }
   }
 
-  .btn {
+  
+
+  p {
+    &:nth-of-type(1) {
+      font-family: 'Bison';
+      font-size: 22px;
+      margin: 0;
+      margin-top: 5px;
+      color: ${(props) => props.theme.third};
+      opacity: 0.8;
+    }
+  }
+  
+`
+const Btn = styled.a`
+ 
     border-radius: 5px;
     transition: 0.2s;
     display: flex;
@@ -334,29 +348,22 @@ border: none;
     }
     &:active {
       box-shadow: 0 4px 4px rgba(0, 0, 0, 0.1);
-      transform: scale(0.95);
+  
     }
     &:hover {
-      transform: scale(1.02);
+      background-image: linear-gradient(195deg,  #f8b0b0 ,#ffd7d4, #f8b0b0);
+   
     }
-  }
-
-  p {
-    &:nth-of-type(1) {
-      font-family: 'Bison';
-      font-size: 22px;
-      margin: 0;
-      margin-top: 5px;
-      color: ${(props) => props.theme.third};
-      opacity: 0.8;
-    }
-  }
-  .private {
  
- 
+`
+const Img = styled.img`
+      transition: .2s;
+      transform: rotate(180deg);
+     
+    ${Btn}:hover & {
+transform: translate(5px,0)     rotate(180deg);
   }
 `
-
 const Status = styled.div`
   
   text-align: right;
@@ -496,7 +503,7 @@ function DashboardComponent() {
                 items={items}
               
                 today={today}
-                id={me.id}
+                id={me && me.id}
               />
               </motion.div>
            
@@ -557,10 +564,10 @@ function TodaysClasses({ items, id }) {
                   }}
                 
                 >
-                  <a className="btn" style={{fontSize:'18px'}}>
+                  <Btn  style={{fontSize:'18px'}}>
                     Enter Private Session{' '}
                     
-                  </a>
+                  </Btn>
                 </Link>
               ) : (
                 <button className="btn-dis">Opens Upon Invite</button>
@@ -607,19 +614,25 @@ function TodaysClasses({ items, id }) {
                   }}
                 
                 >
-                  <a className="btn">
+                  <Btn >
                     Join Live{' '}
-                    <img
+                    <Img
                       style={{
-                        transform: 'rotate(180deg)',
+                    
                         marginLeft: '3px',
+                        marginTop: '1px'
                       }}
                       width="20px"
-                      src="../static/img/arrow-back.svg"
+                      src="../static/img/arrow-back-white.svg"
                       alt="arrow"
                     />
-                  </a>
+                  </Btn>
                 </Link>
+              ) : item.status === 'COMPLETE' ? (
+                <button className="btn-dis">{`Open @ ${format(
+                  new Date(item.open),
+                  'h:mm aa',
+                )} `}</button>
               ) : (
                 <button className="btn-dis">{`Open @ ${format(
                   new Date(item.open),

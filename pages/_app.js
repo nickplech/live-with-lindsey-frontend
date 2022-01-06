@@ -12,9 +12,12 @@ function MyApp({ Component, apollo, pageProps }) {
     <ApolloProvider client={apollo}>
       <ToastStateProvider >
         <UserSocketProvider>
+
+
         <Page>
           <Component {...pageProps} />
         </Page>
+     
         </UserSocketProvider>
       </ToastStateProvider>
     </ApolloProvider>

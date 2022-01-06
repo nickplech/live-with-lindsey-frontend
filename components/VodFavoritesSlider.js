@@ -11,7 +11,7 @@ import {
 import { useQuery } from '@apollo/client'
 import gql from 'graphql-tag'
 import Item from './Item'
-import VanillaTilt from 'vanilla-tilt'
+ 
 
 const ALL_FAVORITES_QUERY = gql`
   query ALL_FAVORITES_QUERY($id: ID) {
@@ -20,6 +20,7 @@ const ALL_FAVORITES_QUERY = gql`
       url
       thumbnailUrl
       name
+      date
       equipment {
         id
         description
@@ -322,42 +323,17 @@ const Tite = styled.h1`
 `
 
 
-const MenuItem = React.memo( props   => {
-  const tiltRef = useRef()
-
- useEffect(() => {
-   const tiltNode = tiltRef.current
-   const options = {
-   max: 3,
-   scale: 1.01,
-   speed: 100,
-   glare: true,
-   transition: true,
-   'max-glare': 0.4,
- }
-   VanillaTilt.init(tiltNode, options)
-   return () => tiltNode.vanillaTilt.destroy()
- }, [])
-
+const MenuItem = React.memo( ({videoOnDemand, subscription} )  => {
+ 
  return (
  
-   <>  <div
-     style={{
-       transformStyle: 'preserve-3d',
-       transform: 'perspective(1000px)',
-     }}
-     ref={tiltRef}
-   
-   >
-
-     <Item subscription={props.subscription} videoOnDemand={props.videoOnDemand}></Item>
+ <>
+     <Item subscription={subscription} videoOnDemand={videoOnDemand}></Item>
 
  
-     {/* <p className="the_date">Live on: <span>{format(new Date(videoOnDemand.date), 'MMM dd, yyyy')}</span></p> */}
   
-   </div>
        <Tags>
-       {props.videoOnDemand.tags.map((tag, i) => {
+       {videoOnDemand.tags.map((tag, i) => {
          return <span key={tag.name}>{tag.name}</span>
        })}
      </Tags>

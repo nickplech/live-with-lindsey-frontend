@@ -58,7 +58,7 @@ justify-content: center;
   width: 180px;
   cursor: pointer;
 `
-export default function ControlDots({ updateStatus, theName, id, status }) {
+export default function ControlDots({  theName, id, status }) {
   const [statusStateVersion, setStatusStateVersion] = useState(status)
   
   const userSocket = useUserSocket()

@@ -3,7 +3,7 @@ import { useQuery } from '@apollo/client'
 import gql from 'graphql-tag'
 import { useToast } from './contexts/LocalState'
  import Emoji from './Emoji'
-import {formatDistanceToNow, format} from 'date-fns'
+import {formatDistanceToNow, format, startOfWeek, endOfWeek} from 'date-fns'
 import styled from 'styled-components'
 import Error from './ErrorMessage'
 import ChartStats from './ChartStats'
@@ -19,13 +19,9 @@ const  PUBLIC_UPDATE_QUERY = gql`
       title
       iconImg
       textContent 
-    publicHeadline 
+ 
     createdAt
-    item {
-      id
-      name
-      date
-    }
+
        
     }
   }
@@ -77,13 +73,13 @@ grid-template-rows:1fr 60px;
 }
  `
  const TopStats = styled.div`
- grid-row: 2;grid-column: 1;
+ grid-row: 1;grid-column: 1;
     display: flex;
   background: transparent;
   border-radius: 5px;
- height:40px;
+ height:170px;
  align-items: flex-end;
- justify-content: flex-end;
+ justify-content: flex-start;
  text-align: right;
  overflow: hidden;
  user-select: none;
@@ -95,8 +91,8 @@ grid-template-rows:1fr 60px;
   z-index:200;
   margin: 10px auto 0;
   width: 95%;
-padding: 0;
-background: ${props => props.selectedButton === props.name ? 'white' : 'linear-gradient(45deg,  #f8b0b0 ,#ffd7d4)'};
+padding:5px;
+background: ${props => props.selectedButton === props.name ? 'white' : 'linear-gradient(322deg,  #f8b0b0 ,#ffd7d4)'};
 box-shadow: 0 10px 11px -6px rgba(0, 0, 0, 0.14),  0 -4px 46px rgba(0, 0, 0, 0.07);
   transition: 0.3s;
  
@@ -108,11 +104,26 @@ box-shadow: 0 10px 11px -6px rgba(0, 0, 0, 0.14),  0 -4px 46px rgba(0, 0, 0, 0.0
   grid-column: 3;
 
 }
-
+.primary-stat {
+transform: translate(0px, 0px);
+font-size: 48px;
+line-height: 50px;
+position: absolute;
+color: #f8b0b0;
+/* -webkit-text-fill-color: transparent;
+  -webkit-background-clip: text;
+    background-image: linear-gradient(260deg,#fff, #ffd7d4, #fff );
+    background-clip: text; */
  
+    
+}
  
+ .active-style {
+   background: white;
+   color: #f8b0b0;
+ }
 span {
-  transform: translate(5px, 5px);
+  transform: translate(0px, 0px);
 }
  `
  
@@ -130,15 +141,7 @@ background: transparent;
 padding: 20px;
 margin: 0px auto 0;
 transform: translate(0, -15px);
-/* &:before {
-  position: absolute;
-  top: 0;
-  height: 40px;overflow: hidden;
-  width: 100%;
-  content: '';
-  background: rgba(240,240,240,1);
-  transform: translate(-13px, -39px) skew(-20deg);
-} */
+
 .mostRecent {
   align-self: center;
   transform : translate(30%, 10px);
@@ -162,22 +165,11 @@ margin-bottom: 50px;
 padding: 5px;
 flex-flow: column;
 transform: translate(0, 25px);
-/* &:after {
-content: '';
-width: 3px;
-height: 50px;
-background-color:slategray;
-opacity: .4;
-position: absolute;
-right: 0;
-z-index: 5;
-bottom: -50px;
-transform: translate(-28px, 0px);
-} */
+
   header {
 
    display: grid;
-   grid-template-columns: 1fr 54px;
+   grid-template-columns:54px 1fr ;
    
  position:relative;
  align-items: center;
@@ -190,7 +182,7 @@ transform: translate(-28px, 0px);
   
 .title {
   color: white;
-  grid-column: 1;
+  grid-column: 2;
   font-size: 20px; display: inline-flex;
   text-align: left;
   letter-spacing: 2px;
@@ -213,7 +205,7 @@ transform: translate(-28px, 0px);
 
   `
   const IconBox = styled.div`
-  grid-column: 2;
+  grid-column: 1;
  box-shadow:   0 1px 10px rgba(0, 0, 0, 0.1);
  display: inline-flex;
  
@@ -231,10 +223,10 @@ transform: translate(-28px, 0px);
 
   `
    
-  const SinceTime = styled.p`
+  const UpdateType = styled.span`
    line-height: 13px;
-   font-size: 15px;
-   letter-spacing: 2px; 
+   font-size: 16px;
+   letter-spacing: 1px;
  padding: 0;
  position: absolute;
   margin: 0;
@@ -246,6 +238,21 @@ transform: translate(-28px, 0px);
  
  
   `
+  const SinceTime = styled.span`
+  line-height: 13px;
+  font-size: 9px;
+  text-transform: uppercase;
+padding: 0;
+position: relative;
+ margin: 0;
+font-family: 'Comfortaa';
+color:slategray;
+
+
+ transform: translate(-5px, -20px);
+
+
+ `
 
 const ContentSection = ({textContent, createdAt}) => (
   <motion.div
@@ -265,20 +272,21 @@ function Accordian({i, expanded, setExpanded, update }){
   return(
     <React.Fragment key={update.id}>
  <MainBox>
-<SinceTime className="sinceTime">   {formatDistanceToNow(new Date(update.createdAt), {addSuffix: true})} 
-</SinceTime>
+<UpdateType>   {update.iconImg}
+</UpdateType>
+
       <motion.header
         initial={false}
         onClick={() => setExpanded(isOpen ? false : i)}
-       ><p className="title">
-          {update.title}    
-       </p>
+       >
          <IconBox >
-           {lowerCased === 'welcome' ?  <img  style={{padding: '5px'}} height="35" src={'../static/img/lhf.svg'} alt={lowerCased} /> : lowerCased === 'challenge' ? <img  height="35" src={'../static/img/challenge.png'} alt={lowerCased} /> : lowerCased === 'invoice' ? <Emoji symbol="" label="envelope" /> : null}
+           {lowerCased === 'community update' ?  <img  style={{padding: '5px'}} height="35" src={'../static/img/lhf.svg'} alt={lowerCased} /> : lowerCased === 'challenge update' ? <img  height="35" src={'../static/img/challenge.png'} alt={lowerCased} /> : lowerCased === 'invoice' ? <Emoji symbol="" label="envelope" /> : null}
       
       </IconBox>
        
-
+<p className="title">
+          {update.title}    
+       </p>
    </motion.header> 
     <AnimatePresence initial={false}>
         {isOpen && (
@@ -298,7 +306,8 @@ function Accordian({i, expanded, setExpanded, update }){
         )}
       </AnimatePresence>
    </MainBox>
-  
+  <SinceTime>   {formatDistanceToNow(new Date(update.createdAt), {addSuffix: true})} 
+</SinceTime>
       
 </React.Fragment>
   )
@@ -306,12 +315,17 @@ function Accordian({i, expanded, setExpanded, update }){
     
 }
  
-      const buttonNames = ['monthly','focus' , 'weekly']
+      const buttonNames = ['week','month','focus'  ]
  
   const DashStats = () => {
   const {isToday} = useToast()
    const [expanded, setExpanded] = useState(false)
-   const [selectedButton, setSelectedButton] = useState('weekly')
+   const [selectedButton, setSelectedButton] = useState('week')
+   const weekStarts = startOfWeek(new Date(), {
+    weekStartsOn: 0,
+  })
+  const weekEnds = endOfWeek(new Date())
+
   const {data, loading, error} = useQuery(PUBLIC_UPDATE_QUERY)
 if (loading) return <p>loading...</p>
 if (error) return <Error error={error} />
@@ -335,20 +349,32 @@ if (!data) return null
          
       
                <div className="stat-grid">
-      <div className="main-stat">mainstat</div>
+  
       {buttonNames.map((name, i) => {
        
-   
+   const active = selectedButton === name ? 'active-style' : null
        
         return(
-          <TopStats key={name} selectedButton={selectedButton} name={name}   onClick={()=> setSelectedButton(name)} className="top-stats"><span>{name}</span></TopStats>
+          <TopStats key={name} selectedButton={selectedButton} name={name}   onClick={()=> setSelectedButton(name)}>
+           <>
+             {i === 0 ? <span>{    
+                format(new Date(), 'eeee') 
+           
+              }</span> : i === 1 ? <span>{    `${
+                format(weekStarts, 'MMM d') +
+                ' ' +
+                '-' +
+                ' ' +
+                format(weekEnds, 'MMM d')
+              }`}</span> : <span>{format(new Date(), 'MMMM')}</span>}</> 
+          </TopStats>
         )
       })}
                  
       
-       
+         <ChartStats/>
                </div>
-               <ChartStats/>
+             
           
          </Stats>
  }    

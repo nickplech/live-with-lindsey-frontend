@@ -19,6 +19,7 @@ const SEARCH_BY_TAGS = gql`
       id
       thumbnailUrl
       name
+      date
       isFavorite {
         id
       }

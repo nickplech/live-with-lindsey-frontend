@@ -82,7 +82,7 @@ const StyledContainer = styled(ToastContainer).attrs({
   .Toastify__progress-bar {
     background: ${props => props.theme.second};
   }
-`;
+`
 export default function Page({ children }) {
   const userSocket = useUserSocket()
  

@@ -8,6 +8,7 @@ import { ALL_FAVORITES_QUERY } from './VodFavoritesSlider'
 import Details from './Details'
 import Recommended from './RecommendedVods'
 import Link from 'next/link'
+
 import Loader from './Loader'
 import { useUser } from './User'
 import debounce from 'lodash.debounce'
@@ -130,17 +131,44 @@ const SingleItemStyles = styled.div`
       z-index: 999999;
     }
   }
-
+.no-url-version-luvs {
+  position: relative;
+    width: 95%;
+    height: 400px;
+    border-radius: 10px;
+    border: 0;
+    margin: 0 auto;
+    object-fit: contain;      box-shadow: 
+ 
+ 0 2px 1px rgba(0, 0, 0, 0.09), 0 4px 2px rgba(0, 0, 0, 0.09),
+   0 8px 4px rgba(0, 0, 0, 0.09), 0 16px 8px rgba(0, 0, 0, 0.09);
+    @media (min-width: 768px) {
+      width: 95%;
+      height: 95%;
+      margin: 0;
+      top: 0;
+      background: grey;
+      left: 20px;
+      position: absolute; box-shadow: 0 2px 1px rgba(0, 0, 0, 0.09), 0 4px 2px rgba(0, 0, 0, 0.09),
+      0 8px 4px rgba(0, 0, 0, 0.09), 0 16px 8px rgba(0, 0, 0, 0.09);
+    }
+    &:after {
+      display: flex;
+      position: absolute;
+      z-index: 999999;
+    }
+}
 `
 
 const VOD_AUTH_QUERY = gql`
-  query VOD_AUTH_QUERY($id: ID!) {
-    vodViewingAuth(  id: $id ) {
+  query VOD_AUTH_QUERY($id: ID!, $userId: ID) {
+    vodViewingAuth(  id: $id, userId: $userId ) {
       id
       name
        date
       description
       url
+      
       thumbnailUrl
         equipment {
           id
@@ -213,8 +241,14 @@ div {
     padding: 2px 5px;
     letter-spacing: 1px;
     line-height: 16px;
+    cursor: pointer;
     border: 1px solid ${(props) => props.theme.third};
     opacity: 0.8;
+    transition: .3s;
+    &:hover {
+      background: ${props => props.theme.third};
+      color: white;
+    }
   }
 `
  
@@ -301,10 +335,57 @@ const PopUp = styled.span`
     inset 1px 1px 15px rgba(100, 100, 100, 0.15);
   
     transition: 0.3s;
-    &:hover,
-    &:focus,
-    &:active {
-      background: ${(props) => props.theme.primary};
+    &:after {
+      content: ${props => props.name + props.descriptionzzzzzz};
+      position: absolute;
+      left: 50%;
+      margin: auto;
+      top: -200%;
+      background: linear-gradient(to right, #4794ff, #3471ff);
+      display: block;
+      padding: 7px 11px;
+      text-align: center;
+      color: white;
+      font-weight: 300;
+      white-space: nowrap;
+      border-radius: 3px;
+      opacity: 0;
+      font-size: .7em;
+      //transform: translate(-50%, 5px);
+      transform-origin: 50% 100%;
+      transform: translate(-50%) rotateX(-55deg);
+      transition-duration: .3s;
+      pointer-events: none;
+      box-shadow: 0 2px 13px 0 #3471ff94;
+    }
+    &:before {
+      content: '';
+      position: absolute;
+      width: 0;
+      height: 0;
+      border: 10px solid #3471ff;
+      border-width: 8px 6px;
+      border-color: #387fff transparent transparent transparent;
+      left: 0;
+      right: 0;
+      margin: auto;
+      top: -7px;
+      opacity: 0;
+      transition-duration: .3s;
+      //transform: rotateX(-55deg);
+    }
+
+    &:hover {
+      &:after {
+        opacity: 1;
+        //transform: translateX(-50%);
+        transform: translate(-50%) rotateX(0);
+        pointer-events: all;
+      }
+
+      &:before {
+        opacity: 1;
+      }
     }
     .theequipment {
       box-shadow: 
@@ -312,47 +393,7 @@ const PopUp = styled.span`
     0 1px 4px rgba(0, 0, 0, 0.19), 0 4px 40px rgba(0, 0, 0, 0.09) ;
     }
 `
-const Bubble = styled.div`
-display: none;
-  background: white;
-  width: 300px;
-  border-radius: 10px;
-  transform: translate(-50%, 0);
-  padding: 5px 10px;
-  position: absolute;
-  color: grey;
- 
-  flex-flow: column;
-  justify-content: center;
-  border: 1px solid lightgray;
 
-  h4 {
-    margin: 0;
-    font-size: 24px;  
-    justify-self: center;
-    letter-spacing: 2px;
-    align-self: center;
-    font-family: 'Bison';
-    margin-left: 5px;
-    color: black;
-  }
-  p {
-    font-size: 15px;
-    letter-spacing: 2px;
-    margin: 0;
-    margin-top: 5px;
-    line-height: 18px;
-  }
-   ${PopUp}:hover & {
-display: flex;
-  }
-  ${PopUp}:active & {
-display: flex;
-  }
-  ${PopUp}:focus & {
-display: flex;
-  }
-`
 const P = styled.div`
   span {
     color: #f8b0b0;
@@ -411,7 +452,7 @@ function SingleItem({ id }) {
   )
 
   const { loading, error, data } = useQuery(VOD_AUTH_QUERY, {
-    variables: { id },
+    variables: { id, userId: me && me.id },
   })
 
 
@@ -431,7 +472,7 @@ useEffect(() => {
   if (loading) return <Loader />
   console.log(data)
  
-  const url = data.vodViewingAuth && data.vodViewingAuth.url
+  const url = data.vodViewingAuth.url && data.vodViewingAuth.url
   const isAFav =
     data.vodViewingAuth &&
     data.vodViewingAuth.isFavorite.some((person) => {
@@ -472,7 +513,7 @@ useEffect(() => {
           }}
         >
        
-        <SingleItemStyles>
+       {url ? <SingleItemStyles>
       
           <iframe
             className="resp-iframe"
@@ -487,7 +528,7 @@ useEffect(() => {
             allowFullScreen
           ></iframe>
   
-        </SingleItemStyles>
+        </SingleItemStyles> : <SingleItemStyles><img src={data.vodViewingAuth &&  data.vodViewingAuth.thumbnailUrl} className="no-url-version-luvs" /></SingleItemStyles>}
         <Tags>    
             {data.vodViewingAuth &&
               data.vodViewingAuth.tags.map((tag) => {
@@ -507,20 +548,12 @@ useEffect(() => {
               data.vodViewingAuth && data.vodViewingAuth.equipment.map((equip) => {
                   
                 return (
-                  <>
-                  <PopUp key={equip.name}>
+            
+                  <PopUp description={equip.description} name={equip.name} key={equip.name}>
              <img className="theequipment" style={{borderRadius: '50%',  height: '45px', width: '45px'  }} src={equip.image.publicUrlTransformed} alt={equip.name} /> 
                   
-                 
-                     <Bubble>
-                        <div style={{ display: 'inline-flex' }}>
-                          {' '}
-                          <img  height='40' src={equip.image.publicUrlTransformed} />
-                          <h4>{equip.name}</h4>
-                        </div>
+                   </PopUp>
 
-                        <p>{equip.description}</p>
-                      </Bubble>   </PopUp></>
                 )
               })}
            

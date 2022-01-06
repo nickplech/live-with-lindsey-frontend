@@ -282,13 +282,13 @@ transform: translateY(250px);
   font-family: 'Bison';
   position: absolute;
 }
-.noequip {
+  .noequip {
     font-size: 24px;
     color: slategray;
     opacity: .6;
     margin-top: 0;
     z-index: 100;
-    transform: translate(0, 10px);
+    transform: translate(0, 5px);
     padding-top: 0;
     color: rgba(200,100,100,.8);
     line-height: 24px;
@@ -304,16 +304,20 @@ transform: translateY(250px);
     font-size: 20px;
   }
  
-  `
+  
+  p {
+    margin: 3px;
+  }
+`
 const PopUp = styled.span`
   cursor: pointer ;
-    margin: 10px 10px ;
+    margin: 15px 15px ;
  display: flex; 
  flex-flow: row;
  width: 100%;
+ position: relative;
+ z-index: 2000;
     justify-content: center;
-    align-self: center;
-    justify-self: center;
     align-items: center;
     line-height: 26px;
  border-radius: 50%;
@@ -325,7 +329,15 @@ const PopUp = styled.span`
     list-style: none;
     color: white;
 
- 
+  -moz-box-shadow: 
+    1px 1px 5px rgba(0, 0, 0, 0.2), 
+    inset 1px 1px 15px rgba(100, 100, 100, 0.15);
+  -webkit-box-shadow: 
+    1px 1px 5px rgba(0, 0, 0, 0.2),
+    inset 1px 1px 15px rgba(100, 100, 100, 0.15);
+  box-shadow: 
+    1px 1px 5px rgba(0, 0, 0, 0.2),
+    inset 1px 1px 15px rgba(100, 100, 100, 0.15);
   
     transition: 0.3s;
     &:hover,
@@ -336,34 +348,30 @@ const PopUp = styled.span`
     .theequipment {
       box-shadow: 
  
-    0 2px 1px rgba(0, 0, 0, 0.09), 0 4px 2px rgba(0, 0, 0, 0.09),
-      0 8px 4px rgba(0, 0, 0, 0.09), 0 16px 8px rgba(0, 0, 0, 0.09),
-      0 32px 16px rgba(0, 0, 0, 0.09);
+    0 1px 4px rgba(0, 0, 0, 0.19), 0 4px 40px rgba(0, 0, 0, 0.09) ;
     }
 `
 const Bubble = styled.div`
 display: none;
   background: white;
-  max-width: 300px;
+  width: 300px;
   border-radius: 10px;
   transform: translate(-50%, 0);
   padding: 5px 10px;
   position: absolute;
   color: grey;
-  font-family: 'Bison';
+ z-index:3000;
   flex-flow: column;
   justify-content: center;
-  box-shadow: 
- 
- 0 2px 1px rgba(0, 0, 0, 0.09), 0 4px 2px rgba(0, 0, 0, 0.09),
-   0 8px 4px rgba(0, 0, 0, 0.09), 0 16px 8px rgba(0, 0, 0, 0.09),
-   0 32px 16px rgba(0, 0, 0, 0.09);
+  border: 1px solid lightgray;
+
   h4 {
     margin: 0;
     font-size: 24px;  
     justify-self: center;
     letter-spacing: 2px;
     align-self: center;
+    font-family: 'Bison';
     margin-left: 5px;
     color: black;
   }
@@ -371,6 +379,7 @@ display: none;
     font-size: 15px;
     letter-spacing: 2px;
     margin: 0;
+    margin-top: 5px;
     line-height: 18px;
   }
    ${PopUp}:hover & {
@@ -427,6 +436,7 @@ function SingleLiveClass({ id, userId }) {
   // const { loading, error, data } = useQuery(VOD_AUTH_QUERY, {
   //   variables: { id },
   // })
+  console.log(item.reason.classDescription)
   return (
     <>
       <Head>
@@ -480,8 +490,8 @@ function SingleLiveClass({ id, userId }) {
         owner={owner && owner}
         date={item.date}
         name={item.reason.name}
-        classId={item.id}   >
-         
+        classId={item.id} 
+         classDescription={item.reason.classDescription}  >
         </DetailsLive>
         <EquipmentList>
             

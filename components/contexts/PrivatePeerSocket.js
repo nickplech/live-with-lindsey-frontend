@@ -35,7 +35,7 @@ export  function usePeerSocket() {
   const screenTrackRef = useRef()
 
     useEffect(() => {
-      const newPeerSocket = io(`http://localhost:3001/privateclass`, {
+      const newPeerSocket = io('http://localhost:3001/privateclass', {
         withCredentials: true,
  
       })

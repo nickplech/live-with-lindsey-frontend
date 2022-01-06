@@ -111,7 +111,7 @@ function Account() {
     if (!file.type || validImageTypes.indexOf(file.type) === -1) {
       toast('Please provide a valid image type: GIF, JPG, or PNG.', {
         appearance: 'error',
-        autoDismiss: true,
+       
       });
       return null;
     }
@@ -120,7 +120,7 @@ function Account() {
     if (file.size > 5 * 1024 * 1024) {
       toast('Maximum image size is 5MB.', {
         appearance: 'error',
-        autoDismiss: true,
+       
       });
       return null;
     }

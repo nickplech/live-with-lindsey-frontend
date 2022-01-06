@@ -1,7 +1,7 @@
 import React from 'react'
 import Link from 'next/link'
 import styled from 'styled-components'
-import { motion, useMotionValue, useTransform } from "framer-motion";
+import { motion, useMotionValue, useTransform } from "framer-motion"
 
 const Wrapper = styled.div`
   position: relative;
@@ -68,7 +68,7 @@ display: flex;
  text-align: left;
  padding-top: 0px;
  padding-left: 10px;
- margin: 0 auto;
+ margin: 0px auto 0;
  @media(min-width: 992px) {
    padding-left: 60px;
  }
@@ -255,7 +255,7 @@ return(
           </Link>
 
             <div className="main-text">
-           <p>Be the first to know about fitness challenges &amp; upcoming Lindsey Harrod Fitness community events! Just enter your email below! <br/><br/>
+           <p>Want to be the first to know about fitness challenges &amp; upcoming Lindsey Harrod Fitness community events! Just enter your email below! <br/><br/>
              </p>
                <MailingListInput placeholder="enter your email for updates"/>
              <SubmitButton className="submit-email">Subscribe!</SubmitButton>
@@ -311,8 +311,7 @@ return(
                 whileTap={{ cursor: "grabbing" }}
             ><div className="circle"/></LiveScreen>
    </Lindsey>
-     {/* <p>Get ready to have fun and work hard. My classes range from low impact, to strength training, to high intensity, and cater to all fitness levels. Be prepared to gain strength and confidence, connect with like minded women, and leave every class feeling challenged, accomplished, and toned in all the right places.
-       </p> */}
+     
   
   </Wrapper>
   </>

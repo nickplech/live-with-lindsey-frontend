@@ -16,19 +16,34 @@ const Tilty = styled.div`
     .js-tilt-glare {
         border-radius: 20px;
     }
+    .thedate {
+      color: white;
+    background: transparent;
+    margin: 0;
+    
+    line-height: 20px;
+    padding: 2px 4px 2px 8px;
+    
+    transform:  translate(10px, 10px);
+    display: inline-flex;
+    font-size: 18px;
+    font-family: 'Bison';
+    letter-spacing:2px;
+    transition: 0.2s;
+    }
     .live {
     color: white;
     background: rgba(240, 20, 20, 0.7);
     margin: 0;
     
-    line-height: 23px;
-    padding: 2px 4px 2px 8px;
-    width: 60px;
-    transform: rotate(-4deg) translate(10px, 10px);
+    line-height: 20px;
+    padding: 2px  4px;
+     
+    transform:  translate(-5px, -2px);
     display: inline-flex;
-    font-size: 22px;
+    font-size: 18px;
     font-family: 'Bison';
-    letter-spacing: 4px;
+    letter-spacing: 2px;
     transition: 0.2s;
   }
 `
@@ -56,6 +71,7 @@ const Grid = styled.div`
     line-height: 18px;
     font-size: 16px;     
   margin: 10px;
+  margin-top: 20px;
   letter-spacing: 2px;
     color: white;
     padding: 0;
@@ -101,7 +117,7 @@ const Grid = styled.div`
     }
   
  `
-function DetailsLive( { status, date, name, classId,owner } ){
+function DetailsLive( { status, date, name, classId,owner, classDescription } ){
     const tiltRef = useRef()
  
    useEffect(() => {
@@ -131,14 +147,10 @@ function DetailsLive( { status, date, name, classId,owner } ){
     <Grid>
   
  <h2>{name && name}</h2> 
-           <span className="live">LIVE</span>  
-         {date && (
-         <p className="datecolorchange">
-                 On{' '}{format(new Date(date), 'MMM dd, yyyy')}
-              </p> 
-              )
+             {date && <p className="thedate"><span className="live">LIVE </span>On{' '}{format(new Date(date), 'MMM dd, yyyy')}</p>  
+   
          }
-           {/* <p className="datecolorchange">{description && description}</p> */}
+           <p className="datecolorchange">{classDescription && classDescription}</p>
                {/* {!me ? null : (
                     <div className="extras">  
             <Heart 

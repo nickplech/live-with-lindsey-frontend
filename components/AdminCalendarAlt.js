@@ -268,7 +268,7 @@ function AdminCalendarAlt() {
     variables: { date: formatISO(weekStarts) },
   })
   if (loading) return <Loader />
-  if (error) return <Error error={error} />
+  // if (error) return <Error error={error} />
   if (!data) return null
 
   const theDataLength = data.allItems.length

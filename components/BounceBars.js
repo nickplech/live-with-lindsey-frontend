@@ -49,8 +49,10 @@ const StyleMePritay = styled.section`
     font-family: 'Bison';
     color: slategray;
     letter-spacing: 2px;
+    line-height: 26px;
     font-size: 26px;
     margin-bottom: 0px;
+    text-align: center;
   }
   p {
     max-width: 550px;
@@ -88,7 +90,7 @@ export default function BounceBars() {
       <StyleMePritay className="white-plain py-5">
         <div className="left">
          <div className="main-text">
-           <h2>My Classes cater to <span>All Levels</span> of Fitness</h2>
+           <h2>Online Workouts for <span>All Levels</span> of fitness</h2>
          <p> 
             From Low Impact, 
             to Strength Training, to High Intensity

@@ -8,13 +8,13 @@ import { useMutation, useQuery } from '@apollo/client'
 import SickButton from './styles/SickButton'
 import Error from './ErrorMessage'
 import { STREAMS_ADMIN_QUERY } from './AdminCalendarAlt'
-
  
 
 import Select from 'react-select'
  
  
 import styled, { keyframes } from 'styled-components'
+import DragAnimation from './DragAnimation'
 
 const loading = keyframes`
   from {
@@ -143,13 +143,12 @@ const CREATE_PRIVATE_CLASS_MUTATION = gql`
       name: $name
       price: $price
       date: $date
- 
-     
-userId: $userId
+      userId: $userId
     ) {
       id
       name
       date
+      price
       user {     
         id
         firstName
@@ -185,20 +184,20 @@ const nameOptions = [{value: '15 Minutes', label: '15 Minute Private Session'},{
 
 function CreatePrivateClass() {
    const [nameState, setNameState] = useState('')
-  const [priceState, setPriceState] = useState('')
+  const [priceState, setPriceState] = useState(20)
   const [selectedOption, setSelectedOption] = useState('')
   const [userNameState, setUserNameState] = useState('')
-  const [date, setDate] = useState(new Date())
-  const [selectedDate, setSelectedDate] = useState(new Date())
+  // const [date, setDate] = useState(new Date())
+  // const [selectedDate, setSelectedDate] = useState(new Date())
   function handleSelectedOption(e) {
     setSelectedOption(e)
-    setUserNameState(e.label)
+    // setUserNameState(e.label)
   }
   const { inputs, handleChange } = useForm({
     date: new Date(),
     reason: '',
   })
- console.log(inputs.date)
+  
  
   const weekStarts = startOfWeek(new Date(), {
     weekStartsOn: 0,
@@ -230,10 +229,9 @@ function CreatePrivateClass() {
     const label = `${user.lastName + ',' + ' ' + user.firstName +  ' ' + '(' + user.businessName + ')'}`
     return { value, label }
   })
-  console.log(date)
-console.log(selectedDate)
+ 
   const needsClass = selectedOption && selectedOption.length
-  const needsDateTime = date && date !== null
+  // const needsDateTime = date && date !== null
 
   return (
     <Inner>
@@ -289,7 +287,10 @@ console.log(selectedDate)
                     />
    </label>
           
-        
+        <label htmlFor="pricing">Price Per Session 
+      <p style={{fontSize: '42px', marginBottom: '30px'}}>${priceState}</p>
+              <DragAnimation priceState={priceState} setPriceState={setPriceState} />
+          </label>
    <label htmlFor="date">
                       SELECT DATE &amp; TIME
                       <input
@@ -310,7 +311,7 @@ console.log(selectedDate)
                     
                     <SickButton
                       disable={
-                        loading || needsClass || needsDateTime 
+                        loading || needsClass 
                       }
                       style={{ marginTop: '50px' }}
                       type="submit"

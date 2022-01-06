@@ -16,7 +16,7 @@ const Div = styled.div`
   cursor: pointer;
   border-radius: 5px;
   list-style: none;
-  transition: 0.2s;
+  transition: 0.4s;
   &:hover {
     box-shadow: 1px 1px 4px 3px rgba(0, 0, 0, 0.1);
   }
@@ -27,9 +27,9 @@ const Reason = ({ reason }) => {
     <Div
       color={"#f8b0b0"}
       style={{
-        background: 'transparent',
-        color: reason.color === '#F8F8FF' && 'black',
-        borderColor: `#f8b0b0`,
+        background: '#f8b0b0',
+        color:  '#fff'  ,
+ 
       }}
     >
       {reason.name}

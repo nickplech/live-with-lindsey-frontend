@@ -2,22 +2,8 @@ import React, { useState } from 'react'
 import { useQuery } from '@apollo/client'
 import gql from 'graphql-tag'
 import styled from 'styled-components'
-import posed from 'react-pose'
-
-const Container = posed.ul({
-  notShut: {},
-  shut: { delay: 300 },
-  initialPose: 'shut',
-})
-const P = posed.li({
-  notShut: { y: 0, opacity: 1 },
-  shut: { y: 20, opacity: 0 },
-})
-
-const Content = posed.div({
-  closed: { height: 0 },
-  open: { height: 'auto' },
-})
+import motion from 'framer-motion'
+ 
 
 const ALL_USERS_QUERY = gql`
   query ALL_USERS_QUERY {
@@ -124,6 +110,22 @@ function Clients() {
   const handleIsOpen = (i) => {
     setOpen(open === i ? false : i)
   }
+ 
+ 
+  const Container = {
+    notShut: {},
+    shut: { delay: 300 },
+    initialPose: 'shut',
+  }
+  const P = {
+    notShut: { y: 0, opacity: 1 },
+    shut: { y: 20, opacity: 0 },
+  }
+  
+  const Content = {
+    closed: { height: 0 },
+    open: { height: 'auto' },
+  }
   const { data, loading, error } = useQuery(ALL_USERS_QUERY)
   if (loading) return <p>loading...</p>
   error && <p>Error: {error.message}</p>
@@ -131,7 +133,7 @@ function Clients() {
     <>
       <List>
         <StyledSubStatus>
-          <Container pose={'notShut'}>
+          <motion.div varients={Container} initial="notShut">
             {data.allUsers &&
               data.allUsers.map((user, i) => {
                 const madeDate = user.createdAt.toString()
@@ -167,7 +169,7 @@ function Clients() {
                   </P>
                 )
               })}
-          </Container>
+          </motion.div>
         </StyledSubStatus>
       </List>
     </>

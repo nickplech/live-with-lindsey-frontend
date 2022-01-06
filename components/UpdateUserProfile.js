@@ -325,7 +325,7 @@ const nameLong = inputs.businessName.length > 14
               onChange={handleChange}
             />
           </label>
-          <p style={{ padding: 0, margin: 0,fontSize: '13px', transform: 'translateY(-20px)', fontFamily: 'Comfortaa'}}>Used to authorize that it is actually you using your account; also used to send Live Workout SMS reminders</p>
+          <p style={{ padding: 0, margin: 0,fontSize: '13px', transform: 'translateY(-20px)', fontFamily: 'Comfortaa'}}>Used for account authorization as-well-as Live Workout SMS reminders</p>
 
           <label htmlFor="businessName">
              Display Name
@@ -369,7 +369,7 @@ const nameLong = inputs.businessName.length > 14
               value={me && me.receiveSms}
               onChange={() => clickSms()}
             />
-          <p style={{ padding: 0, margin: 0, fontSize: '13px',fontFamily: 'Comfortaa'}}>By Leaving this Option Selected, You are Stating that You Would Like to Receive SMS&mdash;Text Message&mdash;Reminders Approximately 30 minutes Before Each Live Workout of Which You are Subscribed</p><p style={{letterSpacing: '1px',fontSize: '14px',}}>Deselect the Checkbox to Elect NOT TO RECEIVE SMS MESSAGES</p>
+          <p style={{ padding: 0, margin: 0, fontSize: '13px',fontFamily: 'Comfortaa'}}>By Leaving this Option Selected, You are Stating that You Would Like to Receive SMS&mdash;Text Message&mdash;Reminders Approximately 30 minutes Before Livestreams</p><p style={{letterSpacing: '1px',fontSize: '14px',}}>Deselect the Checkbox to Elect NOT TO RECEIVE SMS MESSAGES</p>
             <SickButton disabled={tooShort || nameLong} style={{justifySelf: 'flexEnd', bottom: '40px', right: '40px', position: 'absolute'}}
             type="submit">
             Sav{loading ? 'ing' : 'e'} Changes
@@ -379,14 +379,16 @@ const nameLong = inputs.businessName.length > 14
         
     
 
-      </Form>       <h2>Subscription Settings</h2>
+      </Form>    
+     
+         <h2>Subscription Settings</h2>
       <SubscriptionSettings>
  
         <div
           style={{
             background: 'rgba(240,240,240,.8)',
             padding: '20px',
-            borderRadius: '5px',
+         
             marginBottom: '45px',
           }}
         >
@@ -396,7 +398,7 @@ const nameLong = inputs.businessName.length > 14
           </label>
           <label htmlFor="renewelDate">
           
-          <p style={{ marginTop: '10px' }}> Subscription Renews Automatically On: <em >{me && me.subscription}</em></p>
+          <p style={{ marginTop: '5px' }}> Next Automatic Monthly Billing On: <em >{me && me.subscription}</em></p>
         </label>
           {me && me.subscription === 'ALLACCESS' ? (
             <a
@@ -410,7 +412,7 @@ const nameLong = inputs.businessName.length > 14
               href="https://buy.stripe.com/test_4gweXM0Pt2IM0qkfYY"
               className="subscription-buttons"
             >
-              Upgrade to Full Access Pass
+              Upgrade to All Access Pass
             </a>
           )}
         </div>

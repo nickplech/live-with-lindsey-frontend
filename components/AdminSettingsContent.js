@@ -1,5 +1,5 @@
 import React from 'react'
-import AdminCalendarAlt from './AdminCalendarAlt'
+import Calendar from './Calendar'
 import Tabs from './Tabs'
 import UpdateEquipment from './UpdateEquipment'
 import CreatePrivateClass from './CreatePrivateClass'
@@ -14,7 +14,7 @@ const AdminSettingsContent = () => {
       }}
     >
       <Tabs.Tab id="tab1" title="book">
-        <AdminCalendarAlt />
+        <Calendar />
       </Tabs.Tab>
       <Tabs.Tab id="tab2" title="classtype">
         <UpdateScheduleSettings />

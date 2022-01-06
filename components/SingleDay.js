@@ -1,42 +1,60 @@
-import React, { Component } from 'react'
+import React, {useState} from 'react'
 import styled from 'styled-components'
+import {Data_15} from './Calendar'
 import Error from './ErrorMessage'
-import Link from 'next/link'
-import { Query, Mutation, ApolloConsumer } from 'react-apollo'
+ 
+import { useQuery, useMutation  } from '@apollo/client'
 import gql from 'graphql-tag'
-import { Data_15 } from '../lib/timeSlots'
 import AppSlot from './DraggerGrid'
-
 import { format, startOfDay } from 'date-fns'
 import Slot from './Slot'
-import isNowFunc from '../lib/currentTime'
+import { TODAYS_APPOINTMENTS_QUERY } from './Calendar'
 import Loader from './Loader'
 import Modal from './Modal'
+import formatISO from 'date-fns/formatISO'
+import useToggle from './useToggle'
 
+const MOVE_APPOINTMENT_MUTATION = gql`
+  mutation MOVE_APPOINTMENT_MUTATION($id: ID!, $date: DateTime) {
+    updateItem(id: $id, date: $date) {
+      id
+      date
+    }
+  }
+`
+
+const RESIZE_APPOINTMENT_MUTATION = gql`
+  mutation RESIZE_APPOINTMENT_MUTATION($id: ID!, $appLength: String) {
+    updateLength: updateItem(id: $id, appLength: $appLength) {
+      id
+      reason {
+        id  
+        appLength
+      }
+    }
+  }
+`
+ 
 const ALL_REASONS_QUERY = gql`
   query ALL_REASONS_QUERY {
-    allReasons() {
+    allReasons {
       id
       name
       color
-      appointments {
-        id
-
-      }
     }
   }
 `
 
 const DayView = styled.div`
   position: relative;
-  display: grid;
-  grid-row: 1/3;
-  width: 100%;
-  height: 100%;
+ 
+margin: 0 auto;
+  width: 98%;
+  height: calc(100vh - 130px);
   background-color: white;
   box-shadow: 0 1px 5px 3px rgba(0, 0, 0, 0.05);
-  border-radius: 10px 10px 10px 10px;
-  z-index: -1;
+  border-radius: 14px 14px 14px 14px;
+  z-index: 1;
   .gear {
     position: relative;
     height: 18px;
@@ -44,51 +62,45 @@ const DayView = styled.div`
     margin: 0px;
     transition: 0.3s;
     &:hover {
-      transform: rotate(45deg);
+      transform: rotate(180deg);
     }
   }
   .parent {
     display: flex;
-    flex-flow: column;
-    position: absolute;
+  flex-flow: row;
+    position: relative;
     right: 0px;
-    align-items: flex-end;
-    border-radius: 5px 7px 0 0;
+    justify-content: flex-end;
+    align-items: flex-start;
+    border-radius: 10px 10px 0 0;
     text-align: center;
     padding-right: 20px;
-    margin-top: 1px;
-    height: 65px;
+    /* margin-top: 1px; */
+    height: 45px;
     width: 100%;
-    background: ${(props) => props.theme.grey};
+    background: ${(props) => props.theme.second};
   }
   .todayButton {
-    justify-content: center;
+  
     position: absolute;
     display: flex;
     border-radius: 5px;
     background: white;
     left: 10px;
-    border-top: 13px solid red;
-    top: 10px;
-    box-shadow: 0 1px 1px 2px rgba(0, 0, 0, 0.2);
+   justify-content: center;
+   align-items: center;
+ transform: translateY(10px);
+    box-shadow: 0 7px 8px -4px rgba(0, 0, 0, 0.1);
     width: 48px;
-    height: 45px;
+    height: 20px;
     cursor: pointer;
     transition: 0.3s;
     z-index: 50;
-    &:before {
-      content: 'TODAY';
-      color: white;
-      position: absolute;
-      font-size: 9px;
-      top: -14.8px;
-    }
+   
     &:hover {
-      transform: scale(1.03);
+      transform: translateY(10px) scale(1.03);
     }
-    &:active {
-      transform: scale(1);
-    }
+ 
   }
   .date {
     display: flex;
@@ -103,13 +115,18 @@ const DayView = styled.div`
     -ms-user-select: none; /* Internet Explorer/Edge */
     user-select: none;
   }
+  
   .sideDate {
     display: flex;
     color: white;
+    align-items: flex-end;
+    transform: translateY(-8px) translateX(5px);
+    flex-flow: column;
     margin: 0;
-    font-family: 'Montserrat', sans-serif;
-    font-size: 26px;
-    line-height: 26px;
+    font-family: 'Bison';
+    letter-spacing: 2px;
+    font-size: 18px;
+    line-height: 20px;
     padding-top: 10px;
     -webkit-touch-callout: none; /* iOS Safari */
     -webkit-user-select: none; /* Safari */
@@ -118,30 +135,37 @@ const DayView = styled.div`
     -ms-user-select: none; /* Internet Explorer/Edge */
     user-select: none;
   }
+  .dayofweek {
+    font-size: 20px;
+    font-family: 'Bison';
+    letter-spacing: 2px;
+  }
 `
 const MainDiv = styled.div`
-  margin-top: 70px;
+ 
+  grid-row: 1/3;
+  
   position: absolute;
   width: 100%;
-  height: calc(100% - 70px);
+  height: calc(100% - 40px);
   overflow-y: scroll;
   overscroll-behavior: contain;
 `
 const DayGrid = styled.div`
   display: grid;
   grid-template-columns: 60px 1fr;
-  grid-template-rows: 25px 1fr;
+  grid-template-rows: 1fr;
   position: relative;
   width: 100%;
-  right: 0px;
-  margin-top: 0px;
+ 
+  margin-top: 2px;
   height: 100%;
 `
 const Side = styled.div`
   grid-column: 1;
   grid-auto-rows: 25px;
   grid-row-gap: 0px;
-  margin-top: 25px;
+ 
 `
 const Side1 = styled.div`
   height: 25px;
@@ -151,13 +175,14 @@ const Side1 = styled.div`
   z-index: 4;
   position: relative;
   grid-auto-rows: 25px;
+
   grid-row-gap: 0px;
-  font-size: 11px;
+  font-size: 15px;
   justify-content: center;
   align-items: center;
   &:nth-of-type(4n + 1) {
     color: white;
-    background: #f67280;
+    background: #f8b0b0;
     &:after {
       content: '';
       width: 0;
@@ -167,178 +192,194 @@ const Side1 = styled.div`
       border-bottom: 12px solid transparent;
       position: absolute;
       border-left: 10px solid
-        ${(props) => (props.valid ? 'rgba(200,100,100,1)' : '#f8b0b0')};
+        ${(props) => (props.valid ? '#f8b0b0' : '#f8b0b0')};
       transform: translate(35px, -1px);
     }
   }
   &:nth-of-type(4n + 2) {
-    color: rgba(20, 20, 20, 0.65);
+    color: rgba(20, 20, 20, 0.45);
     background: rgba(20, 20, 20, 0.2);
   }
   &:nth-of-type(4n + 3) {
-    color: rgba(20, 20, 20, 0.65);
+    color: rgba(20, 20, 20, 0.45);
     background: rgba(20, 20, 20, 0.3);
   }
   &:nth-of-type(4n + 4) {
-    color: rgba(20, 20, 20, 0.65);
+    color: rgba(20, 20, 20, 0.45);
     background: rgba(20, 20, 20, 0.2);
   }
 `
 const Inputs = styled.div`
   grid-column: 2;
-  grid-auto-rows: 25px;
-  grid-row-gap: 0px;
-  margin: 0 2px;
-`
-const ProviderBar1 = styled.div`
-  grid-column: 2;
-  grid-row: 1;
   height: 25px;
-  grid-row-gap: 0px;
-  display: flex;
-  justify-self: center;
-  font-family: 'Comfortaa';
-  justify-content: center;
-  width: 99%;
+ 
+ 
+  color: rgba(20, 20, 20, 0.6);
+ 
   position: relative;
+  grid-auto-rows: 24px;
+
+  grid-row-gap: 0px;
+  width: 100%;
+  text-align: center;
+  justify-content: center;
   align-items: center;
-  background: #e1e1e1;
-  z-index: 1000;
-  p {
-    display: flex;
-    margin: 0 auto;
-    text-transform: uppercase;
-    opacity: 0.7;
+  div {
+    border-bottom: 1px solid lightgrey;  font-size: 15px;
+    padding-left: 5px;
+    height: 25px;
+    justify-content: center;
+  align-items: center;
+  width: 100%;
+  cursor: pointer;
+  &:hover {
+    background: lightgrey;
+  }
   }
 `
+ 
 
-class SingleDay extends Component {
-  intervalID = 0
-  constructor() {
-    super()
-    let d = new Date()
-    this.state = {
-      isVisible: false,
-      selectedTime: '',
-      today: startOfDay(d),
-      currentTime: d.toLocaleTimeString(),
-    }
+function SingleDay ({slots,appointments,handleSelectedAppointment, appointmentIndices, setSelectedAppointment, selectedAppointment, date, setDate}) {
+  const [isVisible, setIsVisible] = useState(false)
+  const [time, setTime] = useState(new Date().toLocaleTimeString()) 
+  const [open, setOpen] = useToggle(false)
+ 
+  
+   const update = (e) => {
+   setTime( e.target.name )
   }
-  update = (e) => {
-    this.setState({ selectedTime: e.target.name })
-  }
-  countingMinute = () => {
-    let d = new Date()
-    this.setState({
-      currentTime: d.toLocaleTimeString(),
-    })
-  }
-  popUpModal = () => {
-    this.setState({
-      isVisible: !this.state.isVisible,
-    })
+ 
+ 
+  const handleDateTime = (time) => {
+    console.log(time)
+setTime(time)
+ 
   }
 
-  render() {
-    const { slots, appointments, appointmentIndices } = this.props
-    let date = this.props.date
-    let today = this.state.today
-    let time = this.state.selectedTime
+    // const appointmentsArr = appointments &&  appointments.map((appointment) => {
+    //   return appointment
+    // })
+    
+    // useEffect(() => {
+    //   appointmentIndices && appointmentIndices.map((appIndex, i) => {
+    //   const start_index = appIndex
+    //   const number_of_elements_to_remove = 1
+    //   slots.splice(
+    //     start_index,
+    //     number_of_elements_to_remove,
+    //     appointmentsArr[i],
+    //   )
+    // })
+      
+    // }, [])
+    
+    // const stripped = this.state.currentTime.toString().slice(1, -6)
+    // isNowFunc(stripped)
 
-    const { isVisible } = this.state
-    const appointmentsArr = appointments.map((appointment) => {
-      return appointment
-    })
-    appointmentIndices.map((appIndex, i) => {
-      const start_index = appIndex
-      const number_of_elements_to_remove = 1
-      const removed_elements = slots.splice(
-        start_index,
-        number_of_elements_to_remove,
-        appointmentsArr[i],
-      )
-    })
-    const stripped = this.state.currentTime.toString().slice(1, -6)
-    isNowFunc(stripped)
+         const [updateAppointment, {error}] = useMutation(MOVE_APPOINTMENT_MUTATION,
+         {variables: {
+           id: selectedAppointment && selectedAppointment,
+         },         refetchQueries:
+           {
+             query: TODAYS_APPOINTMENTS_QUERY, 
+             variables: {
+               date: new Date(),
+             }
+           }
+          })
+
+        // const [updateAppointmentLength] = useMutation(RESIZE_APPOINTMENT_MUTATION,
+        //   {variables: {
+        //     id: this.state.updatingIdFirm,
+        
+        //   }})
+        //  {(updateAppointment, { error }) => {
+        //    return (
+        //      <Mutation
+        //        mutation={RESIZE_APPOINTMENT_MUTATION}
+        //        variables={{
+        //          id: this.state.updatingIdFirm,
+        //        }}
+        //        refetchQueries={[
+        //          {
+        //            query: TODAYS_APPOINTMENTS_QUERY,
+        //            variables: {
+        //              date: new Date(),
+        //            },
+        //          },
+        //    ]}
+        //   >
+       const today = new Date()
+    
+     
+    const {data, loading} = useQuery(ALL_REASONS_QUERY)
+    if (loading) return <p>loading...</p>
+    if (!data) return null
+ 
+      const optionList = data.allReasons && data.allReasons.map((reason, i) => {
+         const value = reason.id
+         const label = reason.name
+         return { value, label }
+       })
     return (
-      <Query query={ALL_REASONS_QUERY} prefetch>
-        {({ data, loading, error }) => {
-          if (error) return <Error error={error} />
-          if (loading) return <p>Loading...</p>
-          return (
+      
             <>
               <DayView>
                 <div className="parent">
-                  <ApolloConsumer>
-                    {(client) => (
+                
                       <div
                         onClick={() => {
-                          this.props.handleToday(client)
+                        setDate(today)
                         }}
                         className="todayButton"
                       >
-                        {format(today, 'ddd')}
+                     TODAY
                       </div>
-                    )}
-                  </ApolloConsumer>
+             
+      
                   <div className="sideDate">
-                    {format(date, 'MMMM Do, YYYY')}
+                  
+                      <div className="dayofweek"> {format(date, 'eeee')} </div>  {format(date, 'MMMM d, yyyy')} 
                   </div>
-                  <div className="date">{format(date, 'dddd')}</div>
+                
                 </div>
 
                 <MainDiv>
                   <DayGrid>
                     <Side>
-                      {Data_15.map((time, i) => {
-                        const fullTime = time.time + ' ' + time.ampm
-                        const hasMeridian = time.time.toString().includes('00')
-                        const isHour = hasMeridian ? fullTime : time.time
+                      {slots && slots.map((time, i) => {
+                        
 
-                        const isAm = time.ampm.toLowerCase().includes('am')
+                 
                         return (
-                          <Side1 ampm={time.ampm} key={fullTime}>
-                            {isHour}
+                          <Side1 key={i}>
+                            {time}
                           </Side1>
                         )
                       })}
                     </Side>{' '}
-                    <ProviderBar1>
-                      <p>Lindsey Harrod</p>
-                      <Link
-                        href={{
-                          pathname: 'account',
-                          query: { id: this.props.id },
-                        }}
-                      >
-                        <a
-                          style={{
-                            marginTop: '7px',
-                            marginRight: '7px',
-                          }}
-                        >
-                          <img
-                            className="gear"
-                            src="../static/img/gear.png"
-                            alt="edit provider info"
-                          />
-                        </a>
-                      </Link>
-                    </ProviderBar1>
+        
                     <Inputs>
-                      <AppSlot
+                    {Data_15.map((slotty, i) => {
+                      const theTime = slotty.time + ' ' + slotty.ampm 
+                      return(
+                      <div onClick={() => handleDateTime(theTime, date)} key={slotty.time + slotty.ampm} onDoubleClick={setOpen} style={{opacity: '.3'}}>{slotty.time.includes('00') ? slotty.time + slotty.ampm : null}</div>
+                      )
+                    })}
+                      {/* <AppSlot
                         appointmentIndices={appointmentIndices}
                         appointments={appointments}
-                        updateViewerStateLength={
-                          this.props.updateViewerStateLength
-                        }
-                        updateViewerState={this.props.updateViewerState}
-                        selectAppointment={this.props.selectAppointment}
-                        selectedAppointment={this.state.selectedAppointment}
+                        // updateViewerStateLength={
+                        //   updateViewerStateLength
+                        // }
+                        // updateViewerState={updateViewerState}
+                        handleSelectedAppointment={handleSelectedAppointment}
+                       setSelectedAppointment={setSelectedAppointment}
+                        selectedAppointment={selectedAppointment}
                         date={date}
-                        update={this.update}
-                      ></AppSlot>
-                      {slots.map((timeblock, i) => {
+                        update={update}
+                      ></AppSlot> */}
+                      {/* {slots && slots.map((timeblock, i) => {
                         const objy = typeof timeblock !== 'string'
 
                         return (
@@ -346,33 +387,31 @@ class SingleDay extends Component {
                             key={timeblock + 1 + i}
                             time={timeblock}
                             appointmentObject={false}
+                            selectedAppointment={selectedAppointment}
                             isVisible={isVisible}
-                            popUpModal={this.popUpModal}
-                            update={this.update}
-                            selectAppointment={this.props.selectAppointment}
+                            popUpModal={popUpModal}
+                            update={update}
+                            handleSelectedAppointment={handleSelectedAppointment}
                           />
                         )
-                      })}
+                      })} */}
                     </Inputs>
                   </DayGrid>
                 </MainDiv>
               </DayView>
-
-              <Modal
-                isVisible={isVisible}
-                popUpModal={this.popUpModal}
-                date={date}
-                time={time}
-                handleRehydrate={this.props.handleRehydrate}
-                reasons={data.reasons}
-              />
+              {open && (
+        <Modal selectedDate={date}
+                selectedTime={time}
+                setTime={setTime}
+               reasons={optionList} 
+               open={open} 
+               toggle={setOpen} />
+        
+      )}
             </>
-          )
-        }}
-      </Query>
+    
     )
   }
-}
-
+ 
 export default SingleDay
-export { ALL_REASONS_QUERY }
+ 

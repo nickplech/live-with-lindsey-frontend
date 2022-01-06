@@ -1,6 +1,6 @@
  
-import React, { useCallback, useEffect, useState } from "react";
-import { PieChart, Pie,  Cell, ResponsiveContainer  } from "recharts";
+import React, { useCallback, useEffect, useState } from "react"
+import { PieChart, Pie,  Cell, ResponsiveContainer  } from "recharts"
  
 
  
@@ -9,10 +9,10 @@ export default function PieChartComponent({item, total, allAccess, perLive}) {
   const [theDataState, setTheDataState] = useState([])
   const onPieEnter = useCallback(
     (_, index) => {
-      setActiveIndex(index);
+      setActiveIndex(index)
     },
     [setActiveIndex]
-  );
+  )
   useEffect(() => {
  
    setTheDataState([{name: 'all access', value: allAccess.length}, {name: 'pay-per-live', value:  perLive.length}])
@@ -20,7 +20,7 @@ export default function PieChartComponent({item, total, allAccess, perLive}) {
 },[item])
 
     
-const COLORS = ['#f8b0b0', '#ffd7d4'];
+const COLORS = ['#f8b0b0', '#ffd7d4']
   return (
     <>
   
@@ -46,6 +46,6 @@ const COLORS = ['#f8b0b0', '#ffd7d4'];
  
   
     </>
-  );
+  )
 }
  

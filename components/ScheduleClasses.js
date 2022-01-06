@@ -1,18 +1,15 @@
 import Router from 'next/router'
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import useForm from '../lib/useForm'
 import gql from 'graphql-tag'
-
-import { startOfWeek, formatISO, format,eachDayOfInterval, endOfWeek, addWeeks, subWeeks } from 'date-fns'
+import { startOfWeek, formatISO} from 'date-fns'
 import { useMutation, useQuery } from '@apollo/client'
 import SickButton from './styles/SickButton'
 import Error from './ErrorMessage'
- 
- 
 import { STREAMS_ADMIN_QUERY } from './AdminCalendarAlt'
-import { STREAMS_QUERY } from './DashboardComponent'
+import { STREAMS_QUERY } from './ScheduledClasses'
 import { REASONS_QUERY } from './UpdateScheduleSettings'
-import Equipment from './Equipment'
+
 import MultiTag from './MultiTag'
 import Select from 'react-select'
  
@@ -156,14 +153,16 @@ const EquipmentList = styled.ul`
 display: flex;
 flex-flow: row wrap;
 margin: 0 auto;
- list-style: none;
+cursor: pointer;
+ list-style: none; user-select: none;
 width: 100%;
  .menu-item-wrapper {
     user-select: none;
-  
-    border-radius: 50%;
+/*   
+    border-radius: 50%; */
  
-  
+  height: 60px;
+  width: 60px;
  
     align-items: center;
  
@@ -177,7 +176,7 @@ height: 30px;
 width: 30px;
   }
   li{
-    margin: 10px 20px;
+    margin: 10px 20px; user-select: none;
   }
 `
 const Div = styled.ul`
@@ -203,7 +202,7 @@ const Div = styled.ul`
 
 `
 
-const MenuItem = ({handleEquipmentSelect}
+const MenuItem = ({handleEquipmentSelect, selected}
 ) => {
   const {data, loading} = useQuery(EQUIPMENT_QUERY)
  if (loading) return <p>loading...</p>
@@ -214,12 +213,12 @@ const MenuItem = ({handleEquipmentSelect}
   
   <EquipmentList> {theEquipment &&
 theEquipment.map((equipment, i) => {
-
+const hasItPicked = selected.includes(equipment.id)
 return (
-<li key={equipment.id} onClick={() => handleEquipmentSelect(equipment.id)}>
+<li key={equipment.id}  onClick={() => handleEquipmentSelect(equipment.id)}>
  
       <img height="auto" width="60" src={equipment.image.publicUrlTransformed} />
-        <div style={{textTransform: 'uppercase'}}>
+        <div style={{textTransform: 'uppercase', background: `${hasItPicked ? '#ffd7d4' : 'transparent'}`}}>
           {equipment.name}
       
         </div>
@@ -240,7 +239,7 @@ export default function ScheduleClasses() {
   const [selectedTags, setSelectedTags] = useState([])
   const [priceState, setPriceState] = useState('1000')
   const [selectedOption, setSelectedOption] = useState('')
-  const [date, setDate] = useState(new Date())
+
   const [weekStarts, setWeekStarts] = useState(startOfWeek(new Date(), {
     weekStartsOn: 0,
   }))
@@ -254,9 +253,9 @@ export default function ScheduleClasses() {
   }
   
   const handleEquipmentSelect = (equipmentId) => {
-    // const isAlreadySelected = selectedEquipment.includes(equipment => {
-    //   return
-    // })
+  if(selectedEquipment.includes(equipmentId)) {
+     return removeEquipmentSelection(equipmentId)
+  }
     let selectedCopy = [...selectedEquipment]
   
     selectedCopy.push(equipmentId)
@@ -264,10 +263,10 @@ export default function ScheduleClasses() {
  
   }
 
-  // const removeEquipmentSelection = (equipmentId) => {
-  //   const filteredEquip = selectedEquipment.filter((i) => i !== equipmentId)
-  //   setSelectedEquipment(filteredEquip)
-  // }
+  const removeEquipmentSelection = (equipmentId) => {
+    const filteredEquip = selectedEquipment.filter((i) => i !== equipmentId)
+    setSelectedEquipment(filteredEquip)
+  }
   const handleTagsSearch = (item) => {
     let selectedCopy = [...selectedTags]
     selectedCopy.push(item.id)
@@ -340,8 +339,16 @@ export default function ScheduleClasses() {
   <Left>
    
                   <SignUpTitle> Live Stream Scheduler</SignUpTitle>
-                   <Error error={error} />                      <label htmlFor="date">
-                      SELECT DATE &amp; TIME
+                   <Error error={error} />                      
+                    <p
+                      style={{
+                        transform: 'translateY(10px)',
+                        color: 'slategrey',
+                        fontSize: '22px',
+                        textTransform: 'uppercase',
+                      }}
+                      >
+                       DATE &amp; TIME</p>  
                       <input
                         id="date"
                         name="date"
@@ -351,15 +358,17 @@ export default function ScheduleClasses() {
                         defaultValue={inputs.date}
                         onChange={handleChange}
                       />
-</label>  
+
                   
-                    <p
+                   
+<p
                       style={{
-                       
-                        paddingTop: '35px',
                         transform: 'translateY(10px)',
+                        color: 'slategrey',
+                        fontSize: '22px',
+                        textTransform: 'uppercase',
                       }}
-                    >
+                      >
                       SELECT A CLASS
                     </p>
                     <Select

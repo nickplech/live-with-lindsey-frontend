@@ -146,7 +146,7 @@ img {
 
 `
 
-function AddToCart({id,item}) {
+function AddToCart({id,user}) {
 const me = useUser()
   const [spin, setSpin] = useState(false)
   const handleSetSpin = () => {
@@ -178,7 +178,7 @@ const proceedToCheckout = async () => {
     await addToCart()
 
   }
-  const itemOwned = item.user.find((theUser) => {
+  const itemOwned = user.find((theUser) => {
     return theUser.id === me.id
   })
   const cart = me && me.cart.map((cartItem) => {
@@ -205,5 +205,5 @@ return (
 )
 }
 
-export default AddToCart
+export default React.memo(AddToCart)
 export { ADD_TO_CART_MUTATION }

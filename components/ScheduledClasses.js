@@ -1,29 +1,30 @@
 import React from 'react'
 import Loader from './Loader'
 import gql from 'graphql-tag'
-import {formatISO} from 'date-fns'
+import {formatISO,   startOfMinute} from 'date-fns'
 import styled from 'styled-components'
 import { useQuery } from '@apollo/client'
  
 import ProductSlider from './ProductSlider'
-
- const STREAMS_QUERY = gql`
+ 
+const STREAMS_QUERY = gql`
   query STREAMS_QUERY($date: DateTime) {
-    allItems(where: {  AND: [{ private_not: true }, { date_gte: $date }]}, orderBy: "date") {
+    allItems(where: { date_gte: $date, private_not: true }, orderBy: "date") {
       id
       price
       date
-      private 
-      user {
-        id
-        cart {
-          id
-        }
-      }
+      private
+     user {
+       id
+       cart {
+         id
+       }
+     }
       reason {
         id
         name
         classLength
+        classDescription
       }
     }
   }
@@ -118,34 +119,31 @@ const Title = styled.div`
   font-family: 'Felix';
   font-size: 32px;
   color: ${(props) => props.theme.second};
-  margin: ${(props) =>
-    props.items.length === 0 ? ' 0px 0px 0px 25px' : '0px 0px 0px 25px'};
+  margin:  0px 0px 0px 25px ;
   @media (max-width: 992) {
     font-size: 22px;
-    margin: ${(props) =>
-      props.items.length === 0 ? ' 0px 0px 0px 0px' : '0px 0px 0px 0px'};
+    margin:  0px 0px 0px 0px ;
   }
 `
 function ScheduledClasses( ) {
 
-const today = new Date().toLocaleString();
-const isonow = formatISO(new Date(today)) 
  
-  const { error, loading, data } = useQuery(STREAMS_QUERY, {
-    variables: { date: isonow },
+const minStarts = startOfMinute(new Date())
+  const {  loading, data } = useQuery(STREAMS_QUERY, {
+    variables: { date:  formatISO(new Date(minStarts)) },
   })
   if (loading) return <Loader />
-  if (error) return <Error error={error} />
+  // if (error) return <Error error={error} />
    const items = data.allItems
   
  return (
       <Schedule >
-       <Title items={items}>  Scheduled Live Workouts  </Title>
+       <Title>  Scheduled Live Workouts  </Title>
 
 
  {!items.length ?
       <Div>
-        <P>That's it for this week!</P>
+        <P>That&apos;s it for this week!</P>
         <P>Please Check back Sunday for the Upcoming Live Schedule</P>
         <img height="60" src="../static/img/heartsig.svg" />
       </Div>
@@ -162,4 +160,5 @@ const isonow = formatISO(new Date(today))
   )
 }
 
-export default React.memo(ScheduledClasses)
+export default ScheduledClasses 
+export {STREAMS_QUERY}

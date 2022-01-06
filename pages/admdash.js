@@ -1,3 +1,5 @@
+ 
+import React from 'react'
 import PleaseSignIn from '../components/PleaseSignIn'
 import styled from 'styled-components'
 import AdminSettingsContent from '../components/AdminSettingsContent'
@@ -19,7 +21,7 @@ const AD_DASH_QUERY = gql`
 const Grid = styled.div`
   display: grid;
   grid-template-columns: 1fr 1fr;
-  grid-template-rows: 200px 1fr;
+  grid-template-rows: 100px 1fr;
   width: 100%;
   height: 100%;
   .back {
@@ -48,14 +50,14 @@ font-size: 20px;
 }
  .shell {
    cursor: pointer;
-   width: 96%;
+   width: 98%;
      background: ${props => props.theme.primary};
      display: flex;
      justify-content: center;
      align-items: center;
      flex-flow: column;
 margin: 15px auto;
-padding: 20px;
+ 
 border-radius: 5px;
 color: white;
 box-shadow: 0px 5px 5px -3px rgba(20,20,20,.5);
@@ -77,24 +79,24 @@ function AdminDash(props) {
   return (
     <PleaseSignIn>
       {(me) => (
-        <Grid>
-               <a href="http://localhost:3001/admin" className="shell"><img className="img" src="../static/img/servers.svg"/><p >Admin Data Manager </p></a>
+//         <Grid>
+//                <a href="http://localhost:3001/admin" className="shell"><img className="img" src="../static/img/servers.svg"/><p>Data Manager</p></a>
 
 
-<Link href="/scheduleclass">
+// <Link href="/uploadvod">
         
-        <a  className="shell">
-          {' '}
-          <img src="../static/img/plus.svg" className="img" />
-          <p>schedule livestream</p>
-        </a>
+//         <a  className="shell">
+//           {' '}
+//           <img src="../static/img/plus.svg" className="img" />
+//           <p>Video Uploader</p>
+//         </a>
         
-            </Link>
+//             </Link>
       
-          <div className="back">
+          
             <AdminSettingsContent />
-          </div>
-        </Grid>
+        
+      //   </Grid>
       )}
     </PleaseSignIn>
   )

@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import Link from 'next/link'
 import { ALL_ITEMS_QUERY } from './Items'
 import { motion } from 'framer-motion'
-import VanillaTilt from 'vanilla-tilt'
+
 import Loader from './Loader'
  
 import { useQuery } from '@apollo/client'

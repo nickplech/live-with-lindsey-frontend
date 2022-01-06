@@ -1,348 +1,15 @@
 import React from 'react'
 import _ from 'lodash'
 import gql from 'graphql-tag'
-import { Mutation } from 'react-apollo'
-import '../static/styles.css'
+//  import {Mutation} from '@apollo/client'
+// import '../static/styles.css'
 import { format } from 'date-fns'
 import styled from 'styled-components'
 import RGL, { WidthProvider } from 'react-grid-layout'
-import { TODAYS_APPOINTMENTS_QUERY } from './CalendarStats'
+
 
 const ReactGridLayout = WidthProvider(RGL)
 
-const MOVE_APPOINTMENT_MUTATION = gql`
-  mutation MOVE_APPOINTMENT_MUTATION($id: ID!, $start: String) {
-    updateAppointment(id: $id, start: $start) {
-      id
-      start
-      time
-
-      timeRange {
-        id
-        start
-      }
-    }
-  }
-`
-
-const RESIZE_APPOINTMENT_MUTATION = gql`
-  mutation RESIZE_APPOINTMENT_MUTATION($id: ID!, $appLength: Int) {
-    updateAppointmentLength(id: $id, appLength: $appLength) {
-      id
-      timeRange {
-        id
-        appLength
-      }
-    }
-  }
-`
-
-const Data_15 = [
-  {
-    time: '7:00',
-    ampm: 'am',
-    full: false,
-  },
-  {
-    time: '7:15',
-    ampm: 'am',
-    full: false,
-  },
-  {
-    time: '7:30',
-    ampm: 'am',
-    full: false,
-  },
-  {
-    time: '7:45',
-    ampm: 'am',
-    full: false,
-  },
-  {
-    time: '8:00',
-    ampm: 'am',
-    full: false,
-  },
-  {
-    time: '8:15',
-    ampm: 'am',
-    full: false,
-  },
-  {
-    time: '8:30',
-    ampm: 'am',
-    full: false,
-  },
-  {
-    time: '8:45',
-    ampm: 'am',
-    full: false,
-  },
-
-  {
-    time: '9:00',
-    ampm: 'am',
-    full: false,
-  },
-  {
-    time: '9:15',
-    ampm: 'am',
-    full: false,
-  },
-  {
-    time: '9:30',
-    ampm: 'am',
-    full: false,
-  },
-  {
-    time: '9:45',
-    ampm: 'am',
-    full: false,
-  },
-  {
-    time: '10:00',
-    ampm: 'am',
-    full: false,
-  },
-  {
-    time: '10:15',
-    ampm: 'am',
-    full: false,
-  },
-  {
-    time: '10:30',
-    ampm: 'am',
-    full: false,
-  },
-  {
-    time: '10:45',
-    ampm: 'am',
-    full: false,
-  },
-  {
-    time: '11:00',
-    ampm: 'am',
-    full: false,
-  },
-  {
-    time: '11:15',
-    ampm: 'am',
-    full: false,
-  },
-  {
-    time: '11:30',
-    ampm: 'am',
-    full: false,
-  },
-  {
-    time: '11:45',
-    ampm: 'am',
-    full: false,
-  },
-  {
-    time: '12:00',
-    ampm: 'pm',
-    full: false,
-  },
-  {
-    time: '12:15',
-    ampm: 'pm',
-    full: false,
-  },
-  {
-    time: '12:30',
-    ampm: 'pm',
-    full: false,
-  },
-  {
-    time: '12:45',
-    ampm: 'pm',
-    full: false,
-  },
-  {
-    time: '1:00',
-    ampm: 'pm',
-    full: false,
-  },
-  {
-    time: '1:15',
-    ampm: 'pm',
-    full: false,
-  },
-  {
-    time: '1:30',
-    ampm: 'pm',
-    full: false,
-  },
-  {
-    time: '1:45',
-    ampm: 'pm',
-    full: false,
-  },
-  {
-    time: '2:00',
-    ampm: 'pm',
-    full: false,
-  },
-  {
-    time: '2:15',
-    ampm: 'pm',
-    full: false,
-  },
-  {
-    time: '2:30',
-    ampm: 'pm',
-    full: false,
-  },
-  {
-    time: '2:45',
-    ampm: 'pm',
-    full: false,
-  },
-  {
-    time: '3:00',
-    ampm: 'pm',
-    full: false,
-  },
-  {
-    time: '3:15',
-    ampm: 'pm',
-    full: false,
-  },
-  {
-    time: '3:30',
-    ampm: 'pm',
-    full: false,
-  },
-  {
-    time: '3:45',
-    ampm: 'pm',
-    full: false,
-  },
-  {
-    time: '4:00',
-    ampm: 'pm',
-    full: false,
-  },
-  {
-    time: '4:15',
-    ampm: 'pm',
-    full: false,
-  },
-  {
-    time: '4:30',
-    ampm: 'pm',
-    full: false,
-  },
-  {
-    time: '4:45',
-    ampm: 'pm',
-    full: false,
-  },
-
-  {
-    time: '5:00',
-    ampm: 'pm',
-    full: false,
-  },
-  {
-    time: '5:15',
-    ampm: 'pm',
-    full: false,
-  },
-  {
-    time: '5:30',
-    ampm: 'pm',
-    full: false,
-  },
-  {
-    time: '5:45',
-    ampm: 'pm',
-    full: false,
-  },
-  {
-    time: '6:00',
-    ampm: 'pm',
-    full: false,
-  },
-  {
-    time: '6:15',
-    ampm: 'pm',
-    full: false,
-  },
-  {
-    time: '6:30',
-    ampm: 'pm',
-    full: false,
-  },
-  {
-    time: '6:45',
-    ampm: 'pm',
-    full: false,
-  },
-  {
-    time: '7:00',
-    ampm: 'pm',
-    full: false,
-  },
-  {
-    time: '7:15',
-    ampm: 'pm',
-    full: false,
-  },
-  {
-    time: '7:30',
-    ampm: 'pm',
-    full: false,
-  },
-  {
-    time: '7:45',
-    ampm: 'pm',
-    full: false,
-  },
-  {
-    time: '8:00',
-    ampm: 'pm',
-    full: false,
-  },
-  {
-    time: '8:15',
-    ampm: 'pm',
-    full: false,
-  },
-  {
-    time: '8:30',
-    ampm: 'pm',
-    full: false,
-  },
-  {
-    time: '8:45',
-    ampm: 'pm',
-    full: false,
-  },
-  {
-    time: '9:00',
-    ampm: 'pm',
-    full: false,
-  },
-  {
-    time: '9:15',
-    ampm: 'pm',
-    full: false,
-  },
-  {
-    time: '9:30',
-    ampm: 'pm',
-    full: false,
-  },
-  {
-    time: '9:45',
-    ampm: 'pm',
-    full: false,
-  },
-]
-
-export { Data_15 }
 
 const StyledInput = styled.button`
   text-align: left;
@@ -351,7 +18,7 @@ const StyledInput = styled.button`
   outline: none;
   font-weight: 600;
   display: flex;
-  flex-flow: column;
+  flex-flow: column;align-items: flex-start;
   justify-content: flex-start;
   height: 25px;
   width: 100%;
@@ -451,10 +118,10 @@ const Span = styled.span`
   z-index: 400;
 `
 
-export default class AppSlot extends React.Component {
+ class AppSlot extends React.Component {
   static defaultProps = {
     className: 'layout',
-    isDraggable: true,
+    isable: true,
     isDroppable: true,
     isResizable: true,
     cols: 1,
@@ -477,13 +144,14 @@ export default class AppSlot extends React.Component {
     tempDisplayHeight: null,
     tempDisplayStartTime: null,
   }
+
   updateDragStats = (id, i) => {
     this.setState({ updatingId: id, updatingIndex: i })
   }
   generateDOM = () => {
-    const aiArr = this.props.appointmentIndices
+   
     const appointmentsArr = this.props.appointments
-    return aiArr.map((item, i) => {
+    return this.props.appointmentIndices && this.props.appointmentIndices.map((item, i) => {
       const y = parseInt(item)
       const groupAppointment = appointmentsArr[i].users.length
       const lengthOf = appointmentsArr[i].timeRange.appLength / 15
@@ -529,13 +197,13 @@ export default class AppSlot extends React.Component {
             h: lengthOf,
             minH: 1,
             maxH: 60,
-            maxW: 3,
+            maxW: 1,
           }}
           style={{
             borderLeft: `8px solid ${appointmentsArr[i].reason[0].color}`,
           }}
         >
-          <Span>{appointmentsArr[i].reason[0].name} </Span>
+          <Span>{appointmentsArr[i].reason.name} </Span>
           <Count>{`Subscribers: ${groupAppointment}`}</Count>
 
           {this.state.tempDisplayHeight &&
@@ -575,8 +243,8 @@ export default class AppSlot extends React.Component {
   displayLengthOnResize = async (layout) => {
     const testerHeight = layout.i
     const displayHeight = layout[this.state.updatingIndex].h
-    // const currentDisplayHeightInMinutes = (displayHeight * 15) % 60
-    // console.log(currentDisplayHeightInMinutes)
+    const currentDisplayHeightInMinutes = (displayHeight * 15) % 60
+    console.log(currentDisplayHeightInMinutes)
     console.log(layout, testerHeight)
     this.setState({
       tempDisplayHeight: displayHeight,
@@ -622,7 +290,7 @@ export default class AppSlot extends React.Component {
       },
     })
 
-    // await this.props.updateViewerStateLength(newHeight, res)
+    await this.props.updateViewerStateLength(newHeight, res)
   }
 
   handleOnDrop = async (layout, updateAppointmentMutation) => {
@@ -641,39 +309,10 @@ export default class AppSlot extends React.Component {
   }
 
   render() {
-    return (
-      <Mutation
-        mutation={MOVE_APPOINTMENT_MUTATION}
-        variables={{
-          id: this.state.updatingIdFirm,
-        }}
-        refetchQueries={[
-          {
-            query: TODAYS_APPOINTMENTS_QUERY,
-            variables: {
-              date: format(this.props.date, 'MMM DD YYYY'),
-            },
-          },
-        ]}
-      >
-        {(updateAppointment, { error }) => {
-          return (
-            <Mutation
-              mutation={RESIZE_APPOINTMENT_MUTATION}
-              variables={{
-                id: this.state.updatingIdFirm,
-              }}
-              refetchQueries={[
-                {
-                  query: TODAYS_APPOINTMENTS_QUERY,
-                  variables: {
-                    date: format(this.props.date, 'MMM DD YYYY'),
-                  },
-                },
-              ]}
-            >
-              {(updateAppointmentLength, { error }) => {
-                return (
+      console.log(this.props.appointments)
+ 
+ 
+                 return (
                   <ReactGridLayout
                     layout={this.state.layout}
                     style={{ marginTop: '-1px' }}
@@ -701,14 +340,10 @@ export default class AppSlot extends React.Component {
                   >
                     {this.generateDOM()}
                   </ReactGridLayout>
-                )
-              }}
-            </Mutation>
-          )
-        }}
-      </Mutation>
+      
     )
   }
 }
 
-export { MOVE_APPOINTMENT_MUTATION, RESIZE_APPOINTMENT_MUTATION }
+export default AppSlot
+ 

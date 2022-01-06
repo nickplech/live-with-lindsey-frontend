@@ -275,57 +275,6 @@ const MenItem = styled.div`
   
 `
 
-const CurrentlyLive = styled.h4`
-  color: rgba(220, 20, 20, 0.8);
-  font-size: 18px;
-  font-family: 'Bison';
-  letter-spacing: 2px;
-  margin: 0;
-  position: absolute;
-  transform: translate(5px, 70px);
-  .circle {
-    background-color: rgba(255, 82, 82, 1);
-    border-radius: 50%;
-    animation: pulse-red 2s infinite;
-    height: 15px;
-    margin-left: 6px;
-    margin-bottom: -1px;
-    width: 15px;
-    display: inline-flex;
-  }
-  .div {
-    font-size: 16px;
-    display: inline-flex;
-  }
-  @keyframes pulse-red {
-    0% {
-      transform: scale(0.9);
-      box-shadow: 0 0 0 0 rgba(255, 82, 82, 0.7);
-    }
-    70% {
-      transform: scale(1);
-      box-shadow: 0 0 0 10px rgba(255, 82, 82, 0);
-    }
-    100% {
-      transform: scale(0.9);
-      box-shadow: 0 0 0 0 rgba(255, 82, 82, 0);
-    }
-  }
-`
-const TotalClasses = styled.div`
-  font-family: 'Comfortaa';
-  font-size: 16px;
-  position: absolute;
-  text-align: center;
-  justify-content: center;
-  align-items: center;
-  color: rgba(20, 20, 20, 0.6);
-  transform: translateY(29px);
-  margin: 0 auto;
-  flex-flow: row nowrap;
-  display: flex;
-  width: 450px;
-`
 
 const DateBlock = styled.a`
   display: flex;
@@ -388,7 +337,7 @@ const DateBlock = styled.a`
 `
 const MenuItem = ({
   id,
-  active,
+ 
  item,
   theIndex,
   classLength,
@@ -396,10 +345,8 @@ const MenuItem = ({
 }) => {
  
   const cleanName = item.reason.name && item.reason.name.toLowerCase().replace(/\s/g, '')
-  const currentlyLive = active === id
  
  
-
   return (
     <>
       <MenItem
@@ -407,8 +354,8 @@ const MenuItem = ({
         className="menu-item-wrapper"
       >
         <AddToCart
-        item={item}
-       
+        user={item.user}
+        
           theIndex={theIndex}
  
           id={id}
@@ -432,7 +379,7 @@ const MenuItem = ({
   )
 }
  
-export function ProductSlider({ allItems, active }) {   
+export function ProductSlider({ allItems  }) {   
 
   return (
     <Wrap>
@@ -451,7 +398,6 @@ export function ProductSlider({ allItems, active }) {
             {allItems &&
               allItems.map((item, i) => {
             
-               
                 return (
                   <Slide key={item.id} index={i}>
                     <MenuItem
@@ -461,9 +407,6 @@ export function ProductSlider({ allItems, active }) {
                       id={item.id}
                       theIndex={i}
                     
-                      active={active}
-                  
-               
                       classLength={item.reason && item.reason.classLength}
                     />
                   </Slide>
@@ -486,15 +429,11 @@ export function ProductSlider({ allItems, active }) {
           <ButtonNext disabled={allItems.length === 3}>&rsaquo;</ButtonNext>
           <Slider>
             {allItems.map((item, i) => {
-           
-          
-     
-         
      
               return (
                 <Slide key={item.id + 'desktop'} index={i}>
                   <MenuItem
-                    active={active}
+           
                     next={i}
         
                   
@@ -502,9 +441,7 @@ export function ProductSlider({ allItems, active }) {
                     theIndex={i}
                     item={item}
                     classLength={item.reason && item.reason.classLength}
-                    
-            
-                    active={active}
+                 
                   />
                 </Slide>
               )

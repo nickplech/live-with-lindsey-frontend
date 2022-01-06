@@ -1,10 +1,10 @@
-import { scale } from 'chroma-js'
+ 
 import React, { Component } from 'react'
 import styled from 'styled-components'
 import Tab from './Tab'
 
 const Wrap = styled.div`
-  margin: 60px auto;
+  margin: 5px auto;
   width: 100%;
 
   color: rgba(17, 29, 74, 0.8);
@@ -16,20 +16,27 @@ const Wrap = styled.div`
     color: #98927c;
   }
 `
+const TabzContainer = styled.div`
+  position: relative;
+  width: 100%;
+   
+  /* justify-content:flex-start; */
+`
+
 const ListTabs = styled.ul`
   list-style: none;
-  margin: 0 auto;
+  margin: ${props => props.theLength > 3 ? 0 : '50px'} auto 0px;
   position: relative;
   padding: 0;
   display: flex;
-  justify-content: ${(props) =>
-    props.adminStyle ? 'space-evenly' : 'flex-start'};
-  max-width: 1200px;
+ width: 100%;
+ justify-content: ${props => props.theLength > 3 ? 'center' : 'flex-start'};
+  /* max-width: 1200px; */
 `
 
 const TabTitleItem = styled.li`
   position: relative;
-  width: 90%;
+  width: 90%; width: 130px;
 `
 const ActiveTabBorder = styled.div`
   position: relative;
@@ -37,7 +44,7 @@ const ActiveTabBorder = styled.div`
 const AccountTab = styled.div`
   cursor: pointer;
   background: ${(props) =>
-    props.isActiveTab ? (props) => props.theme.primary : 'lightgrey'};
+    props.isActiveTab ? (props) => props.theme.primary : 'rgba(240,240,240,.7)'};
   line-height: 12px;
   box-shadow: ${(props) =>
     props.isActiveTab ? '0px 0px 1px 1px rgba(0, 0, 0, 0.1)' : 'none'};
@@ -48,15 +55,18 @@ const AccountTab = styled.div`
   font-family: 'Bison';
 
   letter-spacing: 2px;
-  width: 180px;
-  border-radius: 5px;
+ 
+ 
 
   transform: translate(6px, 6px);
   user-select: none;
+  &:nth-child(1) {
+    border-radius: 5px;
+  }
   p {
     margin: 0 auto;
     color: ${(props) => (props.isActiveTab ? 'slategrey' : 'grey')};
-    opacity: ${(props) => (props.isActiveTab ? 1 : 0.4)};
+    opacity: ${(props) => (props.isActiveTab ? 1 : 0.6)};
   }
 `
 const TabAnchorItem = styled.a`
@@ -67,10 +77,10 @@ const TabAnchorItem = styled.a`
   display: flex;
   justify-content: center;
   align-items: center;
-  /* border-radius: 50%; */
+  width: 100%;
   height: 50px;
   box-shadow: 0px 0px 3px 1px rgba(0, 0, 0, 0.1);
-
+margin-bottom: 10px;
   background: ${(props) => (props.isActiveTab ? '#3b543b' : '#6b996b')};
   opacity: ${(props) => (props.isActiveTab ? 1 : 0.6)};
   cursor: pointer;
@@ -91,14 +101,8 @@ const TabAnchorItem = styled.a`
   }
 `
 
-const TabzContainer = styled.div`
-  position: relative;
-  width: 100%;
-`
 
-const ReactTabs = styled.div`
-  position: relative;
-`
+ 
 
 class TabsContainer extends Component {
   static Tab = Tab
@@ -151,12 +155,12 @@ class TabsContainer extends Component {
   render() {
     return (
       <Wrap>
-        <ReactTabs>
-          <TabzContainer adminStyle={this.state.tabs.length >= 3}>
-            <ListTabs adminStyle={this.state.tabs.length >= 3}>
+       
+          <TabzContainer >
+            <ListTabs theLength={this.state.tabs.length} >
               {this.state.tabs.map((tab, index) => (
-                <TabTitleItem>
-                  {tab.title === 'profile' || tab.title === 'order history' ? (
+                <TabTitleItem key={tab.title}>
+                  {tab.title === 'profile' || tab.title === 'order history' || tab.title === 'downloads' ? (
                     <AccountTab
                       key={tab.title}
                       onClick={this.onClick(tab)}
@@ -217,7 +221,7 @@ class TabsContainer extends Component {
               addTab: this.addTab,
             }),
           )}
-        </ReactTabs>
+        
       </Wrap>
     )
   }

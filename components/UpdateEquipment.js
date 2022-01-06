@@ -57,23 +57,15 @@ const Inner = styled.div`
  
 `
 const Slider = styled.div`
-display: flex;
-flex-flow: row wrap;
+ display: grid;
 margin: 0 auto;
+grid-template-columns: repeat( auto-fit, minmax( 140px, 1fr) );
+grid-gap: 10px;
 width: 100%;
- .menu-item-wrapper {
-    user-select: none;
-  
-    border-radius: 50%;
+justify-content: flex-start;
+text-align: left;
+align-items: flex-start;  user-select: none;
  
-  
- 
-    align-items: center;
- 
-    margin: 20px auto ;
-    
- 
-  }
 `
 
 
@@ -106,10 +98,10 @@ const MenuItem = ({
   return (
     
       
-       <div className="menu-item-wrapper">
+   
 
 <Equipment next={next} key={id} image={image} equipment={equipment} />
-       </div>
+     
    
   )
 }

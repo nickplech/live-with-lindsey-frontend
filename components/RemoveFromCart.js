@@ -25,10 +25,10 @@ const BigButton = styled.button`
 //  called as soon as get a response back from the server after a mutation has been performed
 function updateCart(cache, payload) {
   // 1. first read the cache
-  console.log(cache)
+ 
   const data = cache.readQuery({ query: CURRENT_USER_QUERY })
   // 2. remove that item from the cart
-  console.log(data)
+ 
   const cartItemId = payload.data.deleteCartItem.id
   const updatedCart = data.authenticatedUser.cart.filter(
     (cartItem) => cartItem.id !== cartItemId,

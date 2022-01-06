@@ -1,12 +1,12 @@
 import Link from 'next/link'
-
-import { useRef, useState, useMemo } from 'react'
+import {format} from 'date-fns'
+import React, { useRef} from 'react'
 import useDimensions from './useDimensions'
 import styled from 'styled-components'
 import { motion } from 'framer-motion'
 
 
-const ItemStyle = styled(motion.div)`
+const ItemStyle = styled(motion.article)`
   background: white;
 
   box-shadow: ${(props) => props.theme.bs};
@@ -93,7 +93,7 @@ const ItemStyle = styled(motion.div)`
     position: absolute;
     height: 200px;
     border-radius: 3px;
-    padding: 5px 15px;
+    padding: 0px 5px;
     width: 100%;
     color: white;
     font-family: 'Bison';
@@ -107,7 +107,7 @@ const ItemStyle = styled(motion.div)`
     position: relative;
     transform: translateZ(300px);
     border-radius: 0 0 10px 10px;
-    padding: 5px 5px;
+    padding-top: 5px;
     width: 100%;
     color: white;
     font-family: 'Bison';
@@ -133,14 +133,20 @@ const ItemStyle = styled(motion.div)`
     padding: 0 3rem;
     font-size: 1.5rem;
   }
-
-  
+h2, h3 {
+  margin: 0;
+  line-height: 20px;
+  padding: 0;
+}
+ h3{
+font-size: 18px;
+  }
 
 `
 const Play = styled.img`
-    height: 60px;
+    height:80px;
     padding: 0px;
-    width: 100px;
+    width:80px;
     display: flex;
     z-index: 99000;
 
@@ -196,7 +202,7 @@ export default function Item({ videoOnDemand, subscription }) {
             }}
           >
       
-              <Play src="../static/img/playme.svg"  style={{ transform: 'translateZ(80px)' }}
+              <Play src="../static/img/play-button.svg"  style={{ transform: 'translateZ(80px)' }}
               className="image1"
               title="play video"/>
     
@@ -208,12 +214,16 @@ export default function Item({ videoOnDemand, subscription }) {
             height: '100%',
             width: '100%',
             display: 'flex',
- 
+            flexFlow: 'column',
             position: 'absolute',
             justifyContent: 'flex-end',
-            alignItems: 'flex-end',
+            bottom: '10px',
+            alignItems: 'flex-start',
           }}
         >
+           
+          <h3 className="the_date"> <span>{format(new Date(videoOnDemand.date), 'MMM dd, yyyy')}</span>
+  </h3>
           <h2 style={{ transform: 'skew(-10deg), translateZ(140px)' }} className="classTitle">
        
             {videoOnDemand.name.toUpperCase()} {' '}    
@@ -223,7 +233,7 @@ export default function Item({ videoOnDemand, subscription }) {
               subscription={subscription}
               src="../static/img/lock2.svg"
               alt="locked out"
-            />
+            /> 
       </ItemStyle>
      
   

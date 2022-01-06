@@ -228,7 +228,7 @@ function SelectSubscription({ handleSetPlan }) {
             </h3>
             {/* <li className="first-bulletpoint">The Perks of a Live with Lindsey All Access Pass</li> */}
             <li className="bulletpoints">
-              Full Access to Daily Live Stream Workouts + Lindsey's Video
+              Full Access to Daily Live Stream Workouts + Lindsey&apos;s Video
               on-Demand Library of 50+ Workouts and Growing
             </li>
             <li className="bulletpoints">5 New Workouts Every Week</li>

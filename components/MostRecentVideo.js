@@ -26,7 +26,7 @@ const MOST_RECENT_VIDEO_QUERY = gql`
 const Wrap = styled.div`
   width: 100%;
   max-width: 1200px;
-  margin: 80px auto 0 auto;
+  margin: 120px auto 0 auto;
   
   display: grid;
   grid-template-columns: 1fr;
@@ -35,7 +35,7 @@ const Wrap = styled.div`
   font-family: 'Bison';
 
   @media (min-width: 768px) {
-    grid-template-columns: 50% 50%;
+    grid-template-columns: 50% 50% ;
     grid-template-rows: 1fr;
     margin-bottom: 155px;
   }
@@ -53,7 +53,7 @@ const Wrap = styled.div`
   }
 
   .right {
-    width: 95%;
+    width: 85%;
     grid-row: 2;
     grid-column: 1;
     margin: 0 auto;
@@ -65,7 +65,7 @@ const Wrap = styled.div`
   }
   h2 {
     margin: 30px auto;
-    margin-top: 60px;
+    margin-top: 50px;
     font-size: 32px;
     border-right: 4px solid ${(props) => props.theme.second};
     padding: 0;
@@ -73,6 +73,7 @@ const Wrap = styled.div`
     position: relative;
     line-height: 34px;
     padding-right: 5px;
+    
   }
   img {
     display: inline-flex;
@@ -188,11 +189,16 @@ const TheItem = styled.div`
 
 `
 const MostRecent = styled(motion.div)`
-font-size: 170px;
-position: absolute;
+     
 line-height: 170px; opacity: .5;
-color: ${props => props.theme.primary};
+color: ${props => props.theme.second};
 text-align: left;
+position: absolute;
+margin-top: -120px;
+margin-left: 260px;
+font-size: 60px;
+width:400px;
+ 
 `
 const Play = styled.img`
   height: 60px;
@@ -221,18 +227,21 @@ const Play = styled.img`
 opacity: 1;
   }
 `
-const Img = styled.img`
-position: absolute;
-right:100px;
-margin-top: 30px;
-z-index:9999;
-`
+const Img = styled.div`
+  transform: 
+  perspective(1000px)
+    rotateX(16deg)
+    rotateY(-8deg)
+    rotateZ(1deg)
+    skew(-2deg);
+    text-shadow: 26px 4px 20px rgba(0,0,0,0.07);
+    `
 const ParallaxImage = ({ src,  children, offset = 50, ...style}) => {
   const [elementTop, setElementTop] = useState(0)
   const ref = useRef(null)
   const [clientHeight, setClientHeight] = useState(0)
   const { scrollY } = useViewportScroll()
-  const y = useTransform(scrollY, [400, 100], [0, 400])
+  const y = useTransform(scrollY, [200, 40], [0, 120], { clamp: true})
   // const y = useTransform(scrollY, [elementTop, elementTop + 1], [0, -1], {
   //   clamp: false,
   // })
@@ -262,6 +271,7 @@ function MostRecentVideo(props) {
   return (
     <Wrap>
       <div className="right">
+      <ParallaxImage><Img>Most Recent</Img></ParallaxImage>
       <TheItem
           isOpen={isOpen}
           thumbnailUrl={mostRecentVod.thumbnailUrl}
@@ -286,7 +296,7 @@ function MostRecentVideo(props) {
         
       </div>
       <div className="left">
-   <ParallaxImage>MOST<br/>RECENT</ParallaxImage>
+   
         <h2>{mostRecentVod.name}</h2>
        
        <p>{mostRecentVod.description}</p>
@@ -301,23 +311,3 @@ function MostRecentVideo(props) {
 }
 
 export default MostRecentVideo
-{/* <div className="canvas-wrapper">
-	<a href="#" className="canvas">
-		<div className="canvas_border">
-			<svg>
-				<defs><linearGradient id="grad-orange" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" style="stop-color:rgb(253,137,68);stop-opacity:1"></stop><stop offset="100%" style="stop-color:rgb(153,75,23);stop-opacity:1"></stop></linearGradient><linearGradient id="grad-red" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#D34F48"></stop><stop offset="100%" stop-color="#772522"></stop></linearGradient></defs>
-				<rect id="rect-grad" className="rect-gradient" fill="none" stroke="url(#grad-orange)" stroke-linecap="square" stroke-width="4" stroke-miterlimit="30" width="100%" height="100%"></rect>
-			</svg>
-		</div>
-		<div className="canvas_img-wrapper">
-			<img className="canvas_img" src="https://blog.codepen.io/wp-content/uploads/2012/06/Button-Black-Large.png" alt="">
-		</div>
-		<div className="canvas_copy canvas_copy--left">
-			<span className="canvas_copy_subtitle">Heading</span>
-			<strong className="canvas_copy_title">Hello</strong>
-			<strong className="canvas_copy_title">World</strong>
-			<span className="canvas_copy_details">Details and stuff</span>
-		</div>
-	</a>
-	 
-</div> */}

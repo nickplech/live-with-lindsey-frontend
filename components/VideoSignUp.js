@@ -142,7 +142,7 @@ const VideoSignUp = ({ date, classId, owner }) => {
   return owner === false && !me ? (
     <NotLoggedIn>
       <a onClick={signUpOnClick} className="btn pay">
-        Signup for Free!
+        Signup for Free to Begin
       </a>
       <a onClick={login} className="btn pay">
         Log In

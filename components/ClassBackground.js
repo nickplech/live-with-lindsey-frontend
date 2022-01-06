@@ -3,7 +3,7 @@ import 'video.js/dist/video-js.css'
 import CountDownTimer from './CountDownTimer'
 import VideoSignUp from './VideoSignUp'
 import styled from 'styled-components'
-import ShareButtons from './ShareButtons'
+
 const Background = styled.div`
   display: flex;
   justify-content: center;

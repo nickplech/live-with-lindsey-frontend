@@ -4,6 +4,7 @@ import { useUser } from '../components/User'
 import MostRecentVideo from '../components/MostRecentVideo'
 import VodNewSlidersComponent from '../components/VodNewSlidersComponent'
 import VodListSlider from '../components/VodListSlider'
+import VodCategoriesTabs from '../components/VodCategoriesTabs'
 import VodFavoritesSlider from '../components/VodFavoritesSlider'
 import gql from 'graphql-tag'
 import CommunityFavoritesSlider from '../components/CommunityFavorites'
@@ -29,20 +30,17 @@ console.log(data.allTags.name)
   return (
     <>
       <PhotoArray />
-        <div style={{minHeight: '600px'}}>
+      <VodCategoriesTabs/>
           <MostRecentVideo />
           <VodFavoritesSlider  user={me} />
           <VodListSlider  user={me} />
           <CommunityFavoritesSlider user={me} />
-          {data.allTags && data.allTags.map((tag, i)=> {
-            
+          {data.allTags && data.allTags.map((tag)=> {
             return(
-
-                     <VodNewSlidersComponent nameOfList={tag.name} />
+                     <VodNewSlidersComponent key={tag.name} user={me} nameOfList={tag.name} />
             )
           })}
-   
-        </div>
+    
       <Footer />
     </>
   )

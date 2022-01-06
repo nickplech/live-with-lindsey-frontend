@@ -13,6 +13,14 @@ const LIVE_AUTH_QUERY = gql`
     liveAuth(id: $id) {
       id
       name
+      equipment {
+        id
+        name
+        description
+        image {
+          publicUrlTransformed
+        }
+      }
       user {
         id
       }
@@ -107,7 +115,6 @@ function LiveStream({ id }) {
   const videoJsOptions = {
     fluid: true,
     fill: true,
- 
     autoplay: true,
     responsive: true,
     controls: true,
@@ -119,7 +126,7 @@ function LiveStream({ id }) {
     suppressNotSupportedError: true,
     sources: [
       {
-        src: `https://live.lindseyharrod.com/hls/${id}.m3u8`,
+        src: `https://lindseyharrodfitness.live/hls/${id}.m3u8`,
         type: 'application/x-mpegURL',
       },
     ],
@@ -145,11 +152,12 @@ function LiveStream({ id }) {
   if (error) return <Error error={error} />
 
   const name = data.liveAuth.name
-  const handleToggleChat = (e) => {
+  const equipment = data.liveAuth.equipment
+  const handleToggleChat = () => {
     setOpen(prev => !prev)
   }
  
- 
+ console.log(equipment)
   return (
       <>
         <Head>
@@ -158,7 +166,7 @@ function LiveStream({ id }) {
         </Head>
       <Background />
       <Griddy open={open}>
-        <VideoLiveJs id={id} options={videoJsOptions}/>
+        <VideoLiveJs id={id} name={name}  options={videoJsOptions}/>
             <ChatFrame open={open}>
               <div className="close-container"><p onClick={() => handleToggleChat()} className="name">close chat</p> <img onClick={() => handleToggleChat()} className="arrow" src="../static/img/uparrow.svg"  /> </div>
               <GetChats

@@ -1,7 +1,11 @@
-import { useEffect, useRef, useState } from 'react'
-import Router from 'next/router'
-// import * as UpChunk from '@mux/upchunk'
-// import useSwr from 'swr'
+import React, { useEffect, useState } from 'react'
+import Uppy from '@uppy/core'
+import Tus from '@uppy/tus'
+import { Dashboard } from '@uppy/react'
+ import Webcam from '@uppy/webcam'
+ import ImageEditor from '@uppy/image-editor'
+import '@uppy/core/dist/style.css'
+import '@uppy/dashboard/dist/style.css'
  import { useMutation } from '@apollo/client'
  import gql from 'graphql-tag'
 import Loader from './Loader'
@@ -12,17 +16,20 @@ const UPLOAD_VOD_VIDEO = gql`
   mutation UPLOAD_VOD_VIDEO(
     $name: String
     $description: String
+  
 $file: Upload
   ) {
     uploadNewVideoOnDemand(
       name: $name
       description: $description
+   
     file: $file
     ) {
       id
-      url
+    
       description
       name
+      
     }
   }
 `
@@ -31,84 +38,86 @@ $file: Upload
 const VideoUploadForm = () => {
   const [nameState, setNameState] = useState('test')
   const [descriptionState, setDescriptionState] = useState('testutesrtttyyty')
-  const [isUploading, setIsUploading] = useState(false)
-  const [isPreparing, setIsPreparing] = useState(false)
-  const [uploadId, setUploadId] = useState(null)
-  const [progress, setProgress] = useState(null)
-  const [errorMessage, setErrorMessage] = useState('')
-  const inputRef = useRef(null)
+  const [uppy, setUppy] = useState(null) 
+   
+ useEffect(() => {
+    const uppy = new Uppy()
+    .use(Tus, { endpoint: 'http://localhost:3001/admin/api' })
+    .use(Webcam, { id: 'MyWebcam' })
+    .use(ImageEditor, { id: 'MyImageEditor' })
+ setUppy(uppy)
 
-
-const [uploadNewVideoOnDemand, {data, loading, error}] = useMutation(UPLOAD_VOD_VIDEO, {variables: {name: nameState,  description: descriptionState }})
-  const upload = data && data.VideoOnDemand
+    return () => uppy.close()
+  }, [])
 
   useEffect(() => {
-    if (upload && upload.id) {
-      Router.push({
-        pathname: `/item/${upload.id}`,
-        scroll: false,
-      })
-    }
-  }, [upload])
+    if(uppy === null) return
+     uppy.on('complete', (result) => {
+    const url = result.successful[0].uploadURL
+    uppy.store.dispatch({
+      type: 'SET_VOD_URL',
+      payload: { url },
+    })
+    uploadNewVideoOnDemand({variables: { file: url, name: nameState,  description: descriptionState }})
+  })
+  }, [uppy])
 
-  if (error) return <Error error="Error fetching api" />
-  if (data && data.error) return <Error error={data.error} />
 
-  const createUpload = async () => {
-   await uploadNewVideoOnDemand({variables: { file:  inputRef.current.files[0],  }})
-   if(loading) return <Loader />
-   if(error) return <Error error={error}/>
-   
+  const [uploadNewVideoOnDemand, {data, loading, error}] = useMutation(UPLOAD_VOD_VIDEO )
+  const upload = data && data.VideoOnDemand
+ console.log(upload) 
+ if (loading) return <Loader />
+ if (error) return <Error error={error} />
  
-  }
 
-  const startUpload = (evt) => {
-    setIsUploading(true)
- createUpload()
-
-    // upload.on('error', (err) => {
-    //   setErrorMessage(err.detail)
-    // })
-
-    // upload.on('progress', (progress) => {
-    //   setProgress(Math.floor(progress.detail))
-    // })
-
-    // upload.on('success', () => {
-    //   setIsPreparing(true)
-    // })
-  }
-
-  if (errorMessage) return <Error error={error} />
 
   return (
-    <>
+  
       <div className="container">
-        {isUploading ? (
-          <>
-            {isPreparing ? (
-              <div>Preparing..</div>
-            ) : (
-              <div>Uploading...{progress ? `${progress}%` : ''}</div>
-            )}
-            <Loader />
-          </>
-        ) : (
-          <label>
-            <button type="button" onClick={() => inputRef.current.click()}>
-              Select a video file
-            </button>
-            <input type="file" onChange={startUpload} ref={inputRef} />
-          </label>
-        )}
+
+           {uppy &&  <Dashboard
+             id={'Dashboard'}
+        uppy={uppy}
+        showProgressDetails={true}
+        note={'Images and Video only'}
+        // proudlyDisplayPoweredByUppy={false}
+        height={350}
+        metaFields={[
+          { id: 'name', name: 'Name', placeholder: 'file name' },
+          { id: 'caption', name: 'Caption', placeholder: 'add description here' }
+        ]}
+        meta={{ type: 'video-on-demand' }}
+        debug={ true}
+        autoProceed={ false}
+        plugins={ ['MyWebcam', 'MyImageEditor']}
+        restrictions={{
+          maxFileSize: 5000000000,
+          maxNumberOfFiles: 3,
+          minNumberOfFiles: 1,
+          allowedFileTypes: ['video/*'],
+          requiredMetaFields: ['caption'],
+        }}
+    
+        width={'100%'}
+        locale={{
+          strings: {
+  
+            dropHereOr: 'Drop Video Here or %{browse}',
+        
+            browse: 'browse',
+          },
+        }}
+     
+      />}
+       
+     
       </div>
-      <style jsx>{`
-        input {
-          display: none;
-        }
-      `}</style>
-    </>
   )
 }
 
 export default VideoUploadForm
+
+
+
+
+ 

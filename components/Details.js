@@ -1,12 +1,13 @@
 import React, {useRef, useEffect} from 'react'
 import styled from 'styled-components'
+import MarkToWatch from './MarkToWatch'
  import {format} from 'date-fns'
 import VanillaTilt from 'vanilla-tilt'
 
 const Tilty = styled.div`
  grid-row: 3;  height: 220px;
  margin-top: 15px;
-    border-radius: 20px;
+    border-radius: 10px;
     position: relative;
  width: 95%;
   @media (min-width: 768px) {
@@ -14,7 +15,7 @@ const Tilty = styled.div`
       grid-row: 2;
     }
     .js-tilt-glare {
-        border-radius: 20px;
+        border-radius: 10px;
     }
     .live {
     color: white;
@@ -44,7 +45,7 @@ const Grid = styled.div`
     width: 100%;
     display: flex;
     flex-flow: column;
-    border-radius: 20px;
+    border-radius: 10px;
     z-index: 999;
     background: rgba(255, 255, 255, 0.25);
    
@@ -140,7 +141,8 @@ function Details( { addToFav, removeFromFavoritesButChill,owner, isAFav, vodView
          }
            <p className="datecolorchange">{vodViewingAuth && vodViewingAuth.description}</p>
                {!me ? null : (
-                    <div className="extras">  
+                    <div className="extras"> 
+                    <MarkToWatch /> 
             <Heart 
             height="20"
            src={`../static/img/${isAFav ? 'heart4' : 'heart3'}.svg`}

@@ -18,6 +18,7 @@ const USER_ORDERS_QUERY = gql`
       total
       createdAt
       charge
+ 
       _recordsMeta {
         count
       }
@@ -42,7 +43,7 @@ const PAGINATION_QUERY = gql`
 const Inner = styled.div`
   text-align: left;
   max-width: ${(props) => props.theme.innerWidth};
-  margin: 0 auto;
+  /* margin: 0 auto; */
   padding: 0rem 0;
   padding-top: 0;
   position: relative;
@@ -67,6 +68,12 @@ const Inner = styled.div`
     color: ${(props) => props.theme.second};
     letter-spacing: 3px;
   }
+ 
+ 
+`
+const Img = styled.img`
+    height: 50px;
+    width:50px;
 `
 const OrderUl = styled.ul`
   display: grid;
@@ -103,7 +110,7 @@ function OrdersList({ userId, page, pages, count }) {
   if (error) return <Error erorr={error} />
   if (!data || data === undefined) return null
   const { allOrders } = data
-  console.log(allOrders)
+
   const currentCount = page * perPage - perPage
   const endOfCountRange = page * perPage
   const lastPage = page === pages
@@ -146,15 +153,19 @@ function OrdersList({ userId, page, pages, count }) {
                       </p>
                       <p>{formatMoney(order.total)}</p>
                     </OrderMeta>
-                    {/* <div className="images">
-                        {order.items.map((item) => (
-                          <img
+                    <div className="images">
+                        {order.records.map((item) => {
+
+                          const cleanName = item.name.toLowerCase().replace(/\s/g, '')
+                          return(
+                          <Img
                             key={item.id}
-                            // src={item.image}
+                  
+                            src={`../static/img/classbackgrounds/backsplashfinal/${cleanName}.jpg`}
                             alt={item.title}
                           />
-                        ))}
-                      </div> */}
+                        )})}
+                      </div>
                   </a>
                 </Link>
               </OrderItemStyles>

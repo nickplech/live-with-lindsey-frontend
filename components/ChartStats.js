@@ -1,7 +1,5 @@
-
- 
-  import React, { PureComponent } from 'react';
-import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
+import React, { PureComponent } from 'react'
+import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, ReferenceDot } from 'recharts'
 import styled from 'styled-components'
 
 const Wrap = styled.div`
@@ -57,14 +55,14 @@ const data = [
     lastweek: 0,
     amt: 20,
   },
-];
+]
 
 
 export default class ChartStats extends PureComponent {
 
   render() {
     return (
-      <Wrap style={{ width: '100%', height: '150px' }}>
+      <Wrap style={{ width: '100%', height: '180px', gridRow: '2', gridColumn: '1/4' }}>
         <ResponsiveContainer>
           <AreaChart
             data={data}
@@ -85,11 +83,15 @@ export default class ChartStats extends PureComponent {
             {/* <XAxis dataKey="name" /> */}
      
             <Tooltip />
-            <Area type="monotone" dataKey="currentweek" strokeWidth="2" stroke="#f8b0b0" fillOpacity={1} fill="url(#colorUv)" />
+            <XAxis dataKey="name">
+    <ReferenceDot value="days" offset={0} position="insideBottom" />
+  </XAxis>
+            <Area type="monotone" dataKey="currentweek" strokeWidth="2" stroke="#f8b0b0" fillOpacity={1} fill="url(#colorUv)" >
+         </Area>
           </AreaChart>
         </ResponsiveContainer>
       </Wrap>
-    );
+    )
   }
 }
  

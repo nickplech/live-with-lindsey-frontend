@@ -1,45 +1,62 @@
-import React, { Component, Fragment } from 'react'
-import { Mutation } from 'react-apollo'
+import React, { useState, useEffect } from 'react'
+import { useMutation } from '@apollo/client'
 import gql from 'graphql-tag'
-import { format, addHours, addMinutes } from 'date-fns'
-import User from './User'
+import { format, addHours,startOfWeek, addMinutes, formatISO } from 'date-fns'
+import Select from 'react-select'
 import Error from './ErrorMessage'
-import { TODAYS_APPOINTMENTS_QUERY } from './CalendarStats'
-import styled from 'styled-components'
-import Loader from './Loader'
-import UserSearch from './UserSearch'
-import posed, { PoseGroup } from 'react-pose'
-const ModalShell = posed.div({
-  enter: {
-    y: 0,
-    opacity: 1,
-    delay: 300,
-    transition: {
-      y: { type: 'spring', stiffness: 1000, damping: 15 },
-      default: { duration: 300 },
-    },
-  },
-  exit: {
-    y: 50,
-    opacity: 0,
-    transition: { duration: 150 },
-  },
-})
+import { TODAYS_APPOINTMENTS_QUERY } from './Calendar'
+  
+import { createPortal } from 'react-dom'
+ 
 
-const Shade = posed.div({
-  enter: { opacity: 1 },
-  exit: { opacity: 0 },
-})
+import { STREAMS_QUERY } from './ScheduledClasses'
+import UserSearch from './UserSearch'
+import MultiTag from './MultiTag'
+import { motion, AnimatePresence } from 'framer-motion'
+import styled, { keyframes } from 'styled-components'
+ 
+
+// const ALL_REASONS_QUERY = gql`
+//   query ALL_REASONS_QUERY {
+//     allReasons {
+//       id
+//       name
+//       color
+//     }
+//   }
+// `
+
+// Creates a portal outside the DOM hierarchy
+function Portal({ children }) {
+  const modalRoot = document.getElementById('modal-root')  
+  const [element] = useState(document.createElement('div'))  
+  useEffect(() => {
+    modalRoot.appendChild(element)
+ 
+    return function cleanup() {
+      modalRoot.removeChild(element)
+    }
+  }, [modalRoot, element])
+
+  return createPortal(children, element)
+}
+
+
 const Wrap = styled.div`
+ 
   display: flex;
   justify-content: center;
   align-items: center;
-  position: absolute;
-  width: 100%;
+  position: relative;
+  width: 100%;  
+ 
+overscroll-behavior: none;
   height: 100%;
   pointer-events: ${(props) => (props.isVisible ? 'auto' : 'none')};
   .shade {
-    position: absolute;
+    grid-column: 1/3;
+    grid-row: 1/3;
+    position: fixed;
     background: rgba(0, 0, 0, 0.8);
     top: 0;
     left: 0;
@@ -48,89 +65,102 @@ const Wrap = styled.div`
     display: flex;
     z-index: 1000;
   }
-  .modal {
-    background-color: #fff;
+
+ 
+`
+const ModalShell = styled(motion.div)`
+ height:  550px;
+ width: 90%;
+ max-width: 700px;
+ /* transform: translateY(-100px); */
+ 
+    background-color: white;
+    position:absolute;              
+ 
+border-radius:12px;
+ 
     border-radius: 8px;
-    display: flex;
-    position: absolute;
-    justify-content: center;
+    
     margin: 0 auto;
-    max-width: 700px;
-    width: 80%;
-    min-height: 400px;
+margin-top: -700px;
     padding: 20px;
     z-index: 1001;
     box-shadow: 1px 1px 5px 3px rgba(0, 0, 0, 0.3);
-  }
-`
-const CREATE_APPOINTMENT_MUTATION = gql`
-  mutation CREATE_APPOINTMENT_MUTATION(
-    $user: [ID!]
-    $reason: [ID!]
-    $note: String
-    $date: String!
-    $start: String!
-    $appLength: Int!
-  ) {
-    createAppointment(
-      user: $user
-      reason: $reason
-      note: $note
-      date: $date
-      start: $start
 
-      appLength: $appLength
+`
+const ModalContent = styled(motion.div)`
+ padding: 5px;
+ position: relative;
+ width: 100%;
+ height: 100%;
+ 
+ 
+ input {
+   font-family: 'Bison';
+   font-size: 16px;
+   padding-left: 10px;
+ 
+   color: slategray;
+ }
+ textarea {
+   resize: none;
+   border-radius: 5px;
+   border: 1px solid lightgrey;
+   font-family: 'Bison';
+   font-size: 16px;
+   letter-spacing: 2px;
+   color: slategray;
+   padding: 10px;
+ }
+`
+const CREATE_CLASS_MUTATION = gql`
+  mutation CREATE_CLASS_MUTATION(
+    $name: String
+    $reason: ID!
+    $price: Int
+    $date: DateTime!
+    $equipment: [ID!]
+    $tags: [ID!]
+  ) {
+    createNewClass(
+      name: $name
+      reason: $reason
+      price: $price
+      date: $date
+      equipment: $equipment
+      tags: $tags
     ) {
       id
       date
-      appLength
-      user {
-        id
-        firstName
-        lastName
-        image
-      }
-      reason {
-        id
-        color
-        name
-        classDescription
-      }
-
-      item {
-        id
-        price
-        date
-        time
-        name
-      }
-      note
+      name
     }
   }
 `
-const ReasonSlide = posed.li({
-  closed: {
-    x: '-40%',
-  },
-  open: {
-    x: '30%',
-
-    transition: {
-      stiffness: 100,
-      duration: 400,
-    },
-  },
-})
+const EQUIPMENT_QUERY = gql`
+  query EQUIPMENT_QUERY {
+    allRequireds {
+      id
+      name
+      quantity
+      description
+      image {
+        publicUrlTransformed
+      }
+    }
+  }
+`
+ 
 
 const TimeChunk = styled.div`
   .cal {
-    width: 150px;
+    width: 130px;
     display: flex;
+    flex-flow: column;
     justify-content: center;
     /* align-items: center; */
-    height: 140px;
+    height: 120px;
     border: none;
-    box-shadow: 0px 10px 5px 3px rgba(20, 20, 20, 0.1);
+    box-shadow: 0px 10px 15px -1px rgba(20, 20, 20, 0.2);
     border-radius: 10px;
     text-align: center;
   }
@@ -141,31 +171,35 @@ const TimeChunk = styled.div`
   .cal__item.month {
     /* transform: translateY(10px); */
     color: #ffffff;
-    font-size: 16px;
-    width: 150px;
-
+    font-size: 20px;
+    width: 130px;
+    top: 0;
     background: ${(props) => props.theme.second};
     text-transform: uppercase;
     border-radius: 10px 10px 0 0;
   }
-  .cal__item.day {
-    font-size: 40px;
-    position: absolute;
-    opacity: 0.8;
-    transform: translateY(20px);
+ .day {
+    font-size: 30px;
+    position: relative;
+    opacity: 1;
+    color: slategray;
     align-self: center;
+  
   }
-
+  .first-one {
+     margin: 20px auto 15px;
+     font-size: 50px;
+    }
   .timer {
-    width: 140px;
-    height: 140px;
+  
     position: absolute;
-    transform: translateX(210px);
+    transform: translateX(150px);
     display: flex;
-    border: 8px solid #323a44;
+ font-size: 24px;
     background: white;
-    border-radius: 50%;
-    box-shadow: 0 0 0 12px white;
+  color: slategray;
+ 
+ 
     /* transform: rotate(-90deg); */
   }
   .timer__item {
@@ -217,7 +251,15 @@ const TimeChunk = styled.div`
     text-transform: uppercase;
   }
 `
-
+const TypeOfClassList = styled.ul`
+position: absolute;
+transform: translateX(150px) translateY(15px);
+list-style: none;
+font-size: 20px;padding: 0;
+li {
+  margin-bottom: 5px;
+}
+`
 const StyledTextArea = styled.textarea`
   padding: 3px 10px;
   margin: 4px auto;
@@ -243,20 +285,22 @@ const StyledTextArea = styled.textarea`
 `
 
 const SickButton = styled.button`
-  background: ${(props) => props.theme.primary};
-  color: ${(props) => props.theme.second};
+  background: ${(props) => props.theme.second};
+  color: #fff;
   font-weight: 800;
-  border: 2px solid ${(props) => props.theme.second};
+  border-radius: 20px;
   margin: 20px auto;
+  border: none;
   display: flex;
   font-size: 2rem;
   padding: 6px 12px;
   font-size: 2rem;
   transition: all 0.5s;
-  font-family: 'Comfortaa';
+  font-family: 'Bison';
+  letter-spacing: 3px;
   outline: none;
   cursor: pointer;
-  width: 80%;
+  width: 50%;
   justify-content: center;
   justify-self: flex-end;
   align-items: center;
@@ -279,9 +323,9 @@ const SickerButton = styled.div`
   position: absolute;
   padding: 5px;
   border: 1px solid white;
-  border-radius: 3px;
-  top: -40px;
-  right: 0px;
+  border-radius: 6px;
+  top: -60px;
+  right: -20px;
   justify-content: center;
   align-items: center;
   font-size: 2.5rem;
@@ -311,13 +355,7 @@ const SickerButton = styled.div`
     display: flex;
   }
 `
-const ReasonName = styled.div`
-  display: flex;
-  width: 100px;
-  font-size: 10px;
-  text-align: left;
-  line-height: 12px;
-`
+ 
 const Ul = styled.ul`
   list-style: none;
   padding: 0;
@@ -360,7 +398,9 @@ const Ul = styled.ul`
     z-index: 500;
   }
 `
+ 
 function timeConvertor(time) {
+
   let pm = time.includes('pm')
   if (pm) {
     time = time.split(':')
@@ -377,243 +417,338 @@ function timeConvertor(time) {
     return (hour + ':' + min).replace('am', '')
   }
 }
+const  Modal = ({reasons, open, children, toggle, selectedDate, selectedTime}) => {
+ 
+const [equipmentId, setEquipmentSearch] = useState('')
+ 
+const [tagsId, setTagsSearch] = useState('')
+  const [addDescription, setAddDescription] = useState(false)
+    const [selectedUsers, setSelectedUsers] = useState([])
+    const [selectedReason, setSelectedReason] = useState(null)
+    const [selectedEquipment, setSelectedEquipment] = useState([])
+    const [selectedTags, setSelectedTags] = useState([])
+    const [selectedType, setSelectedType] = useState('livestream')
+    const [date, setDate] = useState(new Date())
+    const [time, setTime] = useState('')
+    const [priceState, setPriceState] = useState(20)
+    const [altTitle, setAltTitle] = useState('')
+    const [appLength, setAppLength] = useState( 60)
+    const [isoDate, setIsoDate] = useState('')
+    const [note, setNote] = useState('')
 
-class Modal extends Component {
-  state = {
-    loading: false,
-    selectedUsers: [],
-    checkedReasons: [],
-    reasons: this.props.reasons,
-    date: '',
-    openReasons: [],
-    appLength: 60,
-    isoDate: '',
-    note: '',
+ 
+  const weekStarts = startOfWeek(new Date(), {
+    weekStartsOn: 0,
+  })     
+const [createNewClass, { error}] = useMutation(CREATE_CLASS_MUTATION,
+{variables: {
+  date: date && formatISO(new Date(date)),
+  reason: selectedReason && selectedReason,
+  price: parseInt(priceState),
+  equipment: selectedEquipment,
+  tags: selectedTags,
+  name: selectedUsers && selectedUsers,
+},refetchQueries: [
+  {
+    query: STREAMS_QUERY,
+    variables: { date: formatISO(new Date()) },
+  },
+  {
+    query: TODAYS_APPOINTMENTS_QUERY,
+    variables: {  
+      date: formatISO(weekStarts)},
+  },
+],
   }
-
-  handleChange = (e) => {
-    const { name, type, value } = e.target
-    const val = type === 'number' ? parseFloat(value) : value
-    this.setState({ [name]: val })
+ )
+ function handleSelectedOption(e) {
+  setSelectedReason(e)
+}
+const LiveGrid = styled.div`
+display: grid;
+width: 100%;
+grid-template-columns: 1fr 1fr;
+grid-gap: 20px;
+.alt-title {
+  height: 40px;
+  width: 100%;
+  border: 1px solid rgba(20,20,20,.2);
+  border-radius: 3px;
+  &[disabled] {
+    opacity: 0.5;
+    cursor: not-allowed;
   }
-
-  handleUserSearch = (item) => {
-    let selectedCopy = [...this.state.selectedUsers]
+}
+`
+const addDescriptionhandler = () => {
+  setAddDescription(prev => !prev)
+}
+const setNoteHandler =(e) => {
+  e.preventDefault()
+  const {value} = e.target
+  setNote(value)
+}
+const setAltTitleHandler = (e) => {
+  e.preventDefault()
+  const {value} = e.target
+  setAltTitle(value)
+}
+  const handleUserSearch = (item) => {
+    let selectedCopy = [...selectedUsers]
     selectedCopy.push(item.id)
 
-    this.setState({ selectedUsers: selectedCopy })
+    setSelectedUsers( selectedCopy)
   }
 
-  removeUserSearch = (item) => {
-    this.setState(({ selectedUsers }) => {
-      return {
-        selectedUsers: selectedUsers.filter((i) => i !== item.id),
-      }
-    })
+  const removeUserSearch = (item) => {
+    const theUsers = selectedUsers.filter((i) => i !== item.id)
+    setSelectedUsers(theUsers) 
   }
-  handleReasonChange = (e, i) => {
-    const { name } = e.target
-    let checkedReasons = [...this.state.checkedReasons]
-    let openReasons = [...this.state.openReasons]
-    const isChecked = checkedReasons.some((reason) => {
-      if (name === reason) {
-        return true
-      }
-    })
-    if (!isChecked) {
-      checkedReasons.push(name)
-      openReasons.push(i)
-    }
-
-    if (isChecked) {
-      checkedReasons = checkedReasons.filter((reason) => reason !== name)
-      openReasons = openReasons.filter((reason) => reason !== i)
-    }
-
-    this.setState({
-      checkedReasons: checkedReasons,
-      openReasons: openReasons,
-    })
+ 
+  const handleEquipmentSearch = (item) => {
+    let selectedCopy = [...selectedEquipment]
+    selectedCopy.push(item.id)
+    setSelectedEquipment(selectedCopy)
+    setEquipmentSearch(item.id)
   }
 
-  render() {
-    const { handleRehydrate, popUpModal, isVisible } = this.props
-    const { openReasons } = this.state
-    const tooShort = this.state.checkedReasons.length == 0
+  const removeEquipmentSearch = (item) => {
+    const filteredEquip = selectedEquipment.filter((i) => i !== item.id)
+    setSelectedEquipment(filteredEquip)
+  }
+  const handleTagsSearch = (item) => {
+    let selectedCopy = [...selectedTags]
+    selectedCopy.push(item.id)
+    setSelectedTags(selectedCopy)
+    setTagsSearch(item.id)
+  }
 
-    const military = timeConvertor(this.props.time)
-
+  const removeTagsSearch = (item) => {
+    const filteredEquip = selectedTags.filter((i) => i !== item.id)
+    setSelectedTags(filteredEquip)
+  }
+const onValueChange = (e) => {
+  const {value} =  e.target
+  setSelectedType(value)
+}
+  
+    const tooShort = selectedReason && selectedReason.length == 0
+    const military = timeConvertor(time)
     const splitMil = military.split(':')
-    const splitDate = this.props.date.toISOString()
-    const withHours = addHours(new Date(this.props.date), splitMil[0])
+    const splitDate = date && date.toISOString()
+    const withHours = addHours(new Date(date), splitMil[0])
     const withMins = addMinutes(new Date(withHours), splitMil[1])
-
-    const toIso = this.props.time.length && withMins.toISOString()
-    console.log(toIso)
+    const toIso = time.length && withMins.toISOString()
+ 
     return (
-      <Wrap isVisible={isVisible}>
-        <PoseGroup>
-          {isVisible && [
-            <Shade key="shade" className="shade" />,
-            <ModalShell key="modal" className="modal">
-              <Mutation
-                mutation={CREATE_APPOINTMENT_MUTATION}
-                variables={{
-                  users: this.state.selectedUsers,
-                  reason: this.state.checkedReasons,
-                  note: this.state.note,
-                  date: format(this.props.date, 'MMM DD YYYY').toString(),
-                  start: this.props.time,
-                  isoDate: toIso,
-                  appLength: this.state.appLength,
-                }}
-                awaitRefetchQueries={true}
-                refetchQueries={[
-                  {
-                    query: TODAYS_APPOINTMENTS_QUERY,
-                    variables: {
-                      date: format(this.props.date, 'MMM DD YYYY').toString(),
-                    },
-                  },
-                ]}
-              >
-                {(createAppointment, { loading, error }) => {
-                  if (loading) return <Loader name="Creating Appointment" />
-                  if (error)
-                    return (
-                      <>
+      
+        <AnimatePresence>{open &&  
+   <Portal>
+          <Wrap isVisible={open}>
+            <div  className="shade" />
+            <ModalShell  
+  onClick={event => event.stopPropagation()}
+            initial={{ opacity: 0, 
+            y: 60, scale: 0.8 }}
+            animate={{
+            opacity: 1,
+            y: 0,
+            scale: 1,
+            transition: { type: 'spring', 
+                            stiffness: 100 }
+            }}
+            exit={{ opacity: 0, scale: 0.7, 
+                    transition: { duration: 0.3 } }}>
+                      <ModalContent
+              initial={{ y: -30, opacity: 0 }}
+              animate={{ y: 0, opacity: 1, 
+                         transition: { delay: 0.5 } }}>
+               
                         <SickerButton
                           onClick={() => {
-                            this.setState({
-                              reason: '',
-                              note: '',
-                              checkedReasons: [],
-                              openReasons: [],
-                              selectedUsers: [],
-                            })
-                            popUpModal()
+                         
+                            setNote('')
+                            setSelectedReason(null)
+                         
+                            setSelectedUsers([])
+                        toggle()
+                            
                           }}
                         />
                         <Error error={error} />
-                      </>
-                    )
-                  return (
+                  
+               
                     <form
                       onSubmit={async (e) => {
                         e.preventDefault()
-                        const res = await createAppointment()
-                        this.setState({
-                          reason: '',
-                          note: '',
-                          checkedReasons: [],
-                          openReasons: [],
-                          selectedUsers: [],
-                        })
-                        await popUpModal()
-                        const appointment = await res.data.createAppointment
-                        await handleRehydrate(appointment)
+                        const res = await createNewClass()
+                  
+                        setNote('')
+                        setSelectedReason([])
+                        
+                        setSelectedUsers([])
+                 
+                        await toggle()
+                        // const appointment = await res.data.createNewClass
+                        // await handleRehydrate(appointment)
                       }}
                     >
                       <SickerButton
-                        onClick={() => {
-                          this.setState({
-                            reason: '',
-                            note: '',
-                            checkedReasons: [],
-                            openReasons: [],
-                            selectedUsers: [],
-                          })
-                          popUpModal()
+                        onClick={(e) => {
+                          e.preventDefault()
+                          toggle()
+                          setNote('')
+                          setSelectedReason([])
+                    
+                          setSelectedUsers([])
+                          
                         }}
-                      />{' '}
-                      <TimeChunk>
-                        <div className="timer">{this.props.time}</div>
-                        <div className="cal">
+                      />
+                       <LiveGrid>
+                        <div style={{gridColumn: 1}}>
+            
+                <TypeOfClassList>
+                        <li className="radio">
+          <label>
+            <input
+              type="radio"
+              value="livestream"
+              checked={selectedType === "livestream"}
+              onChange={(e) => onValueChange(e)}
+            />
+             LiveStream 
+          </label>
+        </li>
+        <li className="radio">
+          <label>
+            <input
+              type="radio"
+              value="private"
+              checked={selectedType === "private"}
+              onChange={(e) => onValueChange(e)}
+            />
+            Private Class
+          </label>
+        </li>
+        <li className="radio">
+          <label>
+            <input
+              type="radio"
+              value="personal"
+              checked={selectedType === "personal"}
+              onChange={(e) => onValueChange(e)}
+            />
+            Personal Scheduling
+          </label>
+        </li>
+                      
+                          
+                        </TypeOfClassList>
+                        
+                         <TimeChunk> <div className="timer"><img style={{paddingRight: '5px'}} src="../static/img/alarm-clock.ico" />{selectedTime}</div>    
+                  <div className="cal">
                           <div className="cal__item month">
-                            {format(this.props.date, 'MMMM, YYYY')}
-                          </div>{' '}
-                          <div className="cal__item day">
-                            {format(this.props.date, 'Do')}
+                            {format(new Date(selectedDate), 'MMM yyyy')}
                           </div>
-                        </div>{' '}
+                          <div className="cal__item day first-one">
+                            {format(new Date(selectedDate), 'dd')}
+                          </div>
+                          <div className="cal__item day">
+                            {format(new Date(selectedDate), 'eeee')}
+                          </div>
+                        </div>
+                              
                       </TimeChunk>
-                      <User>
-                        {({ data: { authenticatedUser } }) => {
-                          return (
-                            <UserSearch
-                              removeUserSearch={this.removeUserSearch}
-                              handleUserSearch={this.handleUserSearch}
-                              user={authenticatedUser}
-                              selectedUsers={this.state.selectedUsers}
-                            />
-                          )
-                        }}
-                      </User>
-                      <>
-                        <Ul>
-                          {this.state.reasons.map((reason, i) => {
-                            return (
-                              <Fragment key={reason.id + 'key'}>
-                                <label htmlFor={reason.id}>
-                                  <div className="line">
-                                    <ReasonSlide
-                                      pose={
-                                        openReasons.includes(i)
-                                          ? 'open'
-                                          : 'closed'
-                                      }
-                                    >
-                                      <input
-                                        readOnly
-                                        name={reason.id}
-                                        onClick={(e) =>
-                                          this.handleReasonChange(e, i)
-                                        }
-                                        style={{
-                                          background: `${reason.color}`,
-                                        }}
-                                      />
-                                    </ReasonSlide>
-                                  </div>
-                                  <ReasonName
-                                    style={{
-                                      color: openReasons.includes(i)
-                                        ? `${reason.color}`
-                                        : '',
-                                    }}
-                                  >
-                                    {' '}
-                                    {reason.name}
-                                  </ReasonName>{' '}
-                                </label>
-                              </Fragment>
-                            )
-                          })}
-                        </Ul>
-                      </>
-                      <label htmlFor="note">
+             
+               
+                      </div>  
+                       <div style={{gridColumn: 2, textAlign: 'center'}}>             
+ 
+                </div>
+                </LiveGrid>
+                      <LiveGrid>
+                        <div style={{gridColumn: 1, margin: '30px 0 20px'}}>
+              
+                    <Select
+                      className="basic-single"
+                      classNamePrefix="select"
+                      type="select"
+                      value={selectedReason}
+                      isClearable={true}
+                      placeholder="Select a Class"
+                      onChange={(e) => handleSelectedOption(e)}
+                  
+                      isSearchable={true}
+                      name="reason"
+                      options={reasons}
+                    /></div>
+                    
+                      <div style={{gridColumn: 2, margin: '30px 0 20px'}}>
+             
+                    <input
+                      className="alt-title"
+                      placeholder=" Or Create a One Time Title Here"
+                      disabled={selectedReason}
+                      value={altTitle}
+                 
+                  
+                      onChange={(e) => setAltTitleHandler(e)}
+                      
+                 
+                      name="alternateTitle"
+        
+                    /></div>
+                    </LiveGrid>
+                    <div style={{margin: 0 , transform: 'translateY(-10px)'}} >
+                    <span  onClick={() => addDescriptionhandler()} style={{ cursor: 'pointer' }} >+ click to add custom description</span></div>
+                    {addDescription && <LiveGrid><textarea  value={note} onChange={setNoteHandler} style={{gridColumn: '1/3', height: '70px'}}></textarea></LiveGrid>}
+                    <div  >
+                    <p
+                      style={{
+                        paddingTop: '10px',
+                        transform: 'translateY(10px)',
+                        textTransform: 'uppercase',
+                      }}
+                    >
+                      Add Desired Search Tags
+                    </p>
+                    <MultiTag
+                      removeTagsSearch={removeTagsSearch}
+                      selected={selectedTags}
+                      handleTagsSearch={handleTagsSearch}
+                      tagsId={tagsId}
+                    /></div>
+                      {/* <label htmlFor="note">
                         Extra Notes:
                         <StyledTextArea
                           name="note"
                           type="text"
-                          value={this.state.note}
-                          onChange={this.handleChange}
+                          value={note}
+                          onChange={handleChange}
                         />
-                      </label>
+                      </label> */}
                       <SickButton disabled={tooShort} type="submit">
                         Schedule Live Workout
                       </SickButton>
                     </form>
-                  )
-                }}
-              </Mutation>
-            </ModalShell>,
-          ]}
-        </PoseGroup>
-      </Wrap>
+                    </ModalContent>
+            </ModalShell>  
+              </Wrap>
+          
+ </Portal> 
+  } </AnimatePresence>
+     
     )
-  }
+  
 }
 
 export default Modal
-export { CREATE_APPOINTMENT_MUTATION }
+export { CREATE_CLASS_MUTATION }
+
+
+
+   
+   
+   
+
+ 

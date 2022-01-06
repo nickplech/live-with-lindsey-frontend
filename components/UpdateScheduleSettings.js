@@ -15,7 +15,6 @@ const REASONS_QUERY = gql`
     allReasons {
       id
       name
-    
       classDescription
       classLength
     }

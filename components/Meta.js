@@ -7,10 +7,10 @@ const Meta = () => (
     <link rel="shortcut icon" href="/static/img/fulllogo.svg" />
     <link rel="stylesheet" type="text/css" href="/static/nprogress.css" />
     
-    <title>Live with Lindsey</title>
+    <title>Lindsey Harrod Fitness</title>
     <meta
       name="description"
-      content="Lindsey Harrod's Live Stream Workouts + On-Demand fitness library"
+      content="Live Stream + On-Demand Workouts by Lindsey Harrod. Build healthy habits, routines and body anywhere you have internet access"
     ></meta>
     {/* <script src="https://cdn.attn.tv/lindseyharrod/dtag.js"></script> */}
   </Head>

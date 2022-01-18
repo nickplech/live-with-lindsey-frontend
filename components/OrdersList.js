@@ -72,13 +72,13 @@ const Inner = styled.div`
  
 `
 const Img = styled.img`
-    height: 50px;
-    width:50px;
+   
 `
 const OrderUl = styled.ul`
   display: grid;
-  grid-gap: 1rem;
+  grid-gap: 2rem;
   grid-template-columns: repeat(auto-fit, 1fr);
+
   padding: 0;
 `
 function OrderCount({ userId, page }) {
@@ -117,20 +117,24 @@ function OrdersList({ userId, page, pages, count }) {
 
   return (
     <Inner>
-      <Form>
-        <fieldset>
-          {allOrders.length === 0 ? (
-            <h2>Completed Orders: 0</h2>
+      <Form>    <fieldset>
+
+     
+          <Pagination count={count} pages={pages} page={page} /> {allOrders.length === 0 ? (
+            <h2>Total Orders: 0</h2>
           ) : (
+            <>
+           
             <h2>
-              Completed Orders:{' '}
+                   
+             Currently Showing:{' '}
               {currentCount +
                 ' ' +
                 '—' +
                 ' ' +
                 `${lastPage ? count : endOfCountRange}`}
-            </h2>
-          )}
+            </h2>   </>   
+          )} 
           <OrderUl>
             {allOrders.map((order) => (
               <OrderItemStyles key={order.id}>
@@ -160,7 +164,8 @@ function OrdersList({ userId, page, pages, count }) {
                           return(
                           <Img
                             key={item.id}
-                  
+                            height="50"
+                            width="auto"
                             src={`../static/img/classbackgrounds/backsplashfinal/${cleanName}.jpg`}
                             alt={item.title}
                           />

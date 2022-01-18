@@ -13,7 +13,7 @@ const Wrap = styled.div`
   
   
   video { 
-  width: 400px;    height: auto;
+  width: 500px;    height: auto;
     border-radius: 25px;
   }
   
@@ -70,7 +70,7 @@ const LiveWithLindseyVideoText = () => (
         <defs>
         <mask id="mask" x="0" y="0" width="100%" height="100%" >
           <rect x="0" y="0" width="100%" height="100%" />
-        <text x="72"  y="50">LIVE WITH</text>
+        <text x="100"  y="50">ONDEMAND</text>
           </mask>
       </defs>
      <rect x="0" y="0" width="100%" height="100%" />

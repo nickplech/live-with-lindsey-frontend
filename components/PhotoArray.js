@@ -1,7 +1,7 @@
 import React from 'react'
 import styled, {keyframes} from 'styled-components'
 import { motion } from 'framer-motion'
- 
+ import { OnDemandLogo } from './OnDemandLogo'
 const BlackAndWhite = styled.section`
   display: flex;
   flex-direction: column; width: 100%;
@@ -27,14 +27,14 @@ letter-spacing: 2px;
     margin: 0;  
     line-height: 30px;
     user-select: none; 
+      /* text-shadow: 0 0 110px #f8b0b0; */
     cursor: default; font-size: 37px;
-    &:hover {
+    /* &:hover {
       transition: 0s;
       color: rgba(255,215,212,.5);
   
-      text-shadow: 0 0 110px #f8b0b0;
  
-    }
+    } */
   }
  .ani {
   &:nth-of-type(even) {

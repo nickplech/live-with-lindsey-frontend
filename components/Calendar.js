@@ -369,13 +369,13 @@ grid-template-columns:350px 1fr ;
 grid-template-rows:330px 1fr;
 `
 const Details = styled.div`
-  color: white;
+ 
   display: flex;
   width: 180px;
-  justify-content: flex-end;
-  padding-right: 10px;
-  font-family: 'Comfortaa';
-  background: #fff;
+ 
+
+  font-family: 'Bison';
+
   margin: 0 0;
 `
 const Names = styled.span`
@@ -388,8 +388,23 @@ const Names = styled.span`
   margin: 5px 5px;
 `
 const Flex = styled.div`
-  display: flex;
-  flex-flow: row wrap;
+  display: flex;  font-family: 'Comfortaa';
+  flex-flow: row;  background: #fff;
+  justify-content: center;
+  width: 70%;
+  margin: 0 auto;
+  align-items: center;  height: 60px;
+  margin-bottom: 10px;
+  p {
+  margin: 0 auto;
+
+
+  }
+ 
+  background:    #C68DFF ;
+   &:nth-child(1) {
+  background: #FFC68D ;
+  }
 `
 const Timez = styled.h3`
   color: white;
@@ -611,6 +626,9 @@ function CalendarStats()  {
 //  const [loading, setLoading] = useState(false)
    const [date, setDate] = useState(startOfDay(new Date()))
    const [appointmentsState, setAppointmentsState] = useState([])
+   const [dailyTotal, setDailyTotal] = useState(null)
+   const [weeklyTotal, setWeeklyTotal] = useState(null)
+   const [monthlyTotal, setMonthlyTotal] = useState(null)
     const [slots, setSlots] =  useState([])
     const [selectedAppointment, setSelectedAppointment] = useState(null)
     const [appointmentIndices, setAppointmentIndices] = useState()
@@ -678,30 +696,7 @@ setSelectedAppointment()
  
     
  
-    let selectedAppointmentViewer
-
-    if (selectedAppointment) {
-      selectedAppointmentViewer = (
-        <SingleAppointment>
-          <Timez>{format(new Date(selectedAppointment.date), 'hh:mm a')}</Timez>
-          <Datez>{format(new Date(selectedAppointment.date), 'eeee MM dd, yyyy')}</Datez>
-          <Flex>
-            {selectedAppointment.user.map(c => (
-              <Names key={c.id}>{c.fullName} </Names>
-            ))}
-          </Flex>
-          <Details>Class Type</Details>
-          <Flex>
-            {selectedAppointment.reason.map(r => (
-              <Reasonz key={r.id}>{r.name} </Reasonz>
-            ))}
-          </Flex>
-        </SingleAppointment>
-      )
-    } else {
-      selectedAppointmentViewer = null
-    }
-
+ 
 
     const { data, loading} = useQuery(TODAYS_APPOINTMENTS_QUERY, {variables: { date:date }})
    
@@ -721,7 +716,27 @@ if (loading ) return <Loader />
                   calendarType="US"
                   returnValue="start"
                 />
-                {selectedAppointmentViewer}
+               <SingleAppointment>
+           
+  
+          <Details>Daily{dailyTotal}</Details>
+          <Flex>
+          <p>Live{}</p> 
+          <p>Private{}</p>
+
+          </Flex>
+          <Details>Weekly{weeklyTotal}</Details>
+            <Flex>
+            <p>Live{}</p> 
+          <p>Private{}</p>
+          </Flex>
+          <Details>Monthly {monthlyTotal}</Details>
+          <Flex>
+          <p>Live{}</p> 
+          <p>Private{}</p>
+          </Flex>
+        
+        </SingleAppointment>
               </StatsDisplay>
               { loading ? <Loader/> :
               <SingleDay

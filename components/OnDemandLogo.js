@@ -3,7 +3,7 @@ import styled from 'styled-components'
 
 import { motion, useMotionValue, useTransform } from "framer-motion";
 
-export function Example() {
+export default function OnDemandLogo() {
     const x = useMotionValue(200);
     const y = useMotionValue(200);
 
@@ -23,20 +23,22 @@ export function Example() {
                 width: '100vw',
                 height: '100vh',
                 display: "flex",
+                position: 'absolute',
                 placeItems: "center",
                 placeContent: "center",
-                borderRadius: 10,
+ 
                 backgroundColor: "rgba(255, 255, 255, 0.05)",
-                perspective: 400
+                perspective: 800
             }}
             onMouseMove={handleMouse}
         >
-            <motion.div
+            <motion.img
+               src="../static/img/vodheaderblur.png"
                 style={{
-                    width: 150,
-                    height: 150,
-                    borderRadius: 30,
-                    backgroundColor: "#fff",
+                    width: 600,
+                    height: 'auto',
+                
+                    backgroundColor: "transparent",
                     rotateX: rotateX,
                     rotateY: rotateY
                 }}

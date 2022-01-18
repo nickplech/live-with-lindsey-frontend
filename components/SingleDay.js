@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, {useState, useMemo, useEffect} from 'react'
 import styled from 'styled-components'
 import {Data_15} from './Calendar'
 import Error from './ErrorMessage'
@@ -40,7 +40,8 @@ const ALL_REASONS_QUERY = gql`
     allReasons {
       id
       name
-      color
+  
+      classLength
     }
   }
 `
@@ -255,7 +256,7 @@ function SingleDay ({slots,appointments,handleSelectedAppointment, appointmentIn
 setTime(time)
  
   }
-
+ 
     // const appointmentsArr = appointments &&  appointments.map((appointment) => {
     //   return appointment
     // })
@@ -310,17 +311,27 @@ setTime(time)
         //    ]}
         //   >
        const today = new Date()
-    
      
+      //  useEffect(() => {
+         
+
+      //  })
+      //   setReasons(optionList)
+     
+      //  }, [])
+
+   
     const {data, loading} = useQuery(ALL_REASONS_QUERY)
-    if (loading) return <p>loading...</p>
+    if (loading) return <Loader />
     if (!data) return null
  
-      const optionList = data.allReasons && data.allReasons.map((reason, i) => {
+const {allReasons} = data
+              const optionList = allReasons && allReasons.map( reason => {
          const value = reason.id
          const label = reason.name
          return { value, label }
-       })
+               } )
+
     return (
       
             <>
@@ -399,15 +410,16 @@ setTime(time)
                   </DayGrid>
                 </MainDiv>
               </DayView>
-              {open && (
+             
         <Modal selectedDate={date}
                 selectedTime={time}
                 setTime={setTime}
                reasons={optionList} 
+             
                open={open} 
                toggle={setOpen} />
         
-      )}
+     
             </>
     
     )

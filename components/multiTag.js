@@ -20,7 +20,7 @@ const DropDown = styled.div`
   width: 100%;
   z-index: 5;
   border: 1px solid ${(props) => props.theme.lightgrey};
-  max-height: 400px;
+  max-height: 200px;
   overflow-y: scroll;
   z-index: 1000;
 `

@@ -251,7 +251,7 @@ return(
                 
             by <span>Lindsey Harrod </span>  </h1>
                   <Link href={{ pathname: '/signup' }}>
-            <SignMeUp>Click Here to Get Started for Free!</SignMeUp>
+            <SignMeUp>Click to Get Started for Free!</SignMeUp>
           </Link>
 
             <div className="main-text">

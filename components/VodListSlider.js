@@ -297,24 +297,45 @@ const Tite = styled.h1`
 `
 
 function MenuItem( {videoOnDemand, subscription} ){
+  const tiltRef = useRef()
 
-
+  useEffect(() => {
+    const tiltNode = tiltRef.current
+    const options = {
+    max: 3,
+    scale: 1.01,
+    speed: 100,
+    glare: true,
+    transition: true,
+    'max-glare': 0.4,
+  }
+    VanillaTilt.init(tiltNode, options)
+    return () => tiltNode.vanillaTilt.destroy()
+  }, [])
+ 
   return (
   
-    <>  
-
+    <>  <div
+      style={{
+        transformStyle: 'preserve-3d',
+        transform: 'perspective(1000px)',
+      }}
+      ref={tiltRef}
+    
+    >
+ 
       <Item subscription={subscription} videoOnDemand={videoOnDemand}></Item>
-
+ 
      
       {/* <p className="the_date">Live on: <span>{format(new Date(videoOnDemand.date), 'MMM dd, yyyy')}</span></p> */}
    
-   <Tags>
+    </div> <Tags>
         {videoOnDemand.tags.map((tag, i) => {
           return <span key={tag.name}>{tag.name}</span>
         })}
       </Tags> </>
-
- ) } 
+  )
+   } 
 
 
 function  VodListSlider({id, user}) {

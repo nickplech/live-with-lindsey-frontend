@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import Link from 'next/link'
 import {format} from 'date-fns'
 import React, { useRef} from 'react'
@@ -144,9 +145,9 @@ font-size: 18px;
 
 `
 const Play = styled.img`
-    height:80px;
+    height:40px;
     padding: 0px;
-    width:80px;
+    width:40px;
     display: flex;
     z-index: 99000;
 
@@ -154,7 +155,7 @@ const Play = styled.img`
     margin: 0 auto;
     /* opacity: 0.8; */
     background: transparent;
-    border-radius: 50%;
+  
     /* background: ${(props) => props.theme.second}; */
     opacity: ${(props) => (props.isOpen ? 1 : 0)};
     cursor: pointer;
@@ -202,7 +203,7 @@ export default function Item({ videoOnDemand, subscription }) {
             }}
           >
       
-              <Play src="../static/img/play-button.svg"  style={{ transform: 'translateZ(80px)' }}
+              <Play src="../static/img/playbutt.svg"  style={{ transform: 'translateZ(80px)' }}
               className="image1"
               title="play video"/>
     

@@ -190,15 +190,21 @@ const TheItem = styled.div`
 `
 const MostRecent = styled(motion.div)`
      
-line-height: 170px; opacity: .5;
+line-height: 170px; opacity: .7;
 color: ${props => props.theme.second};
-text-align: left;
+text-align: right;
 position: absolute;
-margin-top: -120px;
-margin-left: 260px;
-font-size: 60px;
-width:400px;
  
+right: 55px;
+font-size: 50px;
+width:400px;
+
+    /* span {
+      -webkit-text-fill-color: transparent;
+  -webkit-background-clip: text;
+    background-image: linear-gradient(170deg, #f8b0b0, #ffd7d4);
+    background-clip: text;
+    } */
 `
 const Play = styled.img`
   height: 60px;
@@ -228,20 +234,22 @@ opacity: 1;
   }
 `
 const Img = styled.div`
+position: relative;
+z-index: 0;
   transform: 
   perspective(1000px)
     rotateX(16deg)
     rotateY(-8deg)
     rotateZ(1deg)
-    skew(-2deg);
-    text-shadow: 26px 4px 20px rgba(0,0,0,0.07);
+    skew(-2deg, 0deg);
+    /* text-shadow: 3px 2px 2px rgba(0,0,0,0.34); */
     `
 const ParallaxImage = ({ src,  children, offset = 50, ...style}) => {
   const [elementTop, setElementTop] = useState(0)
   const ref = useRef(null)
   const [clientHeight, setClientHeight] = useState(0)
   const { scrollY } = useViewportScroll()
-  const y = useTransform(scrollY, [200, 40], [0, 120], { clamp: true})
+  const y = useTransform(scrollY, [-220, 350], [ 0, -425], { clamp: true})
   // const y = useTransform(scrollY, [elementTop, elementTop + 1], [0, -1], {
   //   clamp: false,
   // })
@@ -267,16 +275,17 @@ function MostRecentVideo(props) {
   if (loading) return <Loader />
   if (!data) return null
   const [mostRecentVod] = data.allVideoOnDemands
-  console.log(mostRecentVod)
+  console.log(mostRecentVod.stillAvailable)
   return (
     <Wrap>
       <div className="right">
-      <ParallaxImage><Img>Most Recent</Img></ParallaxImage>
+     
       <TheItem
           isOpen={isOpen}
           thumbnailUrl={mostRecentVod.thumbnailUrl}
           videoOnDemand={mostRecentVod}    
         >
+           
           <Link
             href={{
               pathname: '/item',
@@ -292,7 +301,7 @@ function MostRecentVideo(props) {
 
           {/* <img  className="ribbon" src="../static/img/mostrecent2.svg" /> */}
         </TheItem>{' '}
-     
+     <ParallaxImage><Img><span>Most Recent</span></Img></ParallaxImage>
         
       </div>
       <div className="left">
@@ -305,6 +314,7 @@ function MostRecentVideo(props) {
       
        <span><img style={{   marginLeft: '15px' }} src="../static/img/clock.svg" height="20" width="20" alt="class length icon" />  <h3>60 mins</h3></span>
 </div>
+<div>{mostRecentVod.item && mostRecentVod.item.stillAvailable}</div>
       </div>
     </Wrap>
   )

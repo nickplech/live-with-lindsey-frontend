@@ -1,4 +1,5 @@
 import PhotoArray from '../components/PhotoArray'
+import Loader from '../components/Loader'
 import Footer from '../components/Footer'
 import { useUser } from '../components/User'
 import MostRecentVideo from '../components/MostRecentVideo'
@@ -24,7 +25,7 @@ const VOD = (props) => {
   const me = useUser()
 
 const {data, loading, error} = useQuery(ALL_TAG_CATEGORY_QUERY)
-if (loading) return <p>loading...</p>
+if (loading) return <Loader />
 if (!data) return null
 console.log(data.allTags.name)
   return (

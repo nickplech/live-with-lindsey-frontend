@@ -11,14 +11,19 @@ import Error from './ErrorMessage'
  
 const USER_DOWNLOADS_QUERY = gql`
   query USER_DOWNLOADS_QUERY($id: ID) {
-    allPublicUpdates( where:  { user_some: { id_in: $id }  }) {
+    allPublicUpdates(  where: { AND: [{ challenge: { user_some: { id: $id }} }, { file_not: null }] }) {
       id
-
-    
-
- 
-      user {
+      file {
         id
+        filename
+        mimetype
+        publicUrl
+      }
+      challenge {
+        id
+        user {
+          id
+        }
       }
     }
   }
@@ -57,20 +62,22 @@ const Inner = styled.div`
 const OrderUl = styled.ul`
   display: grid;
   grid-gap: 1rem;
-  grid-template-columns: repeat(auto-fit, 1fr);
+  grid-template-columns: 1fr 1fr ;
+  grid-auto-rows: 1fr;
   padding: 0;
+  list-style: none;
 `
 const DownloadStyles = styled.li`
- 
+ height: 200px;
+ width: 100px;
+ background: blue;
 padding: 0;
 `
 function MyDownloads({ userId }) {
  
  
  
-  const { data, loading, error } = useQuery(USER_DOWNLOADS_QUERY, {
-    variables: { id: userId}
-  })
+  const { data, loading, error } = useQuery(USER_DOWNLOADS_QUERY, {variables: {id: userId}} )
   if (loading)
     return (
       <Inner>
@@ -103,39 +110,21 @@ function MyDownloads({ userId }) {
             <h2>Available Downloads: 0</h2>
           ) : (
             <h2>
-              Available Downloads:{' '}
-              {/* {currentCount +
-                ' ' +
-                '—' +
-                ' ' +
-                `${lastPage ? count : endOfCountRange}`} */}
+              Available Downloads: {allPublicUpdates.length}
+             
             </h2>
           )}
           <OrderUl>
-            {allPublicUpdates.map((updateDownload) => (
-              <DownloadStyles key={updateDownload.id}>
-                <Link
-                  href={{
-                    pathname: '/order',
-                    query: { id: updateDownload.id },
-                  }}
-                >
+            {allPublicUpdates.map((publicUpdate) => (
+              <DownloadStyles key={publicUpdate.id}>
+                
                   <a>
                     
-                      <p>
-                        {formatDistance(new Date(updateDownload.createdAt), new Date(), {
-                          addSuffix: true,
-                        })}
-                      </p>
-                      <p>
-                        {updateDownload._recordsMeta.count} Item
-                        {updateDownload._recordsMeta.count === 1 ? '' : 's'}{' '}
-                      </p>
-                       
+             
                    
                
                   </a>
-                </Link>
+             
               </DownloadStyles>
             ))}
           </OrderUl>

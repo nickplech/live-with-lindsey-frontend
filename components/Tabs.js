@@ -162,7 +162,7 @@ class TabsContainer extends Component {
                 <TabTitleItem key={tab.title}>
                   {tab.title === 'profile' || tab.title === 'order history' || tab.title === 'downloads' ? (
                     <AccountTab
-                      key={tab.title}
+                   
                       onClick={this.onClick(tab)}
                       id={tab.id}
                       ref={(tabElement) => {
@@ -183,7 +183,7 @@ class TabsContainer extends Component {
                     </AccountTab>
                   ) : (
                     <TabAnchorItem
-                      key={index}
+                   
                       onClick={this.onClick(tab)}
                       id={tab.id}
                       ref={(tabElement) => {

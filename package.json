@@ -41,6 +41,7 @@
     "framer-motion": "^3.6.1",
     "graphql": "^15.4.0",
     "graphql-tag": "^2.10.3",
+    "gsap": "^3.9.1",
     "immutability-helper": "^3.0.1",
     "isomorphic-unfetch": "^3.0.0",
     "keen-slider": "^5.5.1",

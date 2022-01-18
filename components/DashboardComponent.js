@@ -659,7 +659,7 @@ function TodaysClasses({ items, id }) {
 </ClassList> 
 : 
 <Div>
-          <p className="smaller">Rest Day? You've earned it!</p>
+          <p className="smaller">Rest Day? You&apos;ve earned it!</p>
           <SubText>
             Still looking to sweat?
             <br /> Crush an

@@ -8,7 +8,7 @@ import styled from 'styled-components'
 import Error from './ErrorMessage'
 import ChartStats from './ChartStats'
 import { motion, AnimatePresence } from 'framer-motion'
- 
+import { persist } from '../lib/persist'
 
 
  
@@ -19,7 +19,12 @@ const  PUBLIC_UPDATE_QUERY = gql`
       title
       iconImg
       textContent 
- 
+      file {
+        id
+        filename
+        mimetype
+        publicUrl
+      }
     createdAt
 
        
@@ -223,20 +228,24 @@ transform: translate(0, 25px);
 
   `
    
-  const UpdateType = styled.span`
+  const UpdateType = styled.div`
    line-height: 13px;
    font-size: 16px;
    letter-spacing: 1px;
  padding: 0;
  position: absolute;
   margin: 0;
- 
+ display: flex;
  color:slategray;
  
  
   transform: translate(0, -20px);
  
- 
+ .newy {
+   font-size: 14px;
+   letter-spacing: 2px;
+   margin-left: 5px;
+ }
   `
   const SinceTime = styled.span`
   line-height: 13px;
@@ -254,7 +263,7 @@ color:slategray;
 
  `
 
-const ContentSection = ({textContent, createdAt}) => (
+const ContentSection = ({textContent, file,  createdAt}) => (
   <motion.div
     variants={{ collapsed: { scale: 1 }, open: { scale: 1 } }}
     transition={{ duration: .3 }}
@@ -262,17 +271,20 @@ const ContentSection = ({textContent, createdAt}) => (
   >
     
       <p style={{  padding: '0 15px'}} >{textContent}</p>
+    {file && <a style={{marginLeft: '15px', fontFamily: 'Bison', letterSpacing: '2px'}} className="content" href={file.publicUrl} download={file.filename} target="_blank"><strong>Download Attached Document</strong></a>}
       <p style={{  padding: '0 15px', fontSize: '12px'}}> Posted: {format(new Date(createdAt), 'MMM dd, yyyy hh:mm a')}</p>
-   
+    
   </motion.div>
 )
 function Accordian({i, expanded, setExpanded, update }){
   const isOpen = i === expanded
    const lowerCased = update.iconImg.toLowerCase()
+   const { id } = update
+  const mostRecentNew = persist('set', id, id )
   return(
-    <React.Fragment key={update.id}>
+    <React.Fragment key={id}>
  <MainBox>
-<UpdateType>   {update.iconImg}
+<UpdateType>  <span> {update.iconImg}</span> <span className="newy" style={{color: 'rgba(200,100,100,.65)'}}> *new*</span>  
 </UpdateType>
 
       <motion.header
@@ -301,7 +313,8 @@ function Accordian({i, expanded, setExpanded, update }){
             }}
             transition={{ duration: 0.8, ease: [0.04, 0.62, 0.23, 0.98] }}
           >
-         <ContentSection createdAt={update.createdAt} textContent={update.textContent} />
+         <ContentSection createdAt={update.createdAt} file={update.file} textContent={update.textContent} />
+       
           </motion.section>
         )}
       </AnimatePresence>
@@ -326,6 +339,12 @@ function Accordian({i, expanded, setExpanded, update }){
   })
   const weekEnds = endOfWeek(new Date())
 
+  // useEffect(() => {
+  //   if(!allPublicUpdates) return
+
+  //   const localUpdates = persist(get, )
+   
+  // }, [allPublicUpdates])
   const {data, loading, error} = useQuery(PUBLIC_UPDATE_QUERY)
 if (loading) return <p>loading...</p>
 if (error) return <Error error={error} />
@@ -333,7 +352,7 @@ if (!data) return null
   const {allPublicUpdates} = data
 
 
-    console.log(selectedButton)
+
  return (
  <StatContainer>
 {

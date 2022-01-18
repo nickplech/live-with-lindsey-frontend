@@ -9,7 +9,7 @@ const OrderItemStyles = styled.li`
   margin: 0 auto;
   transition: .3s;
   border: 1px solid ${props => props.theme.offWhite};
- 
+  box-shadow: 0 8px 8px -4px rgba(20,20,20,.2);
   h2 {
     border-bottom: 2px solid red;
     margin-top: 0;
@@ -18,14 +18,17 @@ const OrderItemStyles = styled.li`
   }
 
   .images {
-    display: grid;
-    grid-gap: 10px;
-    grid-template-columns: repeat(auto-fit, minmax(0, 1fr));
+    display: flex;
+    background:  rgba(0, 0, 0, 0.03);
+    flex-flow: row wrap;
     margin-top: 1rem;
+    width: 100%;
+    justify-content: flex-start;
     img {
-      height: 150px;
+      height: 100px;
       object-fit: contain;
-      width: 100%;
+      margin: 10px 10px;
+   width: auto;  box-shadow: 0 8px 8px -4px rgba(20,20,20,.2);
     }
   }
 
@@ -38,7 +41,7 @@ const OrderItemStyles = styled.li`
 const OrderMeta = styled.div`
 display: grid;
     grid-template-columns: repeat(auto-fit, minmax(20px, 1fr));
-    display: grid;
+ 
     grid-gap: 1rem;
     text-align: center;
     & > * {

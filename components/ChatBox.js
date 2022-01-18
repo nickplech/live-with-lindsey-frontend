@@ -258,7 +258,7 @@ function ChatBox({ itemId, messages }) {
     const val = value
     setContent(val)
   }
-console.log(chatMessages)
+ 
   const isEmpty = content.length < 1
   const tooLong = content.length > 160
 

@@ -16,20 +16,19 @@ const UPLOAD_VOD_VIDEO = gql`
   mutation UPLOAD_VOD_VIDEO(
     $name: String
     $description: String
-  
-$file: Upload
+    $url: String
   ) {
     uploadNewVideoOnDemand(
       name: $name
       description: $description
-   
-    file: $file
+      url: $url
     ) {
       id
-    
       description
       name
-      
+      # filename
+      # mimetype
+      # encoding
     }
   }
 `
@@ -42,24 +41,57 @@ const VideoUploadForm = () => {
    
  useEffect(() => {
     const uppy = new Uppy()
-    .use(Tus, { endpoint: 'http://localhost:3001/admin/api' })
-    .use(Webcam, { id: 'MyWebcam' })
+    .use(Tus, { endpoint: 'http://localhost:3001/admin/api/uploadvods' })
+    .use(Webcam, {
+      id: 'MyWebcam',
+      onBeforeSnapshot: () => Promise.resolve(),
+      countdown: false,
+      modes: ["video-audio", "video-only", "audio-only", "picture"],
+      mirror: true,
+      facingMode: "user",
+      locale: {
+        strings: {
+          // Shown before a picture is taken when the `countdown` option is set.
+          smile: "Smile!",
+          // Used as the label for the button that takes a picture.
+          // This is not visibly rendered but is picked up by screen readers.
+          takePicture: "Take a picture",
+          // Used as the label for the button that starts a video recording.
+          // This is not visibly rendered but is picked up by screen readers.
+          startRecording: "Begin video recording",
+          // Used as the label for the button that stops a video recording.
+          // This is not visibly rendered but is picked up by screen readers.
+          stopRecording: "Stop video recording",
+          // Title on the “allow access” screen
+          allowAccessTitle: "Please allow access to your camera",
+          // Description on the “allow access” screen
+          allowAccessDescription:
+            "In order to take pictures or record video with your camera, please allow camera access for this site.",
+        },
+      }})
     .use(ImageEditor, { id: 'MyImageEditor' })
  setUppy(uppy)
 
     return () => uppy.close()
   }, [])
 
+  const uppyUpload = async () => {
+   const res =  await uppy.on('complete', (result) => {
+      const url = result.successful[0].uploadURL
+      uppy.store.dispatch({
+        type: 'SET_VOD_URL',
+        payload: { url },
+      })
+      return url
+    })
+   await uploadNewVideoOnDemand({variables: { url: res, name: nameState,  description: descriptionState }})
+     
+  }
+
   useEffect(() => {
     if(uppy === null) return
-     uppy.on('complete', (result) => {
-    const url = result.successful[0].uploadURL
-    uppy.store.dispatch({
-      type: 'SET_VOD_URL',
-      payload: { url },
-    })
-    uploadNewVideoOnDemand({variables: { file: url, name: nameState,  description: descriptionState }})
-  })
+    uppyUpload()
+       
   }, [uppy])
 
 
@@ -72,7 +104,13 @@ const VideoUploadForm = () => {
 
 
   return (
-  
+    // <form onSubmit={() => {console.log("submitted baby")}} encType={'multipart/form-data'}>
+    // <input name={'video'} type={'file'} onChange={({target: { files }}) => {
+    //     const file = files[0]
+    //     file && uploadNewVideoOnDemand({ variables: { file: file } })
+    // }}/>{loading && <p>Loading.....</p>}</form>
+
+
       <div className="container">
 
            {uppy &&  <Dashboard
@@ -84,7 +122,7 @@ const VideoUploadForm = () => {
         height={350}
         metaFields={[
           { id: 'name', name: 'Name', placeholder: 'file name' },
-          { id: 'caption', name: 'Caption', placeholder: 'add description here' }
+          { id: 'description', name: 'description', placeholder: 'add description here' }
         ]}
         meta={{ type: 'video-on-demand' }}
         debug={ true}
@@ -95,7 +133,7 @@ const VideoUploadForm = () => {
           maxNumberOfFiles: 3,
           minNumberOfFiles: 1,
           allowedFileTypes: ['video/*'],
-          requiredMetaFields: ['caption'],
+      
         }}
     
         width={'100%'}

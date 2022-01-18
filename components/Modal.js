@@ -1,19 +1,22 @@
 import React, { useState, useEffect } from 'react'
-import { useMutation } from '@apollo/client'
+import { useLazyQuery, useMutation } from '@apollo/client'
 import gql from 'graphql-tag'
 import { format, addHours,startOfWeek, addMinutes, formatISO } from 'date-fns'
 import Select from 'react-select'
 import Error from './ErrorMessage'
 import { TODAYS_APPOINTMENTS_QUERY } from './Calendar'
-  
+import useForm from '../lib/useForm'
 import { createPortal } from 'react-dom'
  
 
 import { STREAMS_QUERY } from './ScheduledClasses'
 import UserSearch from './UserSearch'
 import MultiTag from './MultiTag'
-import { motion, AnimatePresence } from 'framer-motion'
-import styled, { keyframes } from 'styled-components'
+import { motion, AnimatePresence,  
+  AnimateSharedLayout,
+  useTransform,
+  layout, } from 'framer-motion'
+import styled from 'styled-components'
  
 
 // const ALL_REASONS_QUERY = gql`
@@ -26,7 +29,6 @@ import styled, { keyframes } from 'styled-components'
 //   }
 // `
 
-// Creates a portal outside the DOM hierarchy
 function Portal({ children }) {
   const modalRoot = document.getElementById('modal-root')  
   const [element] = useState(document.createElement('div'))  
@@ -44,16 +46,12 @@ function Portal({ children }) {
 
 const Wrap = styled.div`
  
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  position: relative;
-  width: 100%;  
+
  
 overscroll-behavior: none;
   height: 100%;
   pointer-events: ${(props) => (props.isVisible ? 'auto' : 'none')};
-  .shade {
+  
     grid-column: 1/3;
     grid-row: 1/3;
     position: fixed;
@@ -64,28 +62,32 @@ overscroll-behavior: none;
     bottom: 0;
     display: flex;
     z-index: 1000;
-  }
-
+   
+ 
+  justify-content: center;
+  align-items: center;
+ 
+  width: 100%;  
  
 `
 const ModalShell = styled(motion.div)`
- height:  550px;
+ 
  width: 90%;
  max-width: 700px;
  /* transform: translateY(-100px); */
  
     background-color: white;
-    position:absolute;              
+    position:relative;              
  
 border-radius:12px;
  
-    border-radius: 8px;
+  
     
     margin: 0 auto;
-margin-top: -700px;
-    padding: 20px;
+ 
+   
     z-index: 1001;
-    box-shadow: 1px 1px 5px 3px rgba(0, 0, 0, 0.3);
+ 
 
 `
 const ModalContent = styled(motion.div)`
@@ -105,12 +107,13 @@ const ModalContent = styled(motion.div)`
  textarea {
    resize: none;
    border-radius: 5px;
+   width: 100%;
    border: 1px solid lightgrey;
    font-family: 'Bison';
    font-size: 16px;
    letter-spacing: 2px;
    color: slategray;
-   padding: 10px;
+   padding: 5px;
  }
 `
 const CREATE_CLASS_MUTATION = gql`
@@ -136,6 +139,16 @@ const CREATE_CLASS_MUTATION = gql`
     }
   }
 `
+const REASON_QUERY = gql`
+  query REASON_QUERY($id: ID!) {
+    Reason(where: { id: $id }) {
+      id
+      name
+      classLength
+      classDescription
+    }
+  }
+`
 const EQUIPMENT_QUERY = gql`
   query EQUIPMENT_QUERY {
     allRequireds {
@@ -152,13 +165,16 @@ const EQUIPMENT_QUERY = gql`
  
 
 const TimeChunk = styled.div`
+grid-row: 2;
+grid-column: 1;
+padding-left: 20px;
   .cal {
     width: 130px;
     display: flex;
     flex-flow: column;
     justify-content: center;
     /* align-items: center; */
-    height: 120px;
+    height: 90px;
     border: none;
     box-shadow: 0px 10px 15px -1px rgba(20, 20, 20, 0.2);
     border-radius: 10px;
@@ -169,11 +185,12 @@ const TimeChunk = styled.div`
     position: absolute;
   }
   .cal__item.month {
-    /* transform: translateY(10px); */
+    transform: translateY(-65px);
     color: #ffffff;
-    font-size: 20px;
+    font-size: 24px;
     width: 130px;
-    top: 0;
+    line-height: 30px;
+   
     background: ${(props) => props.theme.second};
     text-transform: uppercase;
     border-radius: 10px 10px 0 0;
@@ -182,31 +199,23 @@ const TimeChunk = styled.div`
     font-size: 30px;
     position: relative;
     opacity: 1;
+    transform: translateY(-30px);
     color: slategray;
     align-self: center;
   
   }
   .first-one {
-     margin: 20px auto 15px;
+     margin: 0px auto 0px;
      font-size: 50px;
+     transform: translateY(10px);
     }
-  .timer {
-  
-    position: absolute;
-    transform: translateX(150px);
-    display: flex;
- font-size: 24px;
-    background: white;
-  color: slategray;
- 
- 
-    /* transform: rotate(-90deg); */
-  }
+
   .timer__item {
     position: absolute;
     top: 50%;
     left: 50%;
     background: #323a44;
+    margin-bottom: 10px;
     border-radius: 70px;
   }
   .timer__item.sec {
@@ -251,38 +260,28 @@ const TimeChunk = styled.div`
     text-transform: uppercase;
   }
 `
-const TypeOfClassList = styled.ul`
-position: absolute;
-transform: translateX(150px) translateY(15px);
-list-style: none;
-font-size: 20px;padding: 0;
-li {
-  margin-bottom: 5px;
-}
+const TypeOfClassList = styled.div`
+display: flex;
+background: ${props => props.theme.primary};
+color: slategray;
+width: 100%;
+border-radius: 5px 5px 0 0;
+ justify-content: center;
+
+ align-items: center;
+ text-align:center;
+ position: relative;
+font-size: 20px;line-height:  20px;padding: 5px;
+ div {
+   width: 33.3%; transition: 400ms;
+   cursor:pointer;
+   &:hover {
+     background: #f8b0b0;
+     color: white;
+   }
+ }
 `
-const StyledTextArea = styled.textarea`
-  padding: 3px 10px;
-  margin: 4px auto;
-  border-width: 2px;
-  border-style: solid;
-  position: relative;
-  display: flex;
-  justify-content: center;
-  box-shadow: 1px 1px 4px 3px rgba(0, 0, 0, 0.1);
-  color: grey;
-  background: white;
-  border-color: white;
-  padding: 5px;
-  width: 100%;
-  min-height: 80px;
-  font-size: 2rem;
-  outline: none;
-  resize: none;
-  border-radius: 10px;
-  &:focus {
-    outline: none;
-  }
-`
+ 
 
 const SickButton = styled.button`
   background: ${(props) => props.theme.second};
@@ -324,8 +323,8 @@ const SickerButton = styled.div`
   padding: 5px;
   border: 1px solid white;
   border-radius: 6px;
-  top: -60px;
-  right: -20px;
+  top: -50px;
+  right: 0px;
   justify-content: center;
   align-items: center;
   font-size: 2.5rem;
@@ -356,85 +355,158 @@ const SickerButton = styled.div`
   }
 `
  
-const Ul = styled.ul`
-  list-style: none;
-  padding: 0;
-  display: flex;
+const LiveGrid = styled.div`
+display: grid;
+width: 95%;
+margin: 0 auto;
+grid-template-columns: 30% 120px 1fr;
+grid-template-rows: 30px 1fr  ;
+grid-gap: 20px;
+.alt-title {
+  height: 42px;
+  width: 100%;
 
-  position: relative;
-  justify-content: flex-start;
-  span {
-    position: relative;
-  }
-  input {
-    background: none;
-    border: none;
-    grid-column: 1;
-    position: absolute;
-    text-align: center;
-    color: white;
-    padding: 0px 6px;
-    transition: 0.2s;
-    overflow-x: hidden;
-    border-radius: 50%;
-    font-size: 14px;
-    margin: 0px 0px 0 15px;
-    width: 17px;
-    height: 17px;
-    outline: none;
-    cursor: pointer;
-    z-index: 1000;
-  }
-  .line {
-    width: 45px;
-    grid-column: 1;
-    height: 17px;
-    margin-right: 20px;
-    align-self: center;
-    border-radius: 20px;
-    background: rgba(20, 20, 20, 0.2);
-    position: relative;
-    transform: translate(0px, 0px);
-    z-index: 500;
-  }
-`
- 
-function timeConvertor(time) {
-
-  let pm = time.includes('pm')
-  if (pm) {
-    time = time.split(':')
-    let hour = time[0] == '12' ? 12 : 12 + parseInt(time[0], 10)
-    let min = time[1]
-
-    return (hour + ':' + min).replace('pm', '')
-  }
-  if (!pm) {
-    time = time.split(':')
-    let hour = time[0]
-    let min = time[1]
-
-    return (hour + ':' + min).replace('am', '')
+  border: 1px solid rgba(20,20,20,.2);
+  border-radius: 5px;
+  &[disabled] {
+    opacity: 0.3;
+    background: lightgrey;
+    cursor: not-allowed;
   }
 }
-const  Modal = ({reasons, open, children, toggle, selectedDate, selectedTime}) => {
+.classLength {
+  grid-row: 3;
+  grid-column: 2;
+  width: 100%;
+  margin:  5px auto  ;
+}
+.classlength__menu {
+  transform: translateY(-20px);
  
+}
+ 
+`
+const Flip1 = styled(motion.div)`
+grid-column: 1;
+width: 100%;
+position: absolute;
+pointer-events: ${(props) => (props.flipped ? 'none' : 'auto')};
+`
+const Flip2 = styled(motion.div)`
+grid-column: 1;
+width: 100%;
+pointer-events: ${(props) => (props.flipped ? 'auto' : 'none')};
+`
+const ClassBubble = styled.div`
+grid-column: 2/4;
+grid-row: 1/3;
+display: grid;
+grid-template-columns: 1fr 1fr;
+grid-template-rows: 1fr 1fr;
+background: ${props => props.private === 'live' ? '#FFC68D' : '#C68DFF'  };
+${props => props.personal ? 'background: #a3ffc1' : null};
+border-radius: 10px;
+width: 95%;
+padding: 10px;
+transform: translateY(20px);
+height: 80%;    box-shadow: 0px 10px 15px -1px rgba(20, 20, 20, 0.2); 
+.bottom {
+  width: 100%;
+  grid-row: 2;
+  grid-column: 1/3;
+  display: flex;
+align-items: flex-end;
+ 
+height: 100%;
+  position: relative;
+}
+ .timer {
+ line-height: 30px;
+    position: relative;
+ 
+    display: flex;
+ font-size: 34px;
+ 
+  color: white;
+ 
+&:after {
+  position: relative;
+  content: '';
+  margin-left: 8px;
+ 
+  width: 4px;
+  height: 30px; 
+  background: #fff;
+}
+    /* transform: rotate(-90deg) #a3ffc1; */
+  }
+  .class-title {
+    color: white;
+    font-size: 30px;
+    margin:  0px;
+    line-height: 28px;
+grid-row: 1;
+grid-column: 1/3;
+  }
+  .class-length {
+ 
+    position: relative;
+    line-height: 30px;
+    display: flex;
+ font-size: 34px;
+ margin-left: 7px;
+  color: white;
+  }
+  .class-status {
+    position: absolute;
+    justify-self: flex-end;
+    letter-spacing: 2px;padding:2px 8px;
+    line-height: 15px;
+    transform: translate(-10px, -15px);
+    border-radius: 5px;
+    min-width: 60px;
+    grid-row: 1;
+    grid-column: 2;
+    color: white;
+    background: red;
+  }
+`
+ const typeList = ['Live', 'Private', 'Personal']
+
+
+
+  const variants = {
+    varientA: { opacity: 1, rotateX: 0 },
+    varientB: { opacity: 0, rotateX: 180 },   
+  }
+  const flipVarients = {
+    varientA: { opacity: 0, rotateX: 180 },
+    varientB: { opacity: 1, rotateX: 0 },
+  }
+
+
+const classLengthOptions = [{value: '5 Min', label: '5 Min'}, {value: '10 Min', label: '10 Min'},{value: '15 Min', label: '15 Min'}, {value: '20 Min', label: '20 Min'}, {value: '25 Min', label: '25 Min'}, {value: '30 Min', label: '30 Min'}, {value: '45 Min', label: '45 Min'},{value: '60 Min', label: '60 Min'},{value: '90 Min', label: '90 Min'}]
+const  Modal = ({ reasons, open, children, toggle, selectedDate, selectedTime}) => {
+   const [flipped, setFlipped] = useState(false)
 const [equipmentId, setEquipmentSearch] = useState('')
  
 const [tagsId, setTagsSearch] = useState('')
   const [addDescription, setAddDescription] = useState(false)
     const [selectedUsers, setSelectedUsers] = useState([])
     const [selectedReason, setSelectedReason] = useState(null)
+    const [selectedUser, setSelectedUser] = useState('')
     const [selectedEquipment, setSelectedEquipment] = useState([])
     const [selectedTags, setSelectedTags] = useState([])
-    const [selectedType, setSelectedType] = useState('livestream')
+    const [selectedType, setSelectedType] = useState('live')
     const [date, setDate] = useState(new Date())
-    const [time, setTime] = useState('')
+    const [classLength, setClassLength] = useState('45 min')
     const [priceState, setPriceState] = useState(20)
     const [altTitle, setAltTitle] = useState('')
+    const [note, setNote] = useState('')
+
     const [appLength, setAppLength] = useState( 60)
     const [isoDate, setIsoDate] = useState('')
-    const [note, setNote] = useState('')
+   
 
  
   const weekStarts = startOfWeek(new Date(), {
@@ -443,7 +515,7 @@ const [tagsId, setTagsSearch] = useState('')
 const [createNewClass, { error}] = useMutation(CREATE_CLASS_MUTATION,
 {variables: {
   date: date && formatISO(new Date(date)),
-  reason: selectedReason && selectedReason,
+  reason: altTitle ? altTitle : selectedReason,
   price: parseInt(priceState),
   equipment: selectedEquipment,
   tags: selectedTags,
@@ -464,26 +536,14 @@ const [createNewClass, { error}] = useMutation(CREATE_CLASS_MUTATION,
  function handleSelectedOption(e) {
   setSelectedReason(e)
 }
-const LiveGrid = styled.div`
-display: grid;
-width: 100%;
-grid-template-columns: 1fr 1fr;
-grid-gap: 20px;
-.alt-title {
-  height: 40px;
-  width: 100%;
-  border: 1px solid rgba(20,20,20,.2);
-  border-radius: 3px;
-  &[disabled] {
-    opacity: 0.5;
-    cursor: not-allowed;
-  }
-}
-`
+
+
+ 
+
 const addDescriptionhandler = () => {
   setAddDescription(prev => !prev)
 }
-const setNoteHandler =(e) => {
+const setNoteHandler = (e) => {
   e.preventDefault()
   const {value} = e.target
   setNote(value)
@@ -499,7 +559,9 @@ const setAltTitleHandler = (e) => {
 
     setSelectedUsers( selectedCopy)
   }
-
+function setFlippedHandler() {
+  setFlipped(prev => !prev)
+}
   const removeUserSearch = (item) => {
     const theUsers = selectedUsers.filter((i) => i !== item.id)
     setSelectedUsers(theUsers) 
@@ -527,27 +589,42 @@ const setAltTitleHandler = (e) => {
     const filteredEquip = selectedTags.filter((i) => i !== item.id)
     setSelectedTags(filteredEquip)
   }
-const onValueChange = (e) => {
-  const {value} =  e.target
-  setSelectedType(value)
+const onValueChange = (theType) => {
+   
+  setSelectedType(theType)
 }
-  
+ const [getReason] = useLazyQuery(REASON_QUERY, {variables: {id: selectedReason && selectedReason.value}})
+
+ async function handleReasonFetch() {
+const res = await getReason()
+const cLength = res.data.Reason.classLength
+
+setClassLength(cLength)
+ }
+
+ function handleClassLength(e) {
+   console.log(e)
+   const {value} = e
+   setClassLength(value)
+ }
+
+useEffect(() => {
+  if(!selectedReason) return
+  handleReasonFetch()
+ 
+}, [selectedReason])
+
     const tooShort = selectedReason && selectedReason.length == 0
-    const military = timeConvertor(time)
-    const splitMil = military.split(':')
-    const splitDate = date && date.toISOString()
-    const withHours = addHours(new Date(date), splitMil[0])
-    const withMins = addMinutes(new Date(withHours), splitMil[1])
-    const toIso = time.length && withMins.toISOString()
+ 
  
     return (
       
-        <AnimatePresence>{open &&  
-   <Portal>
-          <Wrap isVisible={open}>
+        <AnimatePresence >{open &&  
+   <Portal key='modal-portal'>
+          <Wrap key='modal-wrap' isVisible={open}  onClick={event => event.stopPropagation()}>
             <div  className="shade" />
             <ModalShell  
-  onClick={event => event.stopPropagation()}
+
             initial={{ opacity: 0, 
             y: 60, scale: 0.8 }}
             animate={{
@@ -565,87 +642,40 @@ const onValueChange = (e) => {
                          transition: { delay: 0.5 } }}>
                
                         <SickerButton
-                          onClick={() => {
-                         
-                            setNote('')
-                            setSelectedReason(null)
-                         
-                            setSelectedUsers([])
-                        toggle()
-                            
-                          }}
+                          onClick={toggle}
                         />
-                        <Error error={error} />
+                        {/* <Error error={error} /> */}
                   
                
                     <form
                       onSubmit={async (e) => {
                         e.preventDefault()
                         const res = await createNewClass()
-                  
-                        setNote('')
-                        setSelectedReason([])
-                        
-                        setSelectedUsers([])
-                 
                         await toggle()
                         // const appointment = await res.data.createNewClass
                         // await handleRehydrate(appointment)
                       }}
                     >
-                      <SickerButton
-                        onClick={(e) => {
-                          e.preventDefault()
-                          toggle()
-                          setNote('')
-                          setSelectedReason([])
-                    
-                          setSelectedUsers([])
-                          
-                        }}
-                      />
-                       <LiveGrid>
-                        <div style={{gridColumn: 1}}>
-            
-                <TypeOfClassList>
-                        <li className="radio">
-          <label>
-            <input
-              type="radio"
-              value="livestream"
-              checked={selectedType === "livestream"}
-              onChange={(e) => onValueChange(e)}
-            />
-             LiveStream 
-          </label>
-        </li>
-        <li className="radio">
-          <label>
-            <input
-              type="radio"
-              value="private"
-              checked={selectedType === "private"}
-              onChange={(e) => onValueChange(e)}
-            />
-            Private Class
-          </label>
-        </li>
-        <li className="radio">
-          <label>
-            <input
-              type="radio"
-              value="personal"
-              checked={selectedType === "personal"}
-              onChange={(e) => onValueChange(e)}
-            />
-            Personal Scheduling
-          </label>
-        </li>
+                    <TypeOfClassList>
+                      {typeList.map(theType => {
+                        const lowerCaseType = theType.toLowerCase()
+                        return <div key={theType} onClick={() => onValueChange(lowerCaseType)}>
+             {theType}
+          </div>
+         
+                        
+                      })}
+
+
                       
                           
-                        </TypeOfClassList>
+                        </TypeOfClassList> 
+                       <LiveGrid>
+                       
+            
+               
                         
-                         <TimeChunk> <div className="timer"><img style={{paddingRight: '5px'}} src="../static/img/alarm-clock.ico" />{selectedTime}</div>    
+                         <TimeChunk>   
                   <div className="cal">
                           <div className="cal__item month">
                             {format(new Date(selectedDate), 'MMM yyyy')}
@@ -660,16 +690,36 @@ const onValueChange = (e) => {
                               
                       </TimeChunk>
              
-               
-                      </div>  
-                       <div style={{gridColumn: 2, textAlign: 'center'}}>             
- 
-                </div>
-                </LiveGrid>
-                      <LiveGrid>
-                        <div style={{gridColumn: 1, margin: '30px 0 20px'}}>
-              
-                    <Select
+                
+                       <ClassBubble  personal={false} private={selectedType}>     
+                       <p className="class-status">Livestream</p>   
+                       <div className="bottom">
+                         <div className="timer">{selectedTime}</div> 
+                         <div className="class-length">{classLength && classLength}</div>
+                        </div>       
+                       <h3 className="class-title">{selectedReason ? selectedReason.label : altTitle ? altTitle : 'No Class Selected'}</h3>
+
+                   
+                </ClassBubble>
+            
+                    
+             
+                     <AnimateSharedLayout>
+                       <Flip1 
+                  key="selecter-for-reasons"
+                  flipped={flipped}
+                  transition={{
+                    type: 'spring',
+                    damping: 10,
+                    mass: 0.75,
+                    stiffness: 100,
+                  }}
+                  style={{position: 'relative', gridRow:3, gridColumn: 1, margin: '5px 0 0px', transform: 'perspective(600px)'}}
+                
+                  variants={variants}
+                  initial="varientA"
+                  animate={flipped  ? 'varientB' : 'varientA'}
+                > <Select
                       className="basic-single"
                       classNamePrefix="select"
                       type="select"
@@ -679,39 +729,66 @@ const onValueChange = (e) => {
                       onChange={(e) => handleSelectedOption(e)}
                   
                       isSearchable={true}
-                      name="reason"
+                      name="reason-flip"
                       options={reasons}
-                    /></div>
-                    
-                      <div style={{gridColumn: 2, margin: '30px 0 20px'}}>
-             
-                    <input
+                    /> </Flip1>
+                    <Flip2 
+                  variants={flipVarients}
+                  flipped={flipped}
+                  initial="varientA"
+                  animate={flipped ? 'varientB' : 'varientA'}
+                  layout
+                  transition={{
+                    type: 'spring',
+                    damping: 10,
+                    mass: 0.75,
+                    stiffness: 100,
+                  }}
+                  key="selecter-for-reasons-two"
+                  className="content"
+                  style={{
+                    transform: 'perspective(600px)',
+                    position: 'relative',
+                      gridRow:3, gridColumn: 1, margin: '5px 0 0px',
+                  }}
+                >   <input
+                style={{color: 'rgba(20,20,20,.8'}}
                       className="alt-title"
-                      placeholder=" Or Create a One Time Title Here"
+                      placeholder="type Custom Title"
                       disabled={selectedReason}
                       value={altTitle}
+                 id="altTitle"
+                        name="altTitle"
+                      onChange={setAltTitleHandler}
+                    />
+                   </Flip2>          
+                 </AnimateSharedLayout> 
                  
+                   <div  onClick={() => setFlippedHandler()} style={{ cursor: 'pointer',  transform: 'translate( 5px, 210px)',color: 'slategray', fontSize: '16px',   }} >{`${flipped ? 'Switch to Class Selector' : 'Switch to One-Time Title'}`} </div>
                   
-                      onChange={(e) => setAltTitleHandler(e)}
-                      
-                 
-                      name="alternateTitle"
-        
-                    /></div>
-                    </LiveGrid>
-                    <div style={{margin: 0 , transform: 'translateY(-10px)'}} >
-                    <span  onClick={() => addDescriptionhandler()} style={{ cursor: 'pointer' }} >+ click to add custom description</span></div>
-                    {addDescription && <LiveGrid><textarea  value={note} onChange={setNoteHandler} style={{gridColumn: '1/3', height: '70px'}}></textarea></LiveGrid>}
-                    <div  >
-                    <p
-                      style={{
-                        paddingTop: '10px',
-                        transform: 'translateY(10px)',
-                        textTransform: 'uppercase',
-                      }}
-                    >
-                      Add Desired Search Tags
-                    </p>
+                
+               
+                   
+                   
+             
+                      <textarea  id="note"
+                      name="note" style={{height: '70px',gridRow:3,gridColumn:3 , marginTop: '5px'}} value={note} onChange={setNoteHandler}></textarea>
+
+                      <Select 
+                       type="select"
+                        
+                       classNamePrefix="classlength"
+                      value={classLength}
+                       isClearable={false}
+                  placeholder={classLength}
+                       onChange={(e) => handleClassLength(e)}
+                   className="classLength"   
+                       name="classLength"
+                       options={classLengthOptions}
+                    />
+                   </LiveGrid>
+              
+                      <div  >  
                     <MultiTag
                       removeTagsSearch={removeTagsSearch}
                       selected={selectedTags}

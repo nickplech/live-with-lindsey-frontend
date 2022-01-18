@@ -336,55 +336,57 @@ const PopUp = styled.span`
   
     transition: 0.3s;
     &:after {
-      content: ${props => props.name + props.descriptionzzzzzz};
+      content:'  ${props => props.description}';
       position: absolute;
       left: 50%;
-      margin: auto;
-      top: -200%;
-      background: linear-gradient(to right, #4794ff, #3471ff);
-      display: block;
+      margin: 0 auto;
+      top: calc(100% + 10px);
+      background:rgba(250,250,250,1);
+      display: flex;
       padding: 7px 11px;
       text-align: center;
-      color: white;
+      color: slategrey;
       font-weight: 300;
-      white-space: nowrap;
-      border-radius: 3px;
+      border: 2px solid #ffd7d4;
+      border-radius: 6px;
+    width: 200px;
       opacity: 0;
       font-size: .7em;
+      line-height: 16px;
       //transform: translate(-50%, 5px);
       transform-origin: 50% 100%;
-      transform: translate(-50%) rotateX(-55deg);
+      transform: translate(-100%)  ;
       transition-duration: .3s;
       pointer-events: none;
-      box-shadow: 0 2px 13px 0 #3471ff94;
+      box-shadow: 0 2px 13px 0 rgba(20,20,20,.2);
     }
     &:before {
       content: '';
       position: absolute;
       width: 0;
       height: 0;
-      border: 10px solid #3471ff;
+      border: 10px solid  #ffd7d4;
       border-width: 8px 6px;
-      border-color: #387fff transparent transparent transparent;
+      border-color:   transparent transparent #ffd7d4 transparent;
       left: 0;
       right: 0;
       margin: auto;
-      top: -7px;
-      opacity: 0;
+      bottom: -10px;
+      opacity: 0;   box-shadow: 0 2px 13px 0 rgba(20,20,20,.2);
       transition-duration: .3s;
-      //transform: rotateX(-55deg);
+      transform: translate(-50%)   ;
     }
 
     &:hover {
       &:after {
         opacity: 1;
         //transform: translateX(-50%);
-        transform: translate(-50%) rotateX(0);
+        transform: translate(-50%) rotateX(0deg);
         pointer-events: all;
       }
 
       &:before {
-        opacity: 1;
+        opacity: 1;   transform: translate(-50%) rotateX(0deg);
       }
     }
     .theequipment {

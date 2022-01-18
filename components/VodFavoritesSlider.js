@@ -323,23 +323,48 @@ const Tite = styled.h1`
 `
 
 
-const MenuItem = React.memo( ({videoOnDemand, subscription} )  => {
- 
- return (
- 
- <>
-     <Item subscription={subscription} videoOnDemand={videoOnDemand}></Item>
 
+function MenuItem( {videoOnDemand, subscription} ){
+  const tiltRef = useRef()
+
+  useEffect(() => {
+    const tiltNode = tiltRef.current
+    const options = {
+    max: 3,
+    scale: 1.01,
+    speed: 100,
+    glare: true,
+    transition: true,
+    'max-glare': 0.4,
+  }
+    VanillaTilt.init(tiltNode, options)
+    return () => tiltNode.vanillaTilt.destroy()
+  }, [])
  
+  return (
   
-       <Tags>
-       {videoOnDemand.tags.map((tag, i) => {
-         return <span key={tag.name}>{tag.name}</span>
-       })}
-     </Tags>
+    <>  <div
+      style={{
+        transformStyle: 'preserve-3d',
+        transform: 'perspective(1000px)',
+      }}
+      ref={tiltRef}
+    
+    >
+ 
+      <Item subscription={subscription} videoOnDemand={videoOnDemand}></Item>
+ 
+     
+      {/* <p className="the_date">Live on: <span>{format(new Date(videoOnDemand.date), 'MMM dd, yyyy')}</span></p> */}
+   
+    </div> <Tags>
+        {videoOnDemand.tags.map((tag, i) => {
+          return <span key={tag.name}>{tag.name}</span>
+        })}
+      </Tags> </>
+  )
+   } 
 
-    </>
-) } )
 
 function VodFavoritesSlider({  user }) {
   const { data, error, loading } = useQuery(ALL_FAVORITES_QUERY, {

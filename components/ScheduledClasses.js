@@ -8,12 +8,12 @@ import { useQuery } from '@apollo/client'
 import ProductSlider from './ProductSlider'
  
 const STREAMS_QUERY = gql`
-  query STREAMS_QUERY($date: DateTime) {
-    allItems(where: { date_gte: $date, private_not: true }, orderBy: "date") {
+  query STREAMS_QUERY($date: DateTime, $classType: String) {
+    allItems(where: { date_gte: $date, classType: $classType }, orderBy: "date") {
       id
       price
       date
-      private
+      classType
      user {
        id
        cart {
@@ -130,7 +130,7 @@ function ScheduledClasses( ) {
  
 const minStarts = startOfMinute(new Date())
   const {  loading, data } = useQuery(STREAMS_QUERY, {
-    variables: { date:  formatISO(new Date(minStarts)) },
+    variables: { date:  formatISO(new Date(minStarts)), classType: 'LIVE' },
   })
   if (loading) return <Loader />
   // if (error) return <Error error={error} />

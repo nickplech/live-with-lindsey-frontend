@@ -258,7 +258,7 @@ const GoBacks = styled.div`
 // `
  
 const EquipmentList = styled.div`
-  display: flex;
+display: flex;
 grid-column: 2;
 justify-content: center;
 height: 100px;
@@ -266,130 +266,138 @@ align-items: center;
 grid-row: 2; margin-left: 0px;
 position: relative;
 transform: translateY(250px);
-  flex-flow: row;
+flex-flow: row;
 &:after {
-  content: 'EQUIPMENT';
-  color: lightgrey;
-  opacity:.4;
-  transform: translate(-10px);
-  font-size: 80px;
-  line-height:80px;
-  text-align: center;
-  width: 100%;
-  z-index: 0;
-  margin: 10px auto;
-  background: rgba(230,230,230,.8);
-  font-family: 'Bison';
-  position: absolute;
+content: 'EQUIPMENT';
+color: lightgrey;
+opacity:.4;
+transform: translate(-10px);
+font-size: 80px;
+line-height:80px;
+text-align: center;
+width: 100%;
+z-index: 0;
+margin: 10px auto;
+background: rgba(230,230,230,.8);
+font-family: 'Bison';
+position: absolute;
 }
-  .noequip {
-    font-size: 24px;
-    color: slategray;
-    opacity: .6;
-    margin-top: 0;
-    z-index: 100;
-    transform: translate(0, 5px);
-    padding-top: 0;
-    color: rgba(200,100,100,.8);
-    line-height: 24px;
-  }
-  .title-equip {
-    font-family: 'Bison';
-    line-height: 20px;
-    margin-bottom: 0;
-    margin-left: 15px;
-    transform: translateY(8px);
-    letter-spacing: 2px;
-    color: rgba(30, 30, 30, 0.8);
-    font-size: 20px;
-  }
- 
-  
-  p {
-    margin: 3px;
-  }
+.noequip {
+  font-size: 24px;
+  color: slategray;
+  opacity: .6;
+  margin-top: 0;
+  z-index: 100;
+  transform: translate(0, 5px);
+  padding-top: 0;
+  color: rgba(200,100,100,.8);
+  line-height: 24px;
+}
+.title-equip {
+  font-family: 'Bison';
+  line-height: 20px;
+  margin-bottom: 0;
+  margin-left: 15px;
+  transform: translateY(8px);
+  letter-spacing: 2px;
+  color: rgba(30, 30, 30, 0.8);
+  font-size: 20px;
+}
+
+
+p {
+  margin: 3px;
+}
 `
 const PopUp = styled.span`
-  cursor: pointer ;
-    margin: 15px 15px ;
- display: flex; 
- flex-flow: row;
- width: 100%;
- position: relative;
- z-index: 2000;
-    justify-content: center;
-    align-items: center;
-    line-height: 26px;
- border-radius: 50%;
- background: ${props => props.theme.second};
- width: 40px;
- height: 40px;
-    font-size: 21px;
-    font-family: 'Bison';
-    list-style: none;
-    color: white;
-
-  -moz-box-shadow: 
-    1px 1px 5px rgba(0, 0, 0, 0.2), 
-    inset 1px 1px 15px rgba(100, 100, 100, 0.15);
-  -webkit-box-shadow: 
-    1px 1px 5px rgba(0, 0, 0, 0.2),
-    inset 1px 1px 15px rgba(100, 100, 100, 0.15);
-  box-shadow: 
-    1px 1px 5px rgba(0, 0, 0, 0.2),
-    inset 1px 1px 15px rgba(100, 100, 100, 0.15);
-  
-    transition: 0.3s;
-    &:hover,
-    &:focus,
-    &:active {
-      background: ${(props) => props.theme.primary};
-    }
-    .theequipment {
-      box-shadow: 
- 
-    0 1px 4px rgba(0, 0, 0, 0.19), 0 4px 40px rgba(0, 0, 0, 0.09) ;
-    }
-`
-const Bubble = styled.div`
-display: none;
-  background: white;
-  width: 300px;
-  border-radius: 10px;
-  transform: translate(-50%, 0);
-  padding: 5px 10px;
-  position: absolute;
-  color: grey;
- z-index:3000;
-  flex-flow: column;
+cursor: pointer ;
+  margin: 15px 15px ;
+display: flex; 
+flex-flow: row;
+width: 100%;
+position: relative;
+z-index: 2000;
   justify-content: center;
-  border: 1px solid lightgray;
+  align-items: center;
+  line-height: 26px;
+border-radius: 50%;
+background: ${props => props.theme.second};
+width: 40px;
+height: 40px;
+  font-size: 21px;
+  font-family: 'Bison';
+  list-style: none;
+  color: white;
 
-  h4 {
-    margin: 0;
-    font-size: 24px;  
-    justify-self: center;
-    letter-spacing: 2px;
-    align-self: center;
-    font-family: 'Bison';
-    margin-left: 5px;
-    color: black;
+-moz-box-shadow: 
+  1px 1px 5px rgba(0, 0, 0, 0.2), 
+  inset 1px 1px 15px rgba(100, 100, 100, 0.15);
+-webkit-box-shadow: 
+  1px 1px 5px rgba(0, 0, 0, 0.2),
+  inset 1px 1px 15px rgba(100, 100, 100, 0.15);
+box-shadow: 
+  1px 1px 5px rgba(0, 0, 0, 0.2),
+  inset 1px 1px 15px rgba(100, 100, 100, 0.15);
+
+  transition: 0.3s;
+  &:after {
+    content:'  ${props => props.description}';
+    position: absolute;
+    left: 50%;
+    margin: 0 auto;
+    top: calc(100% + 10px);
+    background:rgba(250,250,250,1);
+    display: flex;
+    padding: 7px 11px;
+    text-align: center;
+    color: slategrey;
+    font-weight: 300;
+    border: 2px solid #ffd7d4;
+    border-radius: 6px;
+  width: 200px;
+    opacity: 0;
+    font-size: .7em;
+    line-height: 16px;
+    //transform: translate(-50%, 5px);
+    transform-origin: 50% 100%;
+    transform: translate(-100%)  ;
+    transition-duration: .3s;
+    pointer-events: none;
+    box-shadow: 0 2px 13px 0 rgba(20,20,20,.2);
   }
-  p {
-    font-size: 15px;
-    letter-spacing: 2px;
-    margin: 0;
-    margin-top: 5px;
-    line-height: 18px;
+  &:before {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 0;
+    border: 10px solid  #ffd7d4;
+    border-width: 8px 6px;
+    border-color:   transparent transparent #ffd7d4 transparent;
+    left: 0;
+    right: 0;
+    margin: auto;
+    bottom: -10px;
+    opacity: 0;   box-shadow: 0 2px 13px 0 rgba(20,20,20,.2);
+    transition-duration: .3s;
+    transform: translate(-50%)   ;
   }
-   ${PopUp}:hover & {
-display: flex;
+
+  &:hover {
+    &:after {
+      opacity: 1;
+      //transform: translateX(-50%);
+      transform: translate(-50%) rotateX(0deg);
+      pointer-events: all;
+    }
+
+    &:before {
+      opacity: 1;   transform: translate(-50%) rotateX(0deg);
+    }
   }
-  ${PopUp}:active & {
-display: flex;
-  }
-  ${PopUp}:focus & {
-display: flex;
+  .theequipment {
+    box-shadow: 
+
+  0 1px 4px rgba(0, 0, 0, 0.19), 0 4px 40px rgba(0, 0, 0, 0.09) ;
   }
 `
 const P = styled.div`
@@ -495,27 +503,20 @@ function SingleLiveClass({ id, userId }) {
         </DetailsLive>
         <EquipmentList>
             
-              {item &&  item.equipment.length === 0 ? <p className="noequip">No Equipment For this Workout</p> : 
-              item && item.equipment.map((equip) => {
-                  
-                return (
-                  <PopUp key={equip.name}>
-             <img className="theequipment" style={{borderRadius: '50%',  height: '45px', width: '45px'  }} src={equip.image.publicUrlTransformed} alt={equip.name} /> 
-                      <Bubble>
-                        <div style={{ display: 'inline-flex' }}>
-                          {' '}
-                          <img  height='40' src={equip.image.publicUrlTransformed} />
-                          <h4>{equip.name}</h4>
-                        </div>
+            {item &&  item.equipment.length === 0 ? <p className="noequip">No Equipment For this Workout</p> : 
+            item && item.equipment.map((equip) => {
+                
+              return (
+          
+                <PopUp description={equip.description} name={equip.name} key={equip.name}>
+           <img className="theequipment" style={{borderRadius: '50%',  height: '45px', width: '45px'  }} src={equip.image.publicUrlTransformed} alt={equip.name} /> 
+                
+                 </PopUp>
 
-                        <p>{equip.description}</p>
-                      </Bubble>
-                    </PopUp>
-                 
-                )
-              })}
-           
-          </EquipmentList>
+              )
+            })}
+         
+        </EquipmentList>
       </Wrap>
       <ShareButtons classId={id}/>
       <Footer/>

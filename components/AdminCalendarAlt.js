@@ -13,7 +13,7 @@ const STREAMS_ADMIN_QUERY = gql`
       price
       date
       name
-      private 
+      classType 
       status
     
       stillAvailable
@@ -298,7 +298,7 @@ function AdminCalendarAlt() {
       {passedArray.map((item, i) => {
              const test = format(new Date(item.date), 'eeee - M/dd | h:mm aa')
         return (
-          item.private ? <PrivateWorkout key={item.id}>        
+          item.classType === 'PRIVATE' ? <PrivateWorkout key={item.id}>        
             < div className="middle"><div className="title">{item.private && item.user[0].firstName + ' ' + item.user[0].lastName + ' ' + item.user[0].businessName}</div> <div >{test}</div>
           </div>
             <Link

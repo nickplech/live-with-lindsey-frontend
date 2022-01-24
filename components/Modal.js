@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from 'react'
 import { useLazyQuery, useMutation } from '@apollo/client'
 import gql from 'graphql-tag'
-import { format, addHours,startOfWeek, addMinutes, formatISO } from 'date-fns'
+import { format,startOfWeek, formatISO } from 'date-fns'
 import Select from 'react-select'
 import Error from './ErrorMessage'
 import { TODAYS_APPOINTMENTS_QUERY } from './Calendar'
-import useForm from '../lib/useForm'
+
 import { createPortal } from 'react-dom'
  
-
+import set from 'date-fns/set'
 import { STREAMS_QUERY } from './ScheduledClasses'
 import UserSearch from './UserSearch'
 import MultiTag from './MultiTag'
@@ -19,15 +19,6 @@ import { motion, AnimatePresence,
 import styled from 'styled-components'
  
 
-// const ALL_REASONS_QUERY = gql`
-//   query ALL_REASONS_QUERY {
-//     allReasons {
-//       id
-//       name
-//       color
-//     }
-//   }
-// `
 
 function Portal({ children }) {
   const modalRoot = document.getElementById('modal-root')  
@@ -103,6 +94,12 @@ const ModalContent = styled(motion.div)`
    padding-left: 10px;
  
    color: slategray;
+   &::placeholder {
+  
+  color: rgb(30,30,30);
+  opacity: .2;
+
+}
  }
  textarea {
    resize: none;
@@ -114,13 +111,21 @@ const ModalContent = styled(motion.div)`
    letter-spacing: 2px;
    color: slategray;
    padding: 5px;
+   &::placeholder {
+  
+        color: rgb(30,30,30);
+        opacity: .2;
+     
+   }
  }
 `
 const CREATE_CLASS_MUTATION = gql`
   mutation CREATE_CLASS_MUTATION(
     $name: String
-    $reason: ID!
+    $reason: ID
     $price: Int
+    $classType: String
+    $classLength: String
     $date: DateTime!
     $equipment: [ID!]
     $tags: [ID!]
@@ -128,6 +133,8 @@ const CREATE_CLASS_MUTATION = gql`
     createNewClass(
       name: $name
       reason: $reason
+      classType: $classType
+      classLength: $classLength
       price: $price
       date: $date
       equipment: $equipment
@@ -403,8 +410,8 @@ grid-row: 1/3;
 display: grid;
 grid-template-columns: 1fr 1fr;
 grid-template-rows: 1fr 1fr;
-background: ${props => props.private === 'live' ? '#FFC68D' : '#C68DFF'  };
-${props => props.personal ? 'background: #a3ffc1' : null};
+background-image: ${props => props.classType === 'LIVE' ?   'linear-gradient(130deg, #ff8063, #e34040)' : props.classType === 'PRIVATE' ? 'linear-gradient(130deg, #9457e2, #5029bb)' : 'linear-gradient(130deg, #ffe561, #ffd24c)'  };
+
 border-radius: 10px;
 width: 95%;
 padding: 10px;
@@ -464,14 +471,14 @@ grid-column: 1/3;
     line-height: 15px;
     transform: translate(-10px, -15px);
     border-radius: 5px;
-    min-width: 60px;
+  
     grid-row: 1;
     grid-column: 2;
     color: white;
     background: red;
   }
 `
- const typeList = ['Live', 'Private', 'Personal']
+ const typeList = ['LIVE', 'PRIVATE', 'PERSONAL']
 
 
 
@@ -484,6 +491,16 @@ grid-column: 1/3;
     varientB: { opacity: 1, rotateX: 0 },
   }
 
+function processDateAndTime(theDate, theTime) {
+  
+  const isPm = theTime.includes('PM')
+  const hour = theTime.substring(0, theTime.indexOf(':'))
+  const militaryHour = isPm ? parseInt(hour) + 12 : hour
+  const minutes = parseInt(theTime.substring(theTime.indexOf(':') + 1, theTime.indexOf(' ')))
+ return set(new Date(theDate), {hours: militaryHour, minutes: minutes, seconds: 0})
+  
+ 
+}
 
 const classLengthOptions = [{value: '5 Min', label: '5 Min'}, {value: '10 Min', label: '10 Min'},{value: '15 Min', label: '15 Min'}, {value: '20 Min', label: '20 Min'}, {value: '25 Min', label: '25 Min'}, {value: '30 Min', label: '30 Min'}, {value: '45 Min', label: '45 Min'},{value: '60 Min', label: '60 Min'},{value: '90 Min', label: '90 Min'}]
 const  Modal = ({ reasons, open, children, toggle, selectedDate, selectedTime}) => {
@@ -497,29 +514,32 @@ const [tagsId, setTagsSearch] = useState('')
     const [selectedUser, setSelectedUser] = useState('')
     const [selectedEquipment, setSelectedEquipment] = useState([])
     const [selectedTags, setSelectedTags] = useState([])
-    const [selectedType, setSelectedType] = useState('live')
+    const [selectedType, setSelectedType] = useState('LIVE')
     const [date, setDate] = useState(new Date())
     const [classLength, setClassLength] = useState('45 min')
-    const [priceState, setPriceState] = useState(20)
+    const [priceState, setPriceState] = useState(2000)
     const [altTitle, setAltTitle] = useState('')
     const [note, setNote] = useState('')
 
-    const [appLength, setAppLength] = useState( 60)
+    const [appLength, setAppLength] = useState(60)
     const [isoDate, setIsoDate] = useState('')
    
-
- 
+   const tidiedUpDate = date && selectedTime && processDateAndTime(date, selectedTime)
+  // const dateAndTime = set(new Date(date), {})
+ console.log(formatISO(tidiedUpDate))
   const weekStarts = startOfWeek(new Date(), {
     weekStartsOn: 0,
   })     
 const [createNewClass, { error}] = useMutation(CREATE_CLASS_MUTATION,
 {variables: {
-  date: date && formatISO(new Date(date)),
-  reason: altTitle ? altTitle : selectedReason,
+  date: date && formatISO(tidiedUpDate),
+  reason: selectedReason?.value,
   price: parseInt(priceState),
+  classType: selectedType,
+  classLength: classLength, 
   equipment: selectedEquipment,
   tags: selectedTags,
-  name: selectedUsers && selectedUsers,
+  name: altTitle ? altTitle : selectedReason?.label 
 },refetchQueries: [
   {
     query: STREAMS_QUERY,
@@ -528,16 +548,20 @@ const [createNewClass, { error}] = useMutation(CREATE_CLASS_MUTATION,
   {
     query: TODAYS_APPOINTMENTS_QUERY,
     variables: {  
-      date: formatISO(weekStarts)},
+      day: format(new Date(date), 'yyyy-MM-dd')},
   },
 ],
   }
  )
+
+
  function handleSelectedOption(e) {
+   if (e === null) return
+   console.log(e)
   setSelectedReason(e)
 }
 
-
+ 
  
 
 const addDescriptionhandler = () => {
@@ -590,9 +614,10 @@ function setFlippedHandler() {
     setSelectedTags(filteredEquip)
   }
 const onValueChange = (theType) => {
-   
+ 
   setSelectedType(theType)
 }
+ 
  const [getReason] = useLazyQuery(REASON_QUERY, {variables: {id: selectedReason && selectedReason.value}})
 
  async function handleReasonFetch() {
@@ -609,7 +634,7 @@ setClassLength(cLength)
  }
 
 useEffect(() => {
-  if(!selectedReason) return
+  if(selectedReason === null) return
   handleReasonFetch()
  
 }, [selectedReason])
@@ -658,8 +683,8 @@ useEffect(() => {
                     >
                     <TypeOfClassList>
                       {typeList.map(theType => {
-                        const lowerCaseType = theType.toLowerCase()
-                        return <div key={theType} onClick={() => onValueChange(lowerCaseType)}>
+                    
+                        return <div key={theType} onClick={() => onValueChange(theType)}>
              {theType}
           </div>
          
@@ -691,13 +716,13 @@ useEffect(() => {
                       </TimeChunk>
              
                 
-                       <ClassBubble  personal={false} private={selectedType}>     
-                       <p className="class-status">Livestream</p>   
+                       <ClassBubble  personal={false} classType={selectedType}>     
+                       <p className="class-status">{selectedType}</p>   
                        <div className="bottom">
                          <div className="timer">{selectedTime}</div> 
                          <div className="class-length">{classLength && classLength}</div>
                         </div>       
-                       <h3 className="class-title">{selectedReason ? selectedReason.label : altTitle ? altTitle : 'No Class Selected'}</h3>
+                       <h3 className="class-title">{altTitle ? altTitle : selectedReason ? selectedReason.label : 'No Class Selected'}</h3>
 
                    
                 </ClassBubble>
@@ -724,7 +749,7 @@ useEffect(() => {
                       classNamePrefix="select"
                       type="select"
                       value={selectedReason}
-                      isClearable={true}
+                      isClearable={false}
                       placeholder="Select a Class"
                       onChange={(e) => handleSelectedOption(e)}
                   
@@ -752,10 +777,11 @@ useEffect(() => {
                       gridRow:3, gridColumn: 1, margin: '5px 0 0px',
                   }}
                 >   <input
-                style={{color: 'rgba(20,20,20,.8'}}
+                style={{color: 'rgba(30,30,30,.7'}}
                       className="alt-title"
+                      autoComplete="off"
                       placeholder="type Custom Title"
-                      disabled={selectedReason}
+                    //  disabled={selectedReason}
                       value={altTitle}
                  id="altTitle"
                         name="altTitle"
@@ -772,7 +798,7 @@ useEffect(() => {
                    
              
                       <textarea  id="note"
-                      name="note" style={{height: '70px',gridRow:3,gridColumn:3 , marginTop: '5px'}} value={note} onChange={setNoteHandler}></textarea>
+                      name="note" placeholder="Add additional description" style={{height: '70px', color: 'rgba(30,30,30,.7)', gridRow:3,gridColumn:3 , marginTop: '5px'}} value={note} onChange={setNoteHandler}></textarea>
 
                       <Select 
                        type="select"

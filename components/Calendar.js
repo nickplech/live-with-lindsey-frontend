@@ -7,324 +7,323 @@ import SingleDay from './SingleDay'
  
 import Error from './ErrorMessage'
 import Loader from './Loader'
-import { useQuery } from '@apollo/client'
+import { useQuery, useLazyQuery } from '@apollo/client'
 import gql from 'graphql-tag'
  
 const Data_15 = [
   {
     time: '7:00',
     ampm: 'am',
-    full: false,
+    full: '7:00 AM',
   },
   {
     time: '7:15',
     ampm: 'am',
-    full: false,
+    full: '7:15 AM',
   },
   {
     time: '7:30',
     ampm: 'am',
-    full: false,
+    full: '7:30 AM',
   },
   {
     time: '7:45',
     ampm: 'am',
-    full: false,
+    full: '7:45 AM',
   },
   {
     time: '8:00',
     ampm: 'am',
-    full: false,
+    full: '8:00 AM',
   },
   {
     time: '8:15',
     ampm: 'am',
-    full: false,
+    full: '8:15 AM',
   },
   {
     time: '8:30',
     ampm: 'am',
-    full: false,
+    full: '8:30 AM',
   },
   {
     time: '8:45',
     ampm: 'am',
-    full: false,
+    full: '8:45 AM',
   },
-
   {
     time: '9:00',
     ampm: 'am',
-    full: false,
+    full: '9:00 AM',
   },
   {
     time: '9:15',
     ampm: 'am',
-    full: false,
+    full: '9:15 AM',
   },
   {
     time: '9:30',
     ampm: 'am',
-    full: false,
+    full: '9:30 AM',
   },
   {
     time: '9:45',
     ampm: 'am',
-    full: false,
+    full: '9:45 AM',
   },
   {
     time: '10:00',
     ampm: 'am',
-    full: false,
+    full: '10:00 AM',
   },
   {
     time: '10:15',
     ampm: 'am',
-    full: false,
+    full: '10:15 AM',
   },
   {
     time: '10:30',
     ampm: 'am',
-    full: false,
+    full: '10:30 AM',
   },
   {
     time: '10:45',
     ampm: 'am',
-    full: false,
+    full: '10:45 AM',
   },
   {
     time: '11:00',
     ampm: 'am',
-    full: false,
+    full: '11:00 AM',
   },
   {
     time: '11:15',
     ampm: 'am',
-    full: false,
+    full: '11:15 AM',
   },
   {
     time: '11:30',
     ampm: 'am',
-    full: false,
+    full: '11:30 AM',
   },
   {
     time: '11:45',
     ampm: 'am',
-    full: false,
+    full: '11:45 AM',
   },
   {
     time: '12:00',
     ampm: 'pm',
-    full: false,
+    full: '12:00 PM',
   },
   {
     time: '12:15',
     ampm: 'pm',
-    full: false,
+    full: '12:15 PM',
   },
   {
     time: '12:30',
     ampm: 'pm',
-    full: false,
+    full: '12:30 PM',
   },
   {
     time: '12:45',
     ampm: 'pm',
-    full: false,
+    full: '12:45 PM',
   },
   {
     time: '1:00',
     ampm: 'pm',
-    full: false,
+    full: '1:00 PM',
   },
   {
     time: '1:15',
     ampm: 'pm',
-    full: false,
+    full: '1:15 PM',
   },
   {
     time: '1:30',
     ampm: 'pm',
-    full: false,
+    full: '1:30 PM',
   },
   {
     time: '1:45',
     ampm: 'pm',
-    full: false,
+    full: '1:45 PM',
   },
   {
     time: '2:00',
     ampm: 'pm',
-    full: false,
+    full: '2:00 PM',
   },
   {
     time: '2:15',
     ampm: 'pm',
-    full: false,
+    full: '2:15 PM',
   },
   {
     time: '2:30',
     ampm: 'pm',
-    full: false,
+    full: '2:30 PM',
   },
   {
     time: '2:45',
     ampm: 'pm',
-    full: false,
+    full: '2:45 PM',
   },
   {
     time: '3:00',
     ampm: 'pm',
-    full: false,
+    full: '3:00 PM',
   },
   {
     time: '3:15',
     ampm: 'pm',
-    full: false,
+    full: '3:15 PM',
   },
   {
     time: '3:30',
     ampm: 'pm',
-    full: false,
+    full: '3:30 PM',
   },
   {
     time: '3:45',
     ampm: 'pm',
-    full: false,
+    full: '3:45 PM',
   },
   {
     time: '4:00',
     ampm: 'pm',
-    full: false,
+    full: '4:00 PM',
   },
   {
     time: '4:15',
     ampm: 'pm',
-    full: false,
+    full: '4:15 PM',
   },
   {
     time: '4:30',
     ampm: 'pm',
-    full: false,
+    full: '4:30 PM',
   },
   {
     time: '4:45',
     ampm: 'pm',
-    full: false,
+    full: '4:45 PM',
   },
 
   {
     time: '5:00',
     ampm: 'pm',
-    full: false,
+    full: '5:00 PM',
   },
   {
     time: '5:15',
     ampm: 'pm',
-    full: false,
+    full: '5:15 PM',
   },
   {
     time: '5:30',
     ampm: 'pm',
-    full: false,
+    full: '5:30 PM',
   },
   {
     time: '5:45',
     ampm: 'pm',
-    full: false,
+    full: '5:45 PM',
   },
   {
     time: '6:00',
     ampm: 'pm',
-    full: false,
+    full: '6:00 PM',
   },
   {
     time: '6:15',
     ampm: 'pm',
-    full: false,
+    full: '6:15 PM',
   },
   {
     time: '6:30',
     ampm: 'pm',
-    full: false,
+    full: '6:30 PM',
   },
   {
     time: '6:45',
     ampm: 'pm',
-    full: false,
+    full: '6:45 PM',
   },
   {
     time: '7:00',
     ampm: 'pm',
-    full: false,
+    full: '7:00 PM',
   },
   {
     time: '7:15',
     ampm: 'pm',
-    full: false,
+    full: '7:15 PM',
   },
   {
     time: '7:30',
     ampm: 'pm',
-    full: false,
+    full: '7:30 PM',
   },
   {
     time: '7:45',
     ampm: 'pm',
-    full: false,
+    full: '7:45 PM',
   },
   {
     time: '8:00',
     ampm: 'pm',
-    full: false,
+    full: '8:00 PM',
   },
   {
     time: '8:15',
     ampm: 'pm',
-    full: false,
+    full: '8:15 PM',
   },
   {
     time: '8:30',
     ampm: 'pm',
-    full: false,
+    full: '8:30 PM',
   },
   {
     time: '8:45',
     ampm: 'pm',
-    full: false,
+    full: '8:45 PM',
   },
   {
     time: '9:00',
     ampm: 'pm',
-    full: false,
+    full: '9:00 PM',
   },
   {
     time: '9:15',
     ampm: 'pm',
-    full: false,
+    full: '9:15 PM',
   },
   {
     time: '9:30',
     ampm: 'pm',
-    full: false,
+    full: '9:30 PM',
   },
   {
     time: '9:45',
     ampm: 'pm',
-    full: false,
+    full: '9:45 PM',
   },
 ]
 
 const TODAYS_APPOINTMENTS_QUERY = gql`
-  query TODAYS_APPOINTMENTS_QUERY($date: DateTime) {
-    allItems(where: { date_gte: $date }, orderBy: "date") {
+  query TODAYS_APPOINTMENTS_QUERY($day: String) {
+    allItems(where: { day: $day }, orderBy: "date") {
       id
       price
       date
       name
-      private 
+      classType 
       status
-    
+      classLength
       stillAvailable
       user {
         id
@@ -344,15 +343,18 @@ const TODAYS_APPOINTMENTS_QUERY = gql`
 
 const SINGLE_APPOINTMENT_QUERY = gql`
   query SINGLE_APPOINTMENT_QUERY($id: ID!) {
-    Item(id: $id) {
+    Item(where: { id: $id }) {
       id
+      name
+      price
+      classLength
       reason {
         color
         name
         classLength
       }
       date
-      private
+      classType
 
       user {
         id
@@ -366,17 +368,22 @@ display: grid;
 width:100%;
 height: 100%;
 grid-template-columns:350px 1fr ;
-grid-template-rows:330px 1fr;
+grid-template-rows:1fr;
 `
 const Details = styled.div`
  
   display: flex;
-  width: 180px;
  
 
   font-family: 'Bison';
 
-  margin: 0 0;
+  padding: 20px;  
+ 
+  flex-flow: column;
+  position: relative;
+
+  height: 100%;
+  width: 100%;
 `
 const Names = styled.span`
   color: white;
@@ -432,10 +439,10 @@ const Reasonz = styled.span`
   margin: 5px 5px;
 `
 const StatsDisplay = styled.div`
-  position: relative;
+  position: relative;  grid-column: 1;
   display: grid;
-  grid-column: 1;
-  grid-row: 1/3;
+grid-template-columns: 1fr;
+  grid-template-rows: 275px 30px 1fr;
  background: rgba(240,240,240,.8);
   width: 100%;
   height: calc(100vh - 130px);
@@ -449,7 +456,8 @@ const StatsDisplay = styled.div`
     grid-column: 1;
     border-radius: 7px;
     max-width: 100%;
-    box-shadow: 0 0 5px 3px rgba(0, 0, 0, 0.05);
+    position: relative;
+    box-shadow: 0px 6px 7px -4px rgba(0,0,0,.2);
     height: 270px;
     border-bottom: 3px solid white;
     background: #fff;
@@ -611,13 +619,39 @@ color: white;
     text-decoration: none;
   }
 `
+const TodayButton = styled.button`
+grid-row: 2;
+position: relative;
+grid-column: 1;
+cursor: pointer;
+border: none;
+font-family: 'Bison';
+font-size: 16px;
+letter-spacing: 2px;
+height: 25px;
+text-align: center;
+width:328px;
+border-radius: 10px;
+transition: .3s;
+box-shadow: 0px 6px 7px -4px rgba(0,0,0,.2);
+margin: 5px auto;
+background: white;
+&[disabled] {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+&:hover {
+  background: #ffd7d4;
+  
+}
+`
 const SingleAppointment = styled.div`
-  padding: 20px;
+  padding: 20px;  grid-row:3;
+  grid-column: 1;
   display: flex;
   flex-flow: column;
   position: relative;
-  grid-row: 2;
-  grid-column: 1;
+
   height: 100%;
   width: 100%;
 `
@@ -625,17 +659,17 @@ const SingleAppointment = styled.div`
 function CalendarStats()  {
 //  const [loading, setLoading] = useState(false)
    const [date, setDate] = useState(startOfDay(new Date()))
-   const [appointmentsState, setAppointmentsState] = useState([])
-   const [dailyTotal, setDailyTotal] = useState(null)
-   const [weeklyTotal, setWeeklyTotal] = useState(null)
-   const [monthlyTotal, setMonthlyTotal] = useState(null)
+   
+  //  const [dailyTotal, setDailyTotal] = useState(null)
+  //  const [weeklyTotal, setWeeklyTotal] = useState(null)
+  //  const [monthlyTotal, setMonthlyTotal] = useState(null)
     const [slots, setSlots] =  useState([])
     const [selectedAppointment, setSelectedAppointment] = useState(null)
-    const [appointmentIndices, setAppointmentIndices] = useState()
 
-
+    const today = startOfDay(new Date())
  
-  const saveDate = async (date) => {
+const isTheSame = date.toString().includes(today)
+  const saveDate = async () => {
  
 
 
@@ -652,13 +686,7 @@ function CalendarStats()  {
       }
         })
 
-    // const indexSearch = slots && slots.map(appointment => {
-    //   const startTime = format(new Date(appointment.date), 'hh:mm a')
-    //   return slots.indexOf(startTime)
-    // })
-
-  // setAppointmentsState(appointments)
-    // setAppointmentIndices(indexSearch)
+ 
     setSlots(slots)
  
   }
@@ -668,42 +696,31 @@ function CalendarStats()  {
 
     saveDate(date) 
   }, [date])
-useEffect(() => {
-  if (!data) return
-  const theItems = data.allItems
-  setAppointmentsState(theItems)
+ 
 
-}, [date])
-
-const handleSelectedAppointment = async(selectedId) => {
-     const item  = await setSelectedAppointment({variables: {id: selectedId}})
-  const appointment = item.data
-    console.log(appointment)
-setSelectedAppointment()
+const handleSelectedAppointment = async(selectionArg) => {
+  console.log(selectionArg)
+  if (!selectionArg) return
+ 
+if(selectionArg.length > 10) {
+ const item  = await getItem({variables: {id: selectionArg}})
+  const appointment = item.data.Item
+  setSelectedAppointment(appointment)
+ return
 }
-  
+setSelectedAppointment(selectionArg) 
 
-  function selectAppointment(time, appointmentObject) {
-    if (appointmentObject === true) {
-      setSelectedAppointment(time)
-    }
-    if (appointmentObject === false) {
-      setSelectedAppointment(null)
-   
-    }
-  }
+}
 
- 
-    
- 
- 
+ const [getItem] = useLazyQuery(SINGLE_APPOINTMENT_QUERY)
 
-    const { data, loading} = useQuery(TODAYS_APPOINTMENTS_QUERY, {variables: { date:date }})
+    const { data, loading} = useQuery(TODAYS_APPOINTMENTS_QUERY, {variables: { day:format(date, 'yyyy-MM-dd').toString() }})
    
 if (loading ) return <Loader />
     if(!data) return null 
     const items = data.allItems
-    console.log(items)
+  
+ const isAnObj = selectedAppointment && typeof selectedAppointment === 'object'
     return (
       
       <Wrap>
@@ -716,35 +733,42 @@ if (loading ) return <Loader />
                   calendarType="US"
                   returnValue="start"
                 />
-               <SingleAppointment>
-           
+                <TodayButton
+                disabled={isTheSame}
+                        onClick={(e) => {
+                          e.preventDefault()
+                        setDate(today)
+                        }}
+                        className="todayButton"
+                      >
+                    {isTheSame ? 'CURRENTLY VIEWING TODAY' : 'JUMP TO TODAY'}
+                     </TodayButton>
+             <SingleAppointment>
+            
+             
+             {isAnObj ?
   
-          <Details>Daily{dailyTotal}</Details>
-          <Flex>
-          <p>Live{}</p> 
-          <p>Private{}</p>
-
-          </Flex>
-          <Details>Weekly{weeklyTotal}</Details>
-            <Flex>
-            <p>Live{}</p> 
-          <p>Private{}</p>
-          </Flex>
-          <Details>Monthly {monthlyTotal}</Details>
-          <Flex>
-          <p>Live{}</p> 
-          <p>Private{}</p>
-          </Flex>
+          <Details>
         
-        </SingleAppointment>
+         <h2>{ selectedAppointment.name}</h2>
+ <Flex> <p style={{background: 'red', color: 'white', fontFamily: 'Bison', letterSpacing: '2px', padding: '0px 4px'}}>{selectedAppointment.classType}</p> 
+<p style={{ color: 'white', fontFamily: 'Bison', letterSpacing: '2px'}}>{format(date, 'eeee MMM dd')} </p></Flex>
+         
+          
+        
+     
+   
+       </Details>  : <p style={{width: '100%', textAlign: 'center', opacity: .4}}>no class selected</p>
+       }
+        </SingleAppointment>  
               </StatsDisplay>
               { loading ? <Loader/> :
               <SingleDay
                 slots={slots}
-                appointmentIndices={appointmentIndices}
-                appointments={appointmentsState}
-                date={date}
            
+            
+                date={date}
+                items={items}
                 setDate={setDate}
                 saveDate={saveDate}
                 handleSelectedAppointment={handleSelectedAppointment}

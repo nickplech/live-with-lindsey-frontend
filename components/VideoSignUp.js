@@ -152,7 +152,7 @@ const VideoSignUp = ({ date, classId, owner }) => {
    
       <HaveIt  >
         
-          You Are Enrolled for This Live!
+          You Are Currently Enrolled!
       
       </HaveIt>
  

@@ -13,6 +13,7 @@ import Loader from './Loader'
 import Modal from './Modal'
 import formatISO from 'date-fns/formatISO'
 import useToggle from './useToggle'
+import { indexOf } from 'lodash'
 
 const MOVE_APPOINTMENT_MUTATION = gql`
   mutation MOVE_APPOINTMENT_MUTATION($id: ID!, $date: DateTime) {
@@ -217,7 +218,7 @@ const Inputs = styled.div`
  
   color: rgba(20, 20, 20, 0.6);
  
-  position: relative;
+  position: absolute;
   grid-auto-rows: 24px;
 
   grid-row-gap: 0px;
@@ -225,27 +226,80 @@ const Inputs = styled.div`
   text-align: center;
   justify-content: center;
   align-items: center;
-  div {
-    border-bottom: 1px solid lightgrey;  font-size: 15px;
+  .divs {
+    border-bottom: 1px solid rgba(20,20,20,.1);  font-size: 15px;
     padding-left: 5px;
     height: 25px;
     justify-content: center;
   align-items: center;
   width: 100%;
+  position: relative;
+ 
   cursor: pointer;
   &:hover {
-    background: lightgrey;
+    background: #ffd7d4;
+   opacity:.3;
   }
   }
 `
- 
+ const InputSlot = styled.div`
+ text-align: left;
 
-function SingleDay ({slots,appointments,handleSelectedAppointment, appointmentIndices, setSelectedAppointment, selectedAppointment, date, setDate}) {
+ width: calc(97% - 10px);
+ cursor: pointer; 
+ position: relative;
+ margin-left: 10px;
+ justify-self:flex-start;
+ background-image: ${props => props.classType === 'LIVE' ?   'linear-gradient(130deg, #ff8063, #e34040)' : props.classType === 'PRIVATE' ? 'linear-gradient(130deg, #9457e2, #5029bb)' : 'linear-gradient(130deg, #ffe561, #ffd24c)'  };
+ color: white;
+ padding-left: 10px;
+ border-radius: 5px;
+ font-size: 20px;
+ &:hover {
+   opacity: .7;
+   
+  }
+ `
+
+function SingleDay ({slots,handleSelectedAppointment, items,  setSelectedAppointment, selectedAppointment, date, setDate}) {
   const [isVisible, setIsVisible] = useState(false)
+  const [appointmentsList, setAppointmentsList] = useState([])
   const [time, setTime] = useState(new Date().toLocaleTimeString()) 
   const [open, setOpen] = useToggle(false)
- 
+  const [indices, setIndices] = useState([])
   
+  useEffect(()=> {
+ 
+   
+    let fullSlots = Data_15.map(slot => {
+      return slot.full
+    })
+    const indexSearch = items.map(item => {
+      const startTime = format(new Date(item.date), 'h:mm a')
+    
+      return fullSlots.indexOf(startTime)
+    })
+ 
+    setIndices(indexSearch)
+    
+    const itemsArr = items.map((item, i) => {
+      return item
+    })
+    indexSearch.map((appIndex, i) => {
+      const start_index = appIndex
+
+      const number_of_elements_to_remove = 1
+      const removed_elements = fullSlots.splice(
+        start_index,
+        number_of_elements_to_remove,
+        itemsArr[i],
+      )
+    })
+    
+    setAppointmentsList(fullSlots)
+  }, [date, items])
+
+ 
    const update = (e) => {
    setTime( e.target.name )
   }
@@ -254,7 +308,7 @@ function SingleDay ({slots,appointments,handleSelectedAppointment, appointmentIn
   const handleDateTime = (time) => {
     console.log(time)
 setTime(time)
- 
+ setSelectedAppointment(time)
   }
  
     // const appointmentsArr = appointments &&  appointments.map((appointment) => {
@@ -310,7 +364,7 @@ setTime(time)
         //          },
         //    ]}
         //   >
-       const today = new Date()
+     
      
       //  useEffect(() => {
          
@@ -338,14 +392,7 @@ const {allReasons} = data
               <DayView>
                 <div className="parent">
                 
-                      <div
-                        onClick={() => {
-                        setDate(today)
-                        }}
-                        className="todayButton"
-                      >
-                     TODAY
-                      </div>
+         
              
       
                   <div className="sideDate">
@@ -371,15 +418,19 @@ const {allReasons} = data
                     </Side>{' '}
         
                     <Inputs>
-                    {Data_15.map((slotty, i) => {
-                      const theTime = slotty.time + ' ' + slotty.ampm 
-                      return(
-                      <div onClick={() => handleDateTime(theTime, date)} key={slotty.time + slotty.ampm} onDoubleClick={setOpen} style={{opacity: '.3'}}>{slotty.time.includes('00') ? slotty.time + slotty.ampm : null}</div>
-                      )
-                    })}
-                      {/* <AppSlot
-                        appointmentIndices={appointmentIndices}
-                        appointments={appointments}
+                    {appointmentsList.map((slotty, i) => {
+                   
+                      const booked = typeof slotty !== 'string'
+                      const displayMe = !booked && slotty.includes('00') ? slotty : null
+                      const selectionArg = booked ? slotty.id : slotty
+                      return booked ? <InputSlot isAppointment={booked} onClick={() => handleSelectedAppointment(selectionArg)}  classType={slotty.classType} key={ slotty.id }>{slotty.name}</InputSlot>  :         
+                       <div className='divs' style={{color: 'rgba(30,30,30,.2)'}} key={ slotty }  onDoubleClick={setOpen} onClick={() => handleDateTime(slotty, date)}>  {displayMe }
+                      </div>
+                      })}
+                     {/* <AppSlot
+                        appointmentIndices={indices}
+                        appointments={items}
+                        appointmentsList={appointmentsList}
                         // updateViewerStateLength={
                         //   updateViewerStateLength
                         // }
@@ -389,7 +440,7 @@ const {allReasons} = data
                         selectedAppointment={selectedAppointment}
                         date={date}
                         update={update}
-                      ></AppSlot> */}
+                      ></AppSlot>  */}
                       {/* {slots && slots.map((timeblock, i) => {
                         const objy = typeof timeblock !== 'string'
 

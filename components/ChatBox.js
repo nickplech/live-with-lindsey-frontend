@@ -276,23 +276,24 @@ function ChatBox({ itemId, messages }) {
   //         setRoomMembers(roomMembers)
   //       })
   //     })
-  // console.log(roomMembers)
+  console.log(roomMembers)
   // useEffect(() => {
   //   if (streamSocket == null) return
-  //   streamSocket.on('user joined', (userIdHandShake) => {
-  //     if (roomMembers.includes(userIdHandShake)) return
+  //   streamSocket.on('userStatusUpdate', (userIdHandShake) => {
+  //     console.log('ITWORKING ITWORKING')
+  //     if (roomMembers.some(member => userIdHandShake === member)) return
   //     else {
-  //       setRoomMembers((prev) => [...prev, roomMembers])
+  //       setRoomMembers((prev) => [...prev, userIdHandShake])
   //     }
   //   })
-  //   return () => streamSocket.off('user joined')
+  //   return () => streamSocket.off('userStatusUpdate')
   // }, [streamSocket])
 
   // useEffect(() => {
    
   //   if (streamSocket == null) return
    
-  //   streamSocket.on('disconnect-count-update', (userIdHandShake) => {
+  //   streamSocket.on('removeUserStatus', (userIdHandShake) => {
         
   //     if (!roomMembers.includes(userIdHandShake)) return
   //     else {
@@ -303,7 +304,7 @@ function ChatBox({ itemId, messages }) {
   //     }
   //   })
 
-  //   return () => streamSocket.off('disconnect-count-update')
+  //   return () => streamSocket.off('removeUserStatus')
   // }, [streamSocket])
 
   useEffect(() => {

@@ -271,7 +271,7 @@ const ContentSection = ({textContent, file,  createdAt}) => (
   >
     
       <p style={{  padding: '0 15px'}} >{textContent}</p>
-    {file && <a style={{marginLeft: '15px', fontFamily: 'Bison', letterSpacing: '2px'}} className="content" href={file.publicUrl} download={file.filename} target="_blank"><strong>Download Attached Document</strong></a>}
+    {file && <a style={{marginLeft: '15px', fontFamily: 'Bison', letterSpacing: '2px'}} className="content" href={file.publicUrl} download={file.filename} target="_blank"><strong>Download Attachment</strong></a>}
       <p style={{  padding: '0 15px', fontSize: '12px'}}> Posted: {format(new Date(createdAt), 'MMM dd, yyyy hh:mm a')}</p>
     
   </motion.div>

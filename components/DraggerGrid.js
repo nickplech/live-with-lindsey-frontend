@@ -48,7 +48,7 @@ const StyledInput = styled.button`
     opacity: 0.75;
     z-index: -1;
     background: ${(props) =>
-      props.appointmentsArr[props.index].reason[0].color};
+      props.classType === 'LIVE' ? '#FFC68D' : props.classType === 'PRIVATE' ? '#C68DFF' : '#a3ffc1'};
   }
 `
 const CurrentHeight = styled.div`
@@ -121,7 +121,7 @@ const Span = styled.span`
  class AppSlot extends React.Component {
   static defaultProps = {
     className: 'layout',
-    isable: true,
+    isDragable: true,
     isDroppable: true,
     isResizable: true,
     cols: 1,
@@ -153,8 +153,8 @@ const Span = styled.span`
     const appointmentsArr = this.props.appointments
     return this.props.appointmentIndices && this.props.appointmentIndices.map((item, i) => {
       const y = parseInt(item)
-      const groupAppointment = appointmentsArr[i].users.length
-      const lengthOf = appointmentsArr[i].timeRange.appLength / 15
+       const groupAppointment = appointmentsArr[i] && appointmentsArr[i].user.length
+      const lengthOf = appointmentsArr[i] && appointmentsArr[i].reason.classLength / 15
 
       const currentDisplayHeightInMinutes =
         (this.state.tempDisplayHeight * 15) % 60
@@ -178,10 +178,11 @@ const Span = styled.span`
 
       return (
         <StyledInput
-          key={appointmentsArr[i].id}
+          key={appointmentsArr[i] && appointmentsArr[i].id}
           index={i}
+          classType={appointmentsArr[i] && appointmentsArr[i].classType}
           appointmentsArr={appointmentsArr}
-          name={appointmentsArr[i].start}
+          name={appointmentsArr[i] && appointmentsArr[i].start}
           onMouseOver={() => {
             this.updateDragStats(appointmentsArr[i].id, i)
           }}
@@ -200,10 +201,10 @@ const Span = styled.span`
             maxW: 1,
           }}
           style={{
-            borderLeft: `8px solid ${appointmentsArr[i].reason[0].color}`,
+            borderLeft: `8px solid ${appointmentsArr[i] &&  appointmentsArr[i].classType === 'LIVE' ? '#FFC68D' : appointmentsArr[i] &&  appointmentsArr[i].classType === 'PRIVATE' ? '#C68DFF' : '#a3ffc1'}`,
           }}
         >
-          <Span>{appointmentsArr[i].reason.name} </Span>
+          <Span>{appointmentsArr[i] && appointmentsArr[i].name ? appointmentsArr[i].name : appointmentsArr[i] && appointmentsArr[i].reason.name} </Span>
           <Count>{`Subscribers: ${groupAppointment}`}</Count>
 
           {this.state.tempDisplayHeight &&
@@ -315,7 +316,7 @@ const Span = styled.span`
                  return (
                   <ReactGridLayout
                     layout={this.state.layout}
-                    style={{ marginTop: '-1px' }}
+                    // style={{ marginTop: '-1px' }}
                     onLayoutChange={this.onLayoutChange}
                     maxRows={60}
                     onResize={(layout) => {

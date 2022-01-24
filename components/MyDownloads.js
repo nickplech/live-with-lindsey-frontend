@@ -1,7 +1,8 @@
-import React from 'react'
+import React, {useState} from 'react'
 import { useQuery } from '@apollo/client'
 import { formatDistance } from 'date-fns'
-import Link from 'next/link'
+
+import { Document, Page } from 'react-pdf';
 import Form from './styles/Form'
 import Loader from './Loader'
 import gql from 'graphql-tag'
@@ -21,6 +22,7 @@ const USER_DOWNLOADS_QUERY = gql`
       }
       challenge {
         id
+        name
         user {
           id
         }
@@ -60,21 +62,32 @@ const Inner = styled.div`
   }
 `
 const OrderUl = styled.ul`
-  display: grid;
-  grid-gap: 1rem;
-  grid-template-columns: 1fr 1fr ;
-  grid-auto-rows: 1fr;
+  display: flex;
+ justify-content: flex-start;
+ width: 100%;
+ flex-flow: row wrap;
   padding: 0;
   list-style: none;
 `
 const DownloadStyles = styled.li`
  height: 200px;
- width: 100px;
- background: blue;
+ width: 170px;
+display: grid;
+grid-template-rows: 1fr 20px;
+margin: 0 auto;
+
 padding: 0;
+img {
+  grid-column: 1; background: blue;
+}
 `
 function MyDownloads({ userId }) {
- 
+  const [numPages, setNumPages] = useState(null)
+  const [pageNumber, setPageNumber] = useState(1)
+
+  function onDocumentLoadSuccess({ numPages }) {
+    setNumPages(numPages);
+  }
  
  
   const { data, loading, error } = useQuery(USER_DOWNLOADS_QUERY, {variables: {id: userId}} )
@@ -115,18 +128,32 @@ function MyDownloads({ userId }) {
             </h2>
           )}
           <OrderUl>
-            {allPublicUpdates.map((publicUpdate) => (
+            {allPublicUpdates.map((publicUpdate) => {
+               
+              const isAPdf = publicUpdate?.file?.mimetype === "application/pdf"
+              
+              return(
               <DownloadStyles key={publicUpdate.id}>
-                
-                  <a>
+              {isAPdf ? <> <Document
+        file={
+          `/lindsey/live-with-lindsey-back/${publicUpdate.file.publicUrl
+        }`}
+        onLoadSuccess={onDocumentLoadSuccess}
+      >
+        <Page pageNumber={pageNumber} />
+      </Document>
+     
+      <a>{publicUpdate.file.filename}
+               </a></> : <>
+                  <img src={publicUpdate.file.publicUrl} alt={publicUpdate.file.filename}/>
                     
              
-                   
-               
-                  </a>
-             
+                   <a>{publicUpdate.file.filename}
+               </a>
+                </>
+             }
               </DownloadStyles>
-            ))}
+            )})}
           </OrderUl>
         </fieldset>
  

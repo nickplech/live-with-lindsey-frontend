@@ -35,7 +35,7 @@ const USERS_WEEK_QUERY = gql`
       open
       status
       stillAvailable
-      private 
+      classType 
       reason {
         id
         name
@@ -545,11 +545,11 @@ function TodaysClasses({ items, id }) {
           return 
         }
         return (
-          item.private ?
+          item.classType === 'PRIVATE' ?
           
           <div key={item.id} className="course ">
             <div className="course-preview private">
-              <h4>{item.private && item.name}</h4>
+              <h4>{item.classType === 'PRIVATE' && item.name}</h4>
               
             </div>
             <div className="course-info">

@@ -15,7 +15,7 @@ import {
 
 const STREAMS_QUERY = gql`
   query STREAMS_QUERY($date: DateTime) {
-    allItems(where: { date_gte: $date, private_not: true }, orderBy: "date") {
+    allItems(where: { date_gte: $date, classType: "LIVE" }, orderBy: "date") {
       id
       price
       date
